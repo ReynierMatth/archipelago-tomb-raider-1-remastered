@@ -1,0 +1,9 @@
+name: TestPlayer
+game: Tomb Raider 1 Remastered
+Tomb Raider 1 Remastered:
+  goal: 0          # final_boss
+  levels_for_goal: 15
+  secrets_mode: 1  # useful
+  trap_percentage: 10
+  starting_weapons: 0  # pistols
+  death_link: false

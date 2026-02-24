@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using TRLevelControl;
 using TRLevelControl.Helpers;
 using TRLevelControl.Model;
 
@@ -6,6 +6,7 @@ namespace TRDataExporter;
 
 public class TR1DataExporter
 {
+    private readonly string _gameDataDir;
     private readonly string _resourceBase;
 
     private static readonly Dictionary<string, string> _levelDisplayNames = new()
@@ -46,76 +47,53 @@ public class TR1DataExporter
         [TR1LevelNames.PYRAMID]    = "Atlantis",
     };
 
-    // Map key item alias enum values to their string names.
-    // The alias value encodes: level_base + entity_type_value
-    // e.g. Vilcabamba_K1_SilverKey = 11183 = 11000 (Vilcabamba base) + 183 (not exact, it's the entity index)
-    private static readonly Dictionary<TR1Type, string> _keyItemAliasNames = new()
+    // In-game key item names per (level, base type)
+    // These are the actual names shown in the TR1 inventory
+    private static readonly Dictionary<(string level, string baseType), string> _keyTypeNames = new()
     {
-        [TR1Type.Vilcabamba_K1_SilverKey]       = "Vilcabamba Silver Key",
-        [TR1Type.Vilcabamba_P1_GoldIdol]        = "Vilcabamba Gold Idol",
-        [TR1Type.Valley_P1_CogAbovePool]        = "Lost Valley Cog (Above Pool)",
-        [TR1Type.Valley_P1_CogBridge]           = "Lost Valley Cog (Bridge)",
-        [TR1Type.Valley_P1_CogTemple]           = "Lost Valley Cog (Temple)",
-        [TR1Type.Folly_K1_NeptuneKey]           = "Folly Neptune Key",
-        [TR1Type.Folly_K2_AtlasKey]             = "Folly Atlas Key",
-        [TR1Type.Folly_K3_DamoclesKey]          = "Folly Damocles Key",
-        [TR1Type.Folly_K4_ThorKey]              = "Folly Thor Key",
-        [TR1Type.Colosseum_K1_RustyKey]         = "Colosseum Rusty Key",
-        [TR1Type.Midas_LeadBar_FireRoom]        = "Midas Lead Bar (Fire Room)",
-        [TR1Type.Midas_LeadBar_SpikeRoom]       = "Midas Lead Bar (Spike Room)",
-        [TR1Type.Midas_LeadBar_TempleRoof]      = "Midas Lead Bar (Temple Roof)",
-        [TR1Type.Cistern_K1_GoldKey]            = "Cistern Gold Key",
-        [TR1Type.Cistern_K2_SilverBehindDoor]   = "Cistern Silver Key (Behind Door)",
-        [TR1Type.Cistern_K2_SilverBetweenDoors] = "Cistern Silver Key (Between Doors)",
-        [TR1Type.Cistern_K3_RustyKeyMainRoom]   = "Cistern Rusty Key (Main Room)",
-        [TR1Type.Cistern_K3_RustyKeyNearPierre] = "Cistern Rusty Key (Near Pierre)",
-        [TR1Type.Tihocan_K1_GoldKeyFlipMap]     = "Tihocan Gold Key (Flip Map)",
-        [TR1Type.Tihocan_K1_GoldKeyPierre]      = "Tihocan Gold Key (Pierre)",
-        [TR1Type.Tihocan_K2_RustyKeyBoulders]   = "Tihocan Rusty Key (Boulders)",
-        [TR1Type.Tihocan_K2_RustyKeyClangClang] = "Tihocan Rusty Key (Clang Clang)",
-        [TR1Type.Tihocan_Scion_EndRoom]         = "Tihocan Scion",
-        [TR1Type.Khamoon_K1_SapphireKeyEnd]     = "Khamoon Sapphire Key (End)",
-        [TR1Type.Khamoon_K1_SapphireKeyStart]   = "Khamoon Sapphire Key (Start)",
-        [TR1Type.Obelisk_K1_SapphireKeyEnd]     = "Obelisk Sapphire Key (End)",
-        [TR1Type.Obelisk_K1_SapphireKeyStart]   = "Obelisk Sapphire Key (Start)",
-        [TR1Type.Obelisk_P1_EyeOfHorus]         = "Obelisk Eye of Horus",
-        [TR1Type.Obelisk_P2_Scarab]             = "Obelisk Scarab",
-        [TR1Type.Obelisk_P3_SealOfAnubis]       = "Obelisk Seal of Anubis",
-        [TR1Type.Obelisk_P4_Ankh]               = "Obelisk Ankh",
-        [TR1Type.Sanctuary_K1_GoldKey]          = "Sanctuary Gold Key",
-        [TR1Type.Sanctuary_P1_AnkhAfterKey]     = "Sanctuary Ankh (After Key)",
-        [TR1Type.Sanctuary_P1_AnkhBehindSphinx] = "Sanctuary Ankh (Behind Sphinx)",
-        [TR1Type.Sanctuary_P2_Scarab]           = "Sanctuary Scarab",
-        [TR1Type.Mines_K1_RustyKey]             = "Mines Rusty Key",
-        [TR1Type.Mines_P1_BoulderFuse]          = "Mines Fuse (Boulder)",
-        [TR1Type.Mines_P1_ConveyorFuse]         = "Mines Fuse (Conveyor)",
-        [TR1Type.Mines_P1_CowboyFuse]           = "Mines Fuse (Cowboy)",
-        [TR1Type.Mines_P1_CowboyAltFuse]        = "Mines Fuse (Cowboy Alt)",
-        [TR1Type.Mines_P2_PyramidKey]           = "Mines Pyramid Key",
+        // Vilcabamba
+        { (TR1LevelNames.VILCABAMBA, "Key1_S_P"), "Silver Key" },
+        { (TR1LevelNames.VILCABAMBA, "Puzzle1_S_P"), "Gold Idol" },
+        // Valley
+        { (TR1LevelNames.VALLEY, "Puzzle1_S_P"), "Machine Cog" },
+        // Folly
+        { (TR1LevelNames.FOLLY, "Key1_S_P"), "Neptune Key" },
+        { (TR1LevelNames.FOLLY, "Key2_S_P"), "Atlas Key" },
+        { (TR1LevelNames.FOLLY, "Key3_S_P"), "Damocles Key" },
+        { (TR1LevelNames.FOLLY, "Key4_S_P"), "Thor Key" },
+        // Colosseum
+        { (TR1LevelNames.COLOSSEUM, "Key1_S_P"), "Rusty Key" },
+        // Midas
+        { (TR1LevelNames.MIDAS, "LeadBar_S_P"), "Lead Bar" },
+        // Cistern
+        { (TR1LevelNames.CISTERN, "Key1_S_P"), "Gold Key" },
+        { (TR1LevelNames.CISTERN, "Key2_S_P"), "Silver Key" },
+        { (TR1LevelNames.CISTERN, "Key3_S_P"), "Rusty Key" },
+        // Tihocan
+        { (TR1LevelNames.TIHOCAN, "Key1_S_P"), "Gold Key" },
+        { (TR1LevelNames.TIHOCAN, "Key3_S_P"), "Rusty Key" },
+        { (TR1LevelNames.TIHOCAN, "ScionPiece2_S_P"), "Scion" },
+        // Khamoon
+        { (TR1LevelNames.KHAMOON, "Key1_S_P"), "Sapphire Key" },
+        // Obelisk
+        { (TR1LevelNames.OBELISK, "Key1_S_P"), "Sapphire Key" },
+        { (TR1LevelNames.OBELISK, "Puzzle1_S_P"), "Eye of Horus" },
+        { (TR1LevelNames.OBELISK, "Puzzle2_S_P"), "Scarab" },
+        { (TR1LevelNames.OBELISK, "Puzzle3_S_P"), "Seal of Anubis" },
+        { (TR1LevelNames.OBELISK, "Puzzle4_S_P"), "Ankh" },
+        // Sanctuary
+        { (TR1LevelNames.SANCTUARY, "Key1_S_P"), "Gold Key" },
+        { (TR1LevelNames.SANCTUARY, "Puzzle1_S_P"), "Ankh" },
+        { (TR1LevelNames.SANCTUARY, "Puzzle2_S_P"), "Scarab" },
+        // Mines
+        { (TR1LevelNames.MINES, "Key1_S_P"), "Rusty Key" },
+        { (TR1LevelNames.MINES, "Puzzle1_S_P"), "Fuse" },
+        { (TR1LevelNames.MINES, "Puzzle2_S_P"), "Pyramid Key" },
     };
 
-    // Map key item alias bases to level file names
-    private static readonly Dictionary<uint, string> _keyItemBaseLevels = new()
+    public TR1DataExporter(string gameDataDir, string resourceBase)
     {
-        [10000] = TR1LevelNames.CAVES,
-        [11000] = TR1LevelNames.VILCABAMBA,
-        [12000] = TR1LevelNames.VALLEY,
-        [13000] = TR1LevelNames.QUALOPEC,
-        [14000] = TR1LevelNames.FOLLY,
-        [15000] = TR1LevelNames.COLOSSEUM,
-        [16000] = TR1LevelNames.MIDAS,
-        [17000] = TR1LevelNames.CISTERN,
-        [18000] = TR1LevelNames.TIHOCAN,
-        [19000] = TR1LevelNames.KHAMOON,
-        [20000] = TR1LevelNames.OBELISK,
-        [21000] = TR1LevelNames.SANCTUARY,
-        [22000] = TR1LevelNames.MINES,
-        [23000] = TR1LevelNames.ATLANTIS,
-        [24000] = TR1LevelNames.PYRAMID,
-    };
-
-    public TR1DataExporter(string resourceBase)
-    {
+        _gameDataDir = gameDataDir;
         _resourceBase = resourceBase;
     }
 
@@ -123,18 +101,10 @@ public class TR1DataExporter
     {
         var data = new TR1ArchipelagoData();
         var levels = TR1LevelNames.AsList;
-        var routes = LoadRoutes();
-        var secretMappings = LoadSecretMappings(levels);
+        var reader = new TR1LevelControl();
 
-        var keyItemTypes = TR1TypeUtilities.GetKeyItemTypes();
-        var standardPickupTypes = TR1TypeUtilities.GetStandardPickupTypes();
-        var weaponTypes = TR1TypeUtilities.GetWeaponPickups();
-
-        // Build item definitions
+        // Build item definitions (AP item types and IDs)
         BuildItemDefinitions(data);
-
-        // Build key dependencies from alias enum
-        BuildKeyDependencies(data);
 
         for (int i = 0; i < levels.Count; i++)
         {
@@ -147,22 +117,90 @@ public class TR1DataExporter
                 Name = displayName,
                 File = levelFile,
                 Sequence = i + 1,
-                Region = region
+                Region = region,
             };
 
-            // Export pickups and key items from known TR1Type entities
-            ExportEntitiesFromEnum(levelData, levelFile, keyItemTypes, standardPickupTypes, weaponTypes);
-
-            // Export secrets from secret mapping files
-            if (secretMappings.TryGetValue(levelFile, out var secretMapping))
+            // Read actual level file
+            string phdPath = Path.Combine(_gameDataDir, levelFile);
+            if (!File.Exists(phdPath))
             {
-                ExportSecrets(levelData, secretMapping);
+                Console.WriteLine($"  WARNING: {phdPath} not found, skipping");
+                data.Levels.Add(levelData);
+                continue;
             }
 
-            // Export routes
-            if (routes.TryGetValue(levelFile, out var levelRoutes))
+            TR1Level level;
+            try
             {
-                ExportRoutes(levelData, levelRoutes);
+                level = reader.Read(phdPath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"  WARNING: Failed to read {levelFile}: {ex.Message}");
+                data.Levels.Add(levelData);
+                continue;
+            }
+
+            Console.WriteLine($"  {displayName}: {level.Entities.Count} entities");
+
+            // Extract pickups and key items from actual entities
+            for (int ei = 0; ei < level.Entities.Count; ei++)
+            {
+                var entity = level.Entities[ei];
+
+                if (TR1TypeUtilities.IsKeyItemType(entity.TypeID)
+                    || (levelFile == TR1LevelNames.TIHOCAN && entity.TypeID == TR1Type.ScionPiece2_S_P))
+                {
+                    string baseName = entity.TypeID.ToString();
+                    int sameTypeCount = levelData.KeyItems.Count(k => k.Type == baseName);
+                    string friendlyName = BuildKeyItemName(levelFile, displayName, entity.TypeID, sameTypeCount);
+                    string alias = BuildKeyItemAlias(displayName, entity.TypeID, sameTypeCount);
+
+                    levelData.KeyItems.Add(new KeyItemData
+                    {
+                        EntityIndex = ei,
+                        Type = baseName,
+                        Alias = alias,
+                        Name = friendlyName,
+                        X = entity.X,
+                        Y = entity.Y,
+                        Z = entity.Z,
+                        Room = entity.Room,
+                    });
+                }
+                else if (TR1TypeUtilities.IsStandardPickupType(entity.TypeID))
+                {
+                    string category;
+                    if (TR1TypeUtilities.IsWeaponPickup(entity.TypeID))
+                        category = "weapon";
+                    else if (TR1TypeUtilities.IsAmmoPickup(entity.TypeID))
+                        category = "ammo";
+                    else if (TR1TypeUtilities.IsMediType(entity.TypeID))
+                        category = entity.TypeID == TR1Type.LargeMed_S_P ? "large_medipack" : "small_medipack";
+                    else
+                        category = "pickup";
+
+                    levelData.Pickups.Add(new PickupData
+                    {
+                        EntityIndex = ei,
+                        Type = entity.TypeID.ToString(),
+                        Category = category,
+                        X = entity.X,
+                        Y = entity.Y,
+                        Z = entity.Z,
+                        Room = entity.Room,
+                    });
+                }
+            }
+
+            // Secrets: use known counts per level
+            int secretCount = _secretCounts.GetValueOrDefault(levelFile, 0);
+            for (int s = 0; s < secretCount; s++)
+            {
+                levelData.Secrets.Add(new SecretData
+                {
+                    Index = s,
+                });
             }
 
             data.Levels.Add(levelData);
@@ -170,271 +208,180 @@ public class TR1DataExporter
 
         data.LevelSequence = levels;
 
+        // Build key dependencies
+        BuildKeyDependencies(data);
+
         return data;
     }
 
-    private void ExportEntitiesFromEnum(
-        LevelData levelData,
-        string levelFile,
-        List<TR1Type> keyItemTypes,
-        List<TR1Type> standardPickupTypes,
-        List<TR1Type> weaponTypes)
+    private static string GetKeyItemDisplayName(TR1Type alias, string baseName)
     {
-        // We can't read the actual level files without the game data.
-        // Instead, we build the data from the enum aliases and type utilities.
-        // The actual entity indices will be filled in when we can read level files.
-
-        // Key items: find all aliases that belong to this level
-        uint levelBase = GetKeyItemBase(levelFile);
-        if (levelBase > 0)
+        // Known alias display names
+        return alias switch
         {
-            foreach (var kvp in _keyItemAliasNames)
-            {
-                uint aliasValue = (uint)kvp.Key;
-                uint aliasBase = (aliasValue / 1000) * 1000;
-                if (aliasBase == levelBase)
-                {
-                    levelData.KeyItems.Add(new KeyItemData
-                    {
-                        EntityIndex = -1, // Will be resolved from level data
-                        Type = kvp.Key.ToString(),
-                        Alias = kvp.Key.ToString(),
-                        Name = kvp.Value,
-                    });
-                }
-            }
-        }
-
-        // Standard pickups: we know the types but not entity indices without level files.
-        // We'll list the available types for this level.
-        foreach (var pickupType in standardPickupTypes)
-        {
-            string category;
-            if (weaponTypes.Contains(pickupType))
-                category = "weapon";
-            else if (TR1TypeUtilities.IsAmmoPickup(pickupType))
-                category = "ammo";
-            else if (TR1TypeUtilities.IsMediType(pickupType))
-                category = pickupType == TR1Type.LargeMed_S_P ? "large_medipack" : "small_medipack";
-            else
-                category = "pickup";
-
-            // Add as a template - actual instances come from level files
-            levelData.Pickups.Add(new PickupData
-            {
-                EntityIndex = -1,
-                Type = TR1TypeUtilities.GetName(pickupType),
-                Category = category,
-            });
-        }
-    }
-
-    private void ExportSecrets(LevelData levelData, SecretMappingData secretMapping)
-    {
-        for (int i = 0; i < secretMapping.Rooms.Count; i++)
-        {
-            levelData.Secrets.Add(new SecretData
-            {
-                Index = i,
-                RewardEntities = secretMapping.RewardEntities ?? new List<int>(),
-            });
-        }
-    }
-
-    private void ExportRoutes(LevelData levelData, List<RouteEntry> levelRoutes)
-    {
-        foreach (var route in levelRoutes)
-        {
-            levelData.Routes.Add(new RouteData
-            {
-                X = route.X,
-                Y = route.Y,
-                Z = route.Z,
-                Room = route.Room,
-                KeyItemsLow = route.KeyItemsLow,
-                KeyItemsHigh = route.KeyItemsHigh,
-                Range = route.Range,
-                RequiresReturnPath = route.RequiresReturnPath,
-            });
-        }
+            TR1Type.Vilcabamba_K1_SilverKey       => "Vilcabamba Silver Key",
+            TR1Type.Vilcabamba_P1_GoldIdol        => "Vilcabamba Gold Idol",
+            TR1Type.Valley_P1_CogAbovePool        => "Lost Valley Cog (Above Pool)",
+            TR1Type.Valley_P1_CogBridge           => "Lost Valley Cog (Bridge)",
+            TR1Type.Valley_P1_CogTemple           => "Lost Valley Cog (Temple)",
+            TR1Type.Folly_K1_NeptuneKey           => "Folly Neptune Key",
+            TR1Type.Folly_K2_AtlasKey             => "Folly Atlas Key",
+            TR1Type.Folly_K3_DamoclesKey          => "Folly Damocles Key",
+            TR1Type.Folly_K4_ThorKey              => "Folly Thor Key",
+            TR1Type.Colosseum_K1_RustyKey         => "Colosseum Rusty Key",
+            TR1Type.Midas_LeadBar_FireRoom        => "Midas Lead Bar (Fire Room)",
+            TR1Type.Midas_LeadBar_SpikeRoom       => "Midas Lead Bar (Spike Room)",
+            TR1Type.Midas_LeadBar_TempleRoof      => "Midas Lead Bar (Temple Roof)",
+            TR1Type.Cistern_K1_GoldKey            => "Cistern Gold Key",
+            TR1Type.Cistern_K2_SilverBehindDoor   => "Cistern Silver Key (Behind Door)",
+            TR1Type.Cistern_K2_SilverBetweenDoors => "Cistern Silver Key (Between Doors)",
+            TR1Type.Cistern_K3_RustyKeyMainRoom   => "Cistern Rusty Key (Main Room)",
+            TR1Type.Cistern_K3_RustyKeyNearPierre => "Cistern Rusty Key (Near Pierre)",
+            TR1Type.Tihocan_K1_GoldKeyFlipMap     => "Tihocan Gold Key (Flip Map)",
+            TR1Type.Tihocan_K1_GoldKeyPierre      => "Tihocan Gold Key (Pierre)",
+            TR1Type.Tihocan_K2_RustyKeyBoulders   => "Tihocan Rusty Key (Boulders)",
+            TR1Type.Tihocan_K2_RustyKeyClangClang => "Tihocan Rusty Key (Clang Clang)",
+            TR1Type.Tihocan_Scion_EndRoom         => "Tihocan Scion",
+            TR1Type.Khamoon_K1_SapphireKeyEnd     => "Khamoon Sapphire Key (End)",
+            TR1Type.Khamoon_K1_SapphireKeyStart   => "Khamoon Sapphire Key (Start)",
+            TR1Type.Obelisk_K1_SapphireKeyEnd     => "Obelisk Sapphire Key (End)",
+            TR1Type.Obelisk_K1_SapphireKeyStart   => "Obelisk Sapphire Key (Start)",
+            TR1Type.Obelisk_P1_EyeOfHorus         => "Obelisk Eye of Horus",
+            TR1Type.Obelisk_P2_Scarab             => "Obelisk Scarab",
+            TR1Type.Obelisk_P3_SealOfAnubis       => "Obelisk Seal of Anubis",
+            TR1Type.Obelisk_P4_Ankh               => "Obelisk Ankh",
+            TR1Type.Sanctuary_K1_GoldKey          => "Sanctuary Gold Key",
+            TR1Type.Sanctuary_P1_AnkhAfterKey     => "Sanctuary Ankh (After Key)",
+            TR1Type.Sanctuary_P1_AnkhBehindSphinx => "Sanctuary Ankh (Behind Sphinx)",
+            TR1Type.Sanctuary_P2_Scarab           => "Sanctuary Scarab",
+            TR1Type.Mines_K1_RustyKey             => "Mines Rusty Key",
+            TR1Type.Mines_P1_BoulderFuse          => "Mines Fuse (Boulder)",
+            TR1Type.Mines_P1_ConveyorFuse         => "Mines Fuse (Conveyor)",
+            TR1Type.Mines_P1_CowboyFuse           => "Mines Fuse (Cowboy)",
+            TR1Type.Mines_P1_CowboyAltFuse        => "Mines Fuse (Cowboy Alt)",
+            TR1Type.Mines_P2_PyramidKey           => "Mines Pyramid Key",
+            _ => baseName,
+        };
     }
 
     private void BuildItemDefinitions(TR1ArchipelagoData data)
     {
         int baseId = 770000;
 
-        // Key items (progression)
-        foreach (var kvp in _keyItemAliasNames)
+        // Key items (progression) — defined from alias enum
+        foreach (var alias in Enum.GetValues<TR1Type>())
         {
-            data.ItemDefinitions[kvp.Key.ToString()] = new ItemDefinition
+            string name = GetKeyItemDisplayName(alias, alias.ToString());
+            if (name != alias.ToString()) // Only aliases with known display names
             {
-                Id = baseId + (int)(uint)kvp.Key,
-                Name = kvp.Value,
-                Category = "key_item",
-                ApClassification = "progression",
-            };
+                data.ItemDefinitions[alias.ToString()] = new ItemDefinition
+                {
+                    Id = baseId + (int)(uint)alias,
+                    Name = name,
+                    Category = "key_item",
+                    ApClassification = "progression",
+                };
+            }
         }
 
         // Weapons (useful)
-        var weapons = new Dictionary<TR1Type, string>
-        {
-            [TR1Type.Shotgun_S_P] = "Shotgun",
-            [TR1Type.Magnums_S_P] = "Magnums",
-            [TR1Type.Uzis_S_P] = "Uzis",
-        };
-        foreach (var kvp in weapons)
-        {
-            data.ItemDefinitions[kvp.Key.ToString()] = new ItemDefinition
-            {
-                Id = baseId + (int)(uint)kvp.Key,
-                Name = kvp.Value,
-                Category = "weapon",
-                ApClassification = "useful",
-            };
-        }
+        AddItemDef(data, baseId, TR1Type.Shotgun_S_P, "Shotgun", "weapon", "useful");
+        AddItemDef(data, baseId, TR1Type.Magnums_S_P, "Magnums", "weapon", "useful");
+        AddItemDef(data, baseId, TR1Type.Uzis_S_P, "Uzis", "weapon", "useful");
 
         // Ammo (filler)
-        var ammo = new Dictionary<TR1Type, string>
-        {
-            [TR1Type.ShotgunAmmo_S_P] = "Shotgun Shells",
-            [TR1Type.MagnumAmmo_S_P] = "Magnum Clips",
-            [TR1Type.UziAmmo_S_P] = "Uzi Clips",
-        };
-        foreach (var kvp in ammo)
-        {
-            data.ItemDefinitions[kvp.Key.ToString()] = new ItemDefinition
-            {
-                Id = baseId + (int)(uint)kvp.Key,
-                Name = kvp.Value,
-                Category = "ammo",
-                ApClassification = "filler",
-            };
-        }
+        AddItemDef(data, baseId, TR1Type.ShotgunAmmo_S_P, "Shotgun Shells", "ammo", "filler");
+        AddItemDef(data, baseId, TR1Type.MagnumAmmo_S_P, "Magnum Clips", "ammo", "filler");
+        AddItemDef(data, baseId, TR1Type.UziAmmo_S_P, "Uzi Clips", "ammo", "filler");
 
         // Medipacks
-        data.ItemDefinitions[TR1Type.LargeMed_S_P.ToString()] = new ItemDefinition
+        AddItemDef(data, baseId, TR1Type.LargeMed_S_P, "Large Medipack", "large_medipack", "useful");
+        AddItemDef(data, baseId, TR1Type.SmallMed_S_P, "Small Medipack", "small_medipack", "filler");
+    }
+
+    private static void AddItemDef(TR1ArchipelagoData data, int baseId, TR1Type type, string name, string category, string classification)
+    {
+        data.ItemDefinitions[type.ToString()] = new ItemDefinition
         {
-            Id = baseId + (int)(uint)TR1Type.LargeMed_S_P,
-            Name = "Large Medipack",
-            Category = "large_medipack",
-            ApClassification = "useful",
-        };
-        data.ItemDefinitions[TR1Type.SmallMed_S_P.ToString()] = new ItemDefinition
-        {
-            Id = baseId + (int)(uint)TR1Type.SmallMed_S_P,
-            Name = "Small Medipack",
-            Category = "small_medipack",
-            ApClassification = "filler",
+            Id = baseId + (int)(uint)type,
+            Name = name,
+            Category = category,
+            ApClassification = classification,
         };
     }
 
     private void BuildKeyDependencies(TR1ArchipelagoData data)
     {
-        foreach (var kvp in _keyItemAliasNames)
+        // For each level's key items, record which level they belong to
+        foreach (var level in data.Levels)
         {
-            uint aliasValue = (uint)kvp.Key;
-            uint aliasBase = (aliasValue / 1000) * 1000;
-
-            if (_keyItemBaseLevels.TryGetValue(aliasBase, out string levelFile))
+            foreach (var keyItem in level.KeyItems)
             {
-                data.KeyDependencies[kvp.Key.ToString()] = new KeyDependency
+                data.KeyDependencies[keyItem.Alias] = new KeyDependency
                 {
-                    Level = levelFile,
-                    BaseType = GetBaseKeyItemType(kvp.Key),
+                    Level = level.File,
+                    BaseType = keyItem.Type,
                 };
             }
         }
     }
 
-    private static string GetBaseKeyItemType(TR1Type aliasType)
+    private static string BuildKeyItemName(string levelFile, string displayName, TR1Type type, int sameTypeCount)
     {
-        string name = aliasType.ToString();
-        if (name.Contains("_K1") || name.Contains("_K2") || name.Contains("_K3") || name.Contains("_K4"))
-            return "Key";
-        if (name.Contains("_P1") || name.Contains("_P2") || name.Contains("_P3") || name.Contains("_P4"))
-            return "Puzzle";
-        if (name.Contains("_Scion"))
-            return "Scion";
-        if (name.Contains("_LeadBar"))
-            return "LeadBar";
-        return "Unknown";
+        string baseName = type.ToString();
+        string typeName = _keyTypeNames.GetValueOrDefault((levelFile, baseName), baseName.Replace("_S_P", ""));
+
+        if (sameTypeCount > 0)
+            return $"{displayName} - {typeName} #{sameTypeCount + 1}";
+        return $"{displayName} - {typeName}";
     }
 
-    private static uint GetKeyItemBase(string levelFile)
+    private static readonly Dictionary<string, string> _levelShortNames = new()
     {
-        foreach (var kvp in _keyItemBaseLevels)
-        {
-            if (kvp.Value == levelFile)
-                return kvp.Key;
-        }
-        return 0;
+        ["Caves"] = "Caves",
+        ["City of Vilcabamba"] = "Vilcabamba",
+        ["Lost Valley"] = "Valley",
+        ["Tomb of Qualopec"] = "Qualopec",
+        ["St. Francis' Folly"] = "Folly",
+        ["Colosseum"] = "Colosseum",
+        ["Palace Midas"] = "Midas",
+        ["The Cistern"] = "Cistern",
+        ["Tomb of Tihocan"] = "Tihocan",
+        ["City of Khamoon"] = "Khamoon",
+        ["Obelisk of Khamoon"] = "Obelisk",
+        ["Sanctuary of the Scion"] = "Sanctuary",
+        ["Natla's Mines"] = "Mines",
+        ["Atlantis"] = "Atlantis",
+        ["The Great Pyramid"] = "Pyramid",
+    };
+
+    private static string BuildKeyItemAlias(string displayName, TR1Type type, int sameTypeCount)
+    {
+        string shortLevel = _levelShortNames.GetValueOrDefault(displayName, displayName.Replace(" ", ""));
+        string shortType = type.ToString().Replace("_S_P", "");
+
+        if (sameTypeCount > 0)
+            return $"{shortLevel}_{shortType}_{sameTypeCount + 1}";
+        return $"{shortLevel}_{shortType}";
     }
 
-    private Dictionary<string, List<RouteEntry>> LoadRoutes()
+    // Known secret counts per level (from TR1 game data)
+    private static readonly Dictionary<string, int> _secretCounts = new()
     {
-        string routesPath = Path.Combine(_resourceBase, "Locations", "routes.json");
-        if (!File.Exists(routesPath))
-        {
-            Console.WriteLine($"Warning: routes.json not found at {routesPath}");
-            return new();
-        }
-
-        string json = File.ReadAllText(routesPath);
-        return JsonConvert.DeserializeObject<Dictionary<string, List<RouteEntry>>>(json) ?? new();
-    }
-
-    private Dictionary<string, SecretMappingData> LoadSecretMappings(List<string> levels)
-    {
-        var mappings = new Dictionary<string, SecretMappingData>();
-        string secretDir = Path.Combine(_resourceBase, "SecretMapping");
-
-        foreach (string level in levels)
-        {
-            string path = Path.Combine(secretDir, $"{level}-SecretMapping.json");
-            if (File.Exists(path))
-            {
-                string json = File.ReadAllText(path);
-                var mapping = JsonConvert.DeserializeObject<SecretMappingData>(json);
-                if (mapping != null)
-                {
-                    mappings[level] = mapping;
-                }
-            }
-        }
-
-        return mappings;
-    }
-}
-
-// JSON deserialization models for routes.json
-public class RouteEntry
-{
-    public int X { get; set; }
-    public int Y { get; set; }
-    public int Z { get; set; }
-    public int Room { get; set; }
-    public string KeyItemsLow { get; set; }
-    public string KeyItemsHigh { get; set; }
-    public string Range { get; set; }
-    public bool RequiresReturnPath { get; set; }
-    public bool Validated { get; set; }
-}
-
-// JSON deserialization models for secret mappings
-public class SecretMappingData
-{
-    public List<int> RewardEntities { get; set; }
-    public List<SecretRoom> Rooms { get; set; } = new();
-}
-
-public class SecretRoom
-{
-    public List<SecretPosition> RewardPositions { get; set; } = new();
-}
-
-public class SecretPosition
-{
-    public int X { get; set; }
-    public int Y { get; set; }
-    public int Z { get; set; }
+        [TR1LevelNames.CAVES]      = 3,
+        [TR1LevelNames.VILCABAMBA] = 3,
+        [TR1LevelNames.VALLEY]     = 5,
+        [TR1LevelNames.QUALOPEC]   = 3,
+        [TR1LevelNames.FOLLY]      = 4,
+        [TR1LevelNames.COLOSSEUM]  = 3,
+        [TR1LevelNames.MIDAS]      = 3,
+        [TR1LevelNames.CISTERN]    = 3,
+        [TR1LevelNames.TIHOCAN]    = 2,
+        [TR1LevelNames.KHAMOON]    = 3,
+        [TR1LevelNames.OBELISK]    = 3,
+        [TR1LevelNames.SANCTUARY]  = 1,
+        [TR1LevelNames.MINES]      = 3,
+        [TR1LevelNames.ATLANTIS]   = 3,
+        [TR1LevelNames.PYRAMID]    = 3,
+    };
 }

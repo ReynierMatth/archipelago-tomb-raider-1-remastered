@@ -17,7 +17,7 @@ from .items import (
     WEAPONS,
     get_all_items,
 )
-from .locations import LEVELS, location_id_to_name, location_table
+from .locations import LEVELS, SECRETS_PER_LEVEL, location_id_to_name, location_table
 from .options import TR1ROptions
 from .regions import create_regions
 from .rules import set_rules
@@ -125,7 +125,8 @@ class TR1RWorld(World):
 
     def create_event(self, name: str):
         from BaseClasses import Item
-        return Item(name, ItemClassification.progression, None, self.player)
+        data = EVENTS[name]
+        return Item(name, data.classification, data.ap_id, self.player)
 
     def set_rules(self) -> None:
         set_rules(self)
@@ -158,8 +159,8 @@ class TR1RWorld(World):
             self.multiworld.completion_condition[player] = \
                 lambda state: all(
                     state.can_reach(f"{level[0]} - Secret {s + 1}", "Location", player)
-                    for level in LEVELS
-                    for s in range(3)
+                    for i, level in enumerate(LEVELS)
+                    for s in range(SECRETS_PER_LEVEL[i])
                 )
         elif goal == 2:  # n_levels
             required = self.options.levels_for_goal.value
