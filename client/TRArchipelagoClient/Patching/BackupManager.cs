@@ -119,7 +119,8 @@ public class BackupManager
         // Common paths for TR1 Remastered level data
         string[] possiblePaths =
         {
-            Path.Combine(_gameDir, "1"),              // TR1 subfolder
+            Path.Combine(_gameDir, "1", "DATA"),       // TR1-3 Remastered Steam layout
+            Path.Combine(_gameDir, "1"),
             Path.Combine(_gameDir, "data", "1"),
             Path.Combine(_gameDir, "TR1"),
             _gameDir,                                  // Flat structure

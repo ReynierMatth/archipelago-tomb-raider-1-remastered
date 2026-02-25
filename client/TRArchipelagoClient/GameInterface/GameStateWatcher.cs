@@ -24,6 +24,7 @@ public class GameStateWatcher : IDisposable
     private readonly APSession _session;
     private readonly ProcessMemory _memory;
     private readonly InventoryManager _inventory;
+    private readonly InventoryScanner _scanner;
 
     // Cached base addresses
     private IntPtr _tomb1Base;
@@ -55,6 +56,8 @@ public class GameStateWatcher : IDisposable
         _session = session;
         _memory = memory;
         _inventory = new InventoryManager(memory);
+        _scanner = new InventoryScanner(memory);
+        _inventory.Scanner = _scanner;
         _levelEntityLocations = levelEntityLocations;
     }
 
@@ -173,6 +176,9 @@ public class GameStateWatcher : IDisposable
         // Check health / death
         CheckHealth();
 
+        // Auto-find live inventory address
+        _scanner.Poll(_tomb1Base);
+
         // Process received items from AP
         ProcessReceivedItems(levelId);
     }
@@ -198,6 +204,12 @@ public class GameStateWatcher : IDisposable
         }
 
         ConsoleUI.LevelChange(newName);
+
+        // Reset inventory scanner (heap addresses shift on level load)
+        _scanner.Reset();
+
+        // Refresh Pistols pointer for ring injection
+        _inventory.RefreshPistolsPointer();
 
         // Reset per-level state
         _entityFlags.Clear();

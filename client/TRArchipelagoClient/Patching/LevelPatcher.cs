@@ -7,7 +7,8 @@ namespace TRArchipelagoClient.Patching;
 
 /// <summary>
 /// Patches TR1 level files for Archipelago multiworld.
-/// Replaces randomizable pickups with sentinel items and records the mapping.
+/// Replaces randomizable pickups with SmallMed_S_P (universal sentinel)
+/// and records entity-to-AP-location mappings.
 /// </summary>
 public class LevelPatcher
 {
@@ -18,14 +19,15 @@ public class LevelPatcher
     // Mapping of (levelFile, entityIndex) -> AP location ID
     private readonly Dictionary<string, Dictionary<int, long>> _locationMappings = new();
 
-    // Items that should be replaced with sentinels
-    private static readonly HashSet<TR1Type> _replaceableTypes = new(
+    // Items that are AP locations (pickups + key items)
+    private static readonly HashSet<TR1Type> _trackableTypes = new(
         TR1TypeUtilities.GetStandardPickupTypes()
             .Concat(TR1TypeUtilities.GetKeyItemTypes())
     );
 
-    // Sentinel type to visually represent an AP item
-    private const TR1Type SentinelType = TR1Type.SavegameCrystal_P;
+    // Sentinel type: SmallMed_S_P exists in every level (has mesh data).
+    // Player picks up a "small medipack" visually, but the real AP item is determined by the server.
+    private const TR1Type SentinelType = TR1Type.SmallMed_S_P;
 
     public LevelPatcher(string gameDir, APSession session)
     {
@@ -34,11 +36,15 @@ public class LevelPatcher
         _backupManager = new BackupManager(gameDir);
     }
 
+    public BackupManager BackupManager => _backupManager;
+
     /// <summary>
-    /// Patch all level files: replace pickups with sentinels and record mappings.
+    /// Backup original files, then scan and patch all level files.
     /// </summary>
     public void PatchAll()
     {
+        _backupManager.BackupAll();
+
         var levels = TR1LevelNames.AsList;
 
         for (int levelIdx = 0; levelIdx < levels.Count; levelIdx++)
@@ -57,7 +63,8 @@ public class LevelPatcher
     }
 
     /// <summary>
-    /// Patch a single level file.
+    /// Scan and patch a single level file.
+    /// Replaces all pickup/key item entities with SmallMed_S_P sentinel.
     /// </summary>
     private void PatchLevel(string levelFile, string levelPath, int levelIndex)
     {
@@ -81,7 +88,7 @@ public class LevelPatcher
         {
             var entity = level.Entities[i];
 
-            if (!_replaceableTypes.Contains(entity.TypeID))
+            if (!_trackableTypes.Contains(entity.TypeID))
                 continue;
 
             // Calculate the AP location ID for this entity
@@ -90,8 +97,7 @@ public class LevelPatcher
             // Record the mapping
             entityMapping[i] = locationId;
 
-            // Replace the entity type with a sentinel (visual placeholder)
-            // The actual item will be determined by the AP server
+            // Replace with sentinel — SmallMed_S_P mesh exists in all levels
             entity.TypeID = SentinelType;
             patchedCount++;
         }

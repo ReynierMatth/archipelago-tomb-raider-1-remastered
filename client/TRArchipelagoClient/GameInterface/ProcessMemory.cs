@@ -233,6 +233,61 @@ public class ProcessMemory : IDisposable
     /// Used to find addresses via byte patterns (ASLR-resistant).
     /// Wildcard bytes are represented as null.
     /// </summary>
+    // =================================================================
+    // VIRTUAL MEMORY ENUMERATION (for heap scanning)
+    // =================================================================
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern int VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, int dwLength);
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct MEMORY_BASIC_INFORMATION
+    {
+        public IntPtr BaseAddress;
+        public IntPtr AllocationBase;
+        public uint AllocationProtect;
+        public ushort PartitionId;
+        public IntPtr RegionSize;
+        public uint State;
+        public uint Protect;
+        public uint Type;
+    }
+
+    private const uint MEM_COMMIT = 0x1000;
+    private const uint PAGE_READWRITE = 0x04;
+    private const uint PAGE_EXECUTE_READWRITE = 0x40;
+    private const uint PAGE_WRITECOPY = 0x08;
+
+    /// <summary>
+    /// Enumerates all readable/writable committed memory regions of the process.
+    /// Returns list of (baseAddress, size) tuples.
+    /// </summary>
+    public List<(IntPtr Address, int Size)> GetReadableRegions(long maxAddress = 0x7FFFFFFFFFFF)
+    {
+        var regions = new List<(IntPtr, int)>();
+        IntPtr address = IntPtr.Zero;
+
+        while ((long)address < maxAddress)
+        {
+            int result = VirtualQueryEx(_processHandle, address, out var info, Marshal.SizeOf<MEMORY_BASIC_INFORMATION>());
+            if (result == 0) break;
+
+            if (info.State == MEM_COMMIT &&
+                (info.Protect == PAGE_READWRITE || info.Protect == PAGE_EXECUTE_READWRITE || info.Protect == PAGE_WRITECOPY))
+            {
+                long size = (long)info.RegionSize;
+                if (size > 0 && size <= 100_000_000) // skip absurdly large regions
+                    regions.Add((info.BaseAddress, (int)size));
+            }
+
+            long next = (long)info.BaseAddress + (long)info.RegionSize;
+            if (next <= (long)address) break; // overflow guard
+            address = new IntPtr(next);
+        }
+
+        return regions;
+    }
+
     public IntPtr AOBScan(byte?[] pattern, IntPtr startAddress, int scanSize)
     {
         byte[] memory = ReadBytes(startAddress, scanSize);

@@ -121,6 +121,22 @@ public static class TR1RMemoryMap
     /// <summary>Water state of current room. Int16.</summary>
     public const int LaraRoomType = 0x310e8c;
 
+    // ----- LARA_INFO Ammo (live runtime, Int32 each, 8-byte stride) -----
+    // These are the AMMO_INFO fields in LARA_INFO. Writing here changes ammo instantly.
+    // Shotgun ammo is stored internally as rounds*6 (6 pellets per shot).
+
+    /// <summary>Magnum ammo count. Int32. Direct value (1 ammo = 1 displayed).</summary>
+    public const int Lara_MagnumAmmo = 0x310FC8;
+
+    /// <summary>Uzi ammo count. Int32. Direct value (1 ammo = 1 displayed).</summary>
+    public const int Lara_UziAmmo = 0x310FD0;
+
+    /// <summary>Shotgun ammo count. Int32. Internal = displayed * 6 (6 pellets per shell).</summary>
+    public const int Lara_ShotgunAmmo = 0x310FD8;
+
+    /// <summary>Shotgun internal multiplier (each shell = 6 pellets).</summary>
+    public const int ShotgunAmmoMultiplier = 6;
+
     // ----- Level & Game State -----
 
     /// <summary>Current TR1 level ID (0=Home, 1=Caves, ..., 24=Menu). Int32.</summary>
@@ -162,6 +178,119 @@ public static class TR1RMemoryMap
 
     /// <summary>Number of rooms. Int16.</summary>
     public const int RoomsCount = 0x3f2030;
+
+    // ----- Inventory Ring (Main Ring) -----
+    // Discovered via Cheat Engine RE of Inv_AddItem (tomb1.dll+1DE22).
+    // The main ring stores items sorted by inv_pos.
+
+    /// <summary>Main ring item count. Int16. Max 24.</summary>
+    public const int MainRingCount = 0xE2ABC;
+
+    /// <summary>Main ring items[] array. 24 × Int64 pointers to INVENTORY_ITEM structs.</summary>
+    public const int MainRingItems = 0xF8D20;
+
+    /// <summary>Main ring qtys[] array. 24 × Int16 quantities. Stride 2.</summary>
+    public const int MainRingQtys = 0xF8DD8;
+
+    /// <summary>Max items per ring.</summary>
+    public const int MaxRingItems = 24;
+
+    // ----- Inventory Ring (Keys Ring) -----
+    // Same mechanic as Main Ring: count + items[] pointers + qtys[].
+    // Stores key items (keys, puzzles, pickups that go to the key ring).
+
+    /// <summary>Keys ring item count. Int16. Max 24.</summary>
+    public const int KeysRingCount = 0xFD6CC;
+
+    /// <summary>Keys ring items[] array. 24 × Int64 pointers to INVENTORY_ITEM structs.</summary>
+    public const int KeysRingItems = 0xF95A0;
+
+    /// <summary>
+    /// Keys ring qtys[] array. 24 × Int16 quantities.
+    /// Estimated offset — needs confirmation via Mode 6 scanner.
+    /// Expected layout: immediately after items[] (24*8 = 0xC0 bytes).
+    /// </summary>
+    public const int KeysRingQtys = 0xF9660;
+
+    /// <summary>
+    /// INVENTORY_ITEM struct stride in the global table (3280 bytes).
+    /// All INVENTORY_ITEM structs are stored sequentially in tomb1.dll.
+    /// Pointer for item X = Pistols_ptr + RelativeIndex * Stride.
+    /// </summary>
+    public const int InventoryItemStride = 0xCD0;
+
+    /// <summary>Offset of object_id field within an INVENTORY_ITEM struct. Int16.</summary>
+    public const int InvItem_ObjectId = 0x08;
+
+    /// <summary>
+    /// Relative table indices from Pistols' INVENTORY_ITEM.
+    /// Usage: target_ptr = pistols_ptr + RelIndex * InventoryItemStride
+    /// </summary>
+    public static class InvItemRelIndex
+    {
+        public const int SmallMedipack = -6;
+        public const int LargeMedipack = -2;   // confirmed (objId=0x6D)
+        public const int Pistols = 0;
+        public const int Shotgun = 1;
+        public const int Compass = 6;
+        public const int Uzis = 9;
+        public const int Magnums = 12;
+    }
+
+    /// <summary>
+    /// Known TR1 object IDs (from TR1Type enum / disassembly).
+    /// These are the object_id values stored at INVENTORY_ITEM+0x08.
+    /// </summary>
+    public static class ObjId
+    {
+        public const int SmallMedipack = 0x6C; // 108
+        public const int LargeMedipack = 0x6D; // 109
+        public const int Pistols = 0x01;
+        public const int Shotgun = 0x02;
+        public const int Magnums = 0x03;
+        public const int Uzis = 0x04;
+        public const int ShotgunAmmo = 0x56; // 86
+        public const int MagnumAmmo = 0x57;  // 87
+        public const int UziAmmo = 0x58;     // 88
+        // Key items
+        public const int Key1 = 0x6E; // 110
+        public const int Key2 = 0x6F; // 111
+        public const int Key3 = 0x70; // 112
+        public const int Key4 = 0x71; // 113
+        public const int Puzzle1 = 0x72; // 114 (e.g. Gold Bar, Fuse)
+        public const int Puzzle2 = 0x73; // 115
+        public const int Puzzle3 = 0x74; // 116
+        public const int Puzzle4 = 0x75; // 117
+        public const int LeadBar = 0x7A; // 122 (Midas gold bar pickup form)
+        public const int ScionPiece = 0x76; // 118
+    }
+
+    /// <summary>
+    /// Maps object_id values to human-readable names.
+    /// Used by the INVENTORY_ITEM table scanner.
+    /// </summary>
+    public static readonly Dictionary<int, string> ObjIdNames = new()
+    {
+        [ObjId.Pistols] = "Pistols",
+        [ObjId.Shotgun] = "Shotgun",
+        [ObjId.Magnums] = "Magnums",
+        [ObjId.Uzis] = "Uzis",
+        [ObjId.ShotgunAmmo] = "Shotgun Ammo",
+        [ObjId.MagnumAmmo] = "Magnum Ammo",
+        [ObjId.UziAmmo] = "Uzi Ammo",
+        [ObjId.SmallMedipack] = "Small Medipack",
+        [ObjId.LargeMedipack] = "Large Medipack",
+        [ObjId.Key1] = "Key 1",
+        [ObjId.Key2] = "Key 2",
+        [ObjId.Key3] = "Key 3",
+        [ObjId.Key4] = "Key 4",
+        [ObjId.Puzzle1] = "Puzzle 1 (Gold Bar/Fuse)",
+        [ObjId.Puzzle2] = "Puzzle 2",
+        [ObjId.Puzzle3] = "Puzzle 3",
+        [ObjId.Puzzle4] = "Puzzle 4",
+        [ObjId.LeadBar] = "Lead Bar",
+        [ObjId.ScionPiece] = "Scion Piece",
+    };
 
     // ----- Camera -----
 
