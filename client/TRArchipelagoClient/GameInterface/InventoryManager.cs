@@ -23,8 +23,9 @@ public class InventoryManager
 {
     private readonly ProcessMemory _memory;
 
-    // Pending key items for levels not currently loaded
-    private readonly Dictionary<int, List<long>> _pendingKeyItems = new();
+    // Received key items per level — kept permanently for idempotent re-injection
+    // after death/reload. InjectToRingRaw handles duplicates safely.
+    private readonly Dictionary<int, List<long>> _receivedKeyItems = new();
 
     // Cached Pistols pointer (reference for all relIdx calculations)
     private IntPtr _pistolsPtr;
@@ -96,8 +97,8 @@ public class InventoryManager
         if (weaponFlag != 0)
         {
             IntPtr weaponAddr = WorldStateAddr + TR1RMemoryMap.Save_WeaponsConfig;
-            byte current = _memory.ReadByte(weaponAddr);
-            _memory.Write(weaponAddr, (byte)(current | weaponFlag));
+            byte weaponByte = _memory.ReadByte(weaponAddr);
+            _memory.Write(weaponAddr, (byte)(weaponByte | weaponFlag));
         }
 
         // Convert any existing ammo items in the ring to LARA_INFO, then give starting ammo
@@ -248,40 +249,43 @@ public class InventoryManager
         int targetMapperIdx = LocationMapper.GetLevelIndex(targetLevelFile);
         int currentMapperIdx = TR1RMemoryMap.ToLocationMapperIndex(currentRuntimeLevelId);
 
+        // Always store for idempotent re-injection (death/reload/reconnect)
+        if (!_receivedKeyItems.ContainsKey(targetMapperIdx))
+            _receivedKeyItems[targetMapperIdx] = new();
+        if (!_receivedKeyItems[targetMapperIdx].Contains(apItemId))
+            _receivedKeyItems[targetMapperIdx].Add(apItemId);
+
+        // Try immediate injection if we're on the right level
         if (targetMapperIdx == currentMapperIdx && currentMapperIdx >= 0)
+            TryInjectKeyItem(apItemId);
+    }
+
+    /// <summary>
+    /// Attempts to inject a key item into the Keys Ring.
+    /// Called from GiveKeyItem (immediate) and from OnLevelChanged (deferred).
+    /// Safe to call multiple times — InjectToRingRaw handles duplicates.
+    /// </summary>
+    private bool TryInjectKeyItem(long apItemId)
+    {
+        if (!EnsurePistolsPointer())
+            return false;
+
+        IntPtr targetPtr = ResolveKeyItemPointer(apItemId);
+        if (targetPtr == IntPtr.Zero)
         {
-            if (!EnsurePistolsPointer())
-            {
-                ConsoleUI.Warning("[INV] Cannot inject key item: Pistols pointer not found.");
-                return;
-            }
-
-            // Resolve the key item type and compute the target pointer
-            IntPtr targetPtr = ResolveKeyItemPointer(apItemId);
-            if (targetPtr == IntPtr.Zero)
-            {
-                ConsoleUI.Warning($"[INV] Key item AP ID {apItemId}: unknown type, cannot inject.");
-                return;
-            }
-
-            bool injected = InjectToRingRaw(
-                TR1RMemoryMap.KeysRingCount,
-                TR1RMemoryMap.KeysRingItems,
-                TR1RMemoryMap.KeysRingQtys,
-                targetPtr, 1);
-
-            if (injected)
-                ConsoleUI.Info($"[INV] Key item injected into Keys Ring (ptr=0x{targetPtr:X})");
-            else
-                ConsoleUI.Warning("[INV] Failed to inject key item into Keys Ring.");
+            ConsoleUI.Warning($"[INV] Key item AP ID {apItemId}: unknown type, cannot inject.");
+            return false;
         }
-        else
-        {
-            // Store for pre-patching when the target level is loaded
-            if (!_pendingKeyItems.ContainsKey(targetMapperIdx))
-                _pendingKeyItems[targetMapperIdx] = new();
-            _pendingKeyItems[targetMapperIdx].Add(apItemId);
-        }
+
+        bool injected = InjectToRingRaw(
+            TR1RMemoryMap.KeysRingCount,
+            TR1RMemoryMap.KeysRingItems,
+            TR1RMemoryMap.KeysRingQtys,
+            targetPtr, 1);
+
+        if (injected)
+            ConsoleUI.Info($"[INV] Key item injected into Keys Ring (ptr=0x{targetPtr:X})");
+        return injected;
     }
 
     /// <summary>
@@ -326,16 +330,73 @@ public class InventoryManager
     }
 
     /// <summary>
-    /// Gets pending key items for a specific level (for pre-patching).
+    /// Gets received key items for a specific level. Items are NOT removed —
+    /// they are kept for idempotent re-injection after death/reload.
+    /// InjectToRingRaw handles duplicates safely (increments qty if already present).
     /// </summary>
-    public List<long> GetPendingKeyItems(int locationMapperIndex)
+    public List<long> GetReceivedKeyItems(int locationMapperIndex)
     {
-        if (_pendingKeyItems.TryGetValue(locationMapperIndex, out var items))
-        {
-            _pendingKeyItems.Remove(locationMapperIndex);
+        if (_receivedKeyItems.TryGetValue(locationMapperIndex, out var items))
             return items;
-        }
         return new();
+    }
+
+    /// <summary>
+    /// Ensures received key items are present in the Keys Ring with correct qty.
+    /// Called every poll tick. Reads actual ring state to be fully idempotent —
+    /// handles death, reload, and reconnect automatically. Skips quickly if
+    /// no items to process or Pistols pointer not available.
+    /// </summary>
+    public void EnsureKeyItemsInRing(int currentRuntimeLevelId)
+    {
+        int mapperIdx = TR1RMemoryMap.ToLocationMapperIndex(currentRuntimeLevelId);
+        if (mapperIdx < 0) return;
+
+        var items = GetReceivedKeyItems(mapperIdx);
+        if (items.Count == 0) return;
+        if (!EnsurePistolsPointer()) return;
+
+        // Count expected qty per pointer from received items
+        var expectedQty = new Dictionary<IntPtr, short>();
+        foreach (long apItemId in items)
+        {
+            IntPtr ptr = ResolveKeyItemPointer(apItemId);
+            if (ptr == IntPtr.Zero) continue;
+            expectedQty.TryGetValue(ptr, out short current);
+            expectedQty[ptr] = (short)(current + 1);
+        }
+
+        // Read actual ring state and reconcile
+        IntPtr t1 = _memory.Tomb1Base;
+        short ringCount = _memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingCount);
+
+        foreach (var (targetPtr, targetQty) in expectedQty)
+        {
+            // Find item in ring
+            int ringIdx = -1;
+            for (int i = 0; i < ringCount; i++)
+            {
+                if (_memory.ReadPointer(t1 + TR1RMemoryMap.KeysRingItems + i * 8) == targetPtr)
+                { ringIdx = i; break; }
+            }
+
+            if (ringIdx >= 0)
+            {
+                // Item exists — ensure correct qty
+                short currentQty = _memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingQtys + ringIdx * 2);
+                if (currentQty < targetQty)
+                    _memory.Write(t1 + TR1RMemoryMap.KeysRingQtys + ringIdx * 2, targetQty);
+            }
+            else if (ringCount < TR1RMemoryMap.MaxRingItems)
+            {
+                // Item missing — add to ring
+                _memory.Write(t1 + TR1RMemoryMap.KeysRingItems + ringCount * 8, targetPtr.ToInt64());
+                _memory.Write(t1 + TR1RMemoryMap.KeysRingQtys + ringCount * 2, targetQty);
+                ringCount++;
+                _memory.Write(t1 + TR1RMemoryMap.KeysRingCount, ringCount);
+                ConsoleUI.Info($"[INV] Key item ensured in Keys Ring (ptr=0x{targetPtr:X}, qty={targetQty})");
+            }
+        }
     }
 
     // =================================================================
@@ -452,9 +513,12 @@ public class InventoryManager
     private bool EnsurePistolsPointer()
     {
         if (_pistolsPtr != IntPtr.Zero) return true;
-        RefreshPistolsPointer();
+        _pistolsPtr = FindPistolsPointer();
         return _pistolsPtr != IntPtr.Zero;
     }
+
+    /// <summary>Invalidate cached pointer (call on level change).</summary>
+    public void InvalidatePistolsPointer() => _pistolsPtr = IntPtr.Zero;
 
     /// <summary>
     /// Finds the Pistols INVENTORY_ITEM pointer by cross-referencing Main Ring items.
@@ -478,44 +542,54 @@ public class InventoryManager
                 return itemPtr;
         }
 
-        // Fallback: items[1] is almost always Pistols
-        return _memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems + 1 * 8);
+        // No fallback — only return a verified pointer
+        return IntPtr.Zero;
     }
 
     /// <summary>
     /// Resolves the INVENTORY_ITEM pointer for a key item AP ID.
-    /// Key item AP IDs encode: 770000 + (levelBase + TR1Type enum value).
-    /// The TR1Type value (extracted via modulo 1000) determines the generic slot.
-    /// Most items use relIdx * stride from Pistols. Key4 uses a raw byte offset.
+    /// AP IDs use level-specific TR1Type aliases (e.g. Folly_K4_ThorKey = 14280),
+    /// not generic types. We cast to TR1Type and parse the enum name to determine
+    /// the generic slot (K1-K4, P1-P4, Scion, LeadBar).
     /// </summary>
     private IntPtr ResolveKeyItemPointer(long apItemId)
     {
-        // Extract the TR1Type enum value from the AP ID
-        // AP ID = 770000 + levelBase + typeValue, where levelBase is a multiple of 1000
-        int typeValue = (int)((apItemId - 770_000) % 1000);
+        int enumValue = (int)(apItemId - 770_000);
+        var tr1Type = (TR1Type)enumValue;
+        string name = tr1Type.ToString();
 
-        // Map TR1Type value to relIdx or byte offset
-        // TR1Type values: Key1=129, Key2=130, Key3=131, Key4=132,
-        //   Puzzle1=110, Puzzle2=111, Puzzle3=112, Puzzle4=113,
-        //   ScionPiece2=144 (Pierre drop, normal pickup)
-        int relIdx = typeValue switch
-        {
-            129 => TR1RMemoryMap.InvItemRelIndex.Key1,       // Key1_S_P
-            130 => TR1RMemoryMap.InvItemRelIndex.Key2,       // Key2_S_P
-            131 => TR1RMemoryMap.InvItemRelIndex.Key3,       // Key3_S_P
-            110 => TR1RMemoryMap.InvItemRelIndex.Puzzle1,    // Puzzle1_S_P
-            111 => TR1RMemoryMap.InvItemRelIndex.Puzzle2,    // Puzzle2_S_P
-            112 => TR1RMemoryMap.InvItemRelIndex.Puzzle3,    // Puzzle3_S_P
-            113 => TR1RMemoryMap.InvItemRelIndex.Puzzle4,    // Puzzle4_S_P
-            143 or 144 => TR1RMemoryMap.InvItemRelIndex.Scion, // ScionPiece1/2_S_P
-            _ => int.MinValue,
-        };
+        // If ToString() returns just a number, the enum value is undefined
+        if (name == enumValue.ToString())
+            return IntPtr.Zero;
 
-        if (relIdx != int.MinValue)
-            return _pistolsPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
+        // Determine generic slot from the alias name pattern
+        // K4 must be checked before K1 (to avoid "_K4_" matching "_K1" substring issue — not possible, but order is cleaner)
+        int? relIdx = null;
+        bool isKey4 = false;
 
-        // Key4 (Thor Key) — uses fixed byte offset, not stride-aligned
-        if (typeValue == 132) // Key4_S_P
+        if (name.Contains("_K1_") || name.Contains("_K1"))
+            relIdx = TR1RMemoryMap.InvItemRelIndex.Key1;
+        else if (name.Contains("_K2_") || name.Contains("_K2"))
+            relIdx = TR1RMemoryMap.InvItemRelIndex.Key2;
+        else if (name.Contains("_K3_") || name.Contains("_K3"))
+            relIdx = TR1RMemoryMap.InvItemRelIndex.Key3;
+        else if (name.Contains("_K4_") || name.Contains("_K4"))
+            isKey4 = true;
+        else if (name.Contains("_P1_") || name.Contains("_P1") || name.Contains("_LeadBar"))
+            relIdx = TR1RMemoryMap.InvItemRelIndex.Puzzle1;
+        else if (name.Contains("_P2_") || name.Contains("_P2"))
+            relIdx = TR1RMemoryMap.InvItemRelIndex.Puzzle2;
+        else if (name.Contains("_P3_") || name.Contains("_P3"))
+            relIdx = TR1RMemoryMap.InvItemRelIndex.Puzzle3;
+        else if (name.Contains("_P4_") || name.Contains("_P4"))
+            relIdx = TR1RMemoryMap.InvItemRelIndex.Puzzle4;
+        else if (name.Contains("_Scion") || name.Contains("Scion"))
+            relIdx = TR1RMemoryMap.InvItemRelIndex.Scion;
+
+        if (relIdx.HasValue)
+            return _pistolsPtr + relIdx.Value * TR1RMemoryMap.InventoryItemStride;
+
+        if (isKey4)
             return _pistolsPtr + TR1RMemoryMap.Key4ByteOffset;
 
         return IntPtr.Zero;

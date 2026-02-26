@@ -181,35 +181,27 @@ public class GameStateWatcher : IDisposable
 
         // Process received items from AP
         ProcessReceivedItems(levelId);
+
+        // Ensure received key items are present in Keys Ring (idempotent)
+        _inventory.EnsureKeyItemsInRing(levelId);
     }
 
     private void OnLevelChanged(int previousLevelId, int newLevelId)
     {
         string newName = TR1RMemoryMap.LevelNames.GetValueOrDefault(newLevelId, $"Level {newLevelId}");
 
-        // If we had a previous level, mark it as complete
-        if (previousLevelId > 0 && previousLevelId != TR1RMemoryMap.Level_MainMenu &&
-            previousLevelId != TR1RMemoryMap.Level_Home)
-        {
-            int mapperIdx = TR1RMemoryMap.ToLocationMapperIndex(previousLevelId);
-            if (mapperIdx >= 0 && !_completedLevels.Contains(previousLevelId))
-            {
-                long locId = LocationMapper.GetLevelCompleteId(mapperIdx);
-                _session.SendLocationCheck(locId);
-                _completedLevels.Add(previousLevelId);
-
-                string prevName = TR1RMemoryMap.LevelNames.GetValueOrDefault(previousLevelId, $"Level {previousLevelId}");
-                ConsoleUI.Success($"Completed: {prevName}");
-            }
-        }
+        // Level completion is handled by CheckLevelCompletion (LevelCompleted flag),
+        // NOT here — OnLevelChanged also fires on save loads.
 
         ConsoleUI.LevelChange(newName);
 
         // Reset inventory scanner (heap addresses shift on level load)
         _scanner.Reset();
 
-        // Refresh Pistols pointer for ring injection
-        _inventory.RefreshPistolsPointer();
+        // Invalidate Pistols pointer — will be re-found lazily when ring is stable
+        _inventory.InvalidatePistolsPointer();
+
+        // Key items are ensured by EnsureKeyItemsInRing() every poll tick — no flush needed.
 
         // Reset per-level state
         _entityFlags.Clear();
