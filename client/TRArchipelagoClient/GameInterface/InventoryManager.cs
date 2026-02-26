@@ -31,6 +31,11 @@ public class InventoryManager
     // stop reconciling until the next load — prevents re-giving used keys.
     private bool _keyItemsEnsured;
 
+    // Pending sentinel medipack removals — queued by CheckEntityPickups,
+    // processed every tick. Uses a counter because the game may not have
+    // added the medipack to the ring yet when the entity flag changes.
+    private int _pendingSentinelRemovals;
+
     // Cached Pistols pointer (reference for all relIdx calculations)
     private IntPtr _pistolsPtr;
 
@@ -524,6 +529,74 @@ public class InventoryManager
     /// so that EnsureKeyItemsInRing will re-inject items into the fresh ring.
     /// </summary>
     public void ResetKeyItemEnsurance() => _keyItemsEnsured = false;
+
+    /// <summary>
+    /// Queue removal of one parasitic small medipack. Called when the player
+    /// picks up a sentinel entity (SmallMed_S_P) — the game natively adds a
+    /// small medipack that we need to cancel.
+    /// </summary>
+    public void QueueSentinelRemoval() => _pendingSentinelRemovals++;
+
+    /// <summary>
+    /// Discard pending sentinel removals. Call on level change (ring resets).
+    /// </summary>
+    public void ResetSentinelRemovals() => _pendingSentinelRemovals = 0;
+
+    /// <summary>
+    /// Process pending sentinel medipack removals. Call every tick.
+    /// Retries until the medipack is found in the ring (the game may not
+    /// have added it yet on the same tick as the entity flag change).
+    /// </summary>
+    public void ProcessSentinelRemovals()
+    {
+        while (_pendingSentinelRemovals > 0 && RemoveOneSentinelMedipack())
+            _pendingSentinelRemovals--;
+    }
+
+    /// <summary>
+    /// Removes one small medipack from the Main Ring (decrements qty by 1,
+    /// or removes the item entirely if qty reaches 0).
+    /// </summary>
+    private bool RemoveOneSentinelMedipack()
+    {
+        if (!EnsurePistolsPointer()) return false;
+
+        IntPtr t1 = _memory.Tomb1Base;
+        IntPtr targetPtr = _pistolsPtr + TR1RMemoryMap.InvItemRelIndex.SmallMedipack * TR1RMemoryMap.InventoryItemStride;
+        short ringCount = _memory.ReadInt16(t1 + TR1RMemoryMap.MainRingCount);
+
+        for (int i = 0; i < ringCount; i++)
+        {
+            if (_memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems + i * 8) != targetPtr)
+                continue;
+
+            IntPtr qtyAddr = t1 + TR1RMemoryMap.MainRingQtys + i * 2;
+            short qty = _memory.ReadInt16(qtyAddr);
+
+            if (qty > 1)
+            {
+                _memory.Write(qtyAddr, (short)(qty - 1));
+                ConsoleUI.Info($"[INV] Sentinel medipack removed (qty {qty} -> {qty - 1})");
+                return true;
+            }
+
+            // qty == 1 → remove item from ring entirely (shift subsequent items)
+            for (int j = i; j < ringCount - 1; j++)
+            {
+                long nextPtr = _memory.ReadInt64(t1 + TR1RMemoryMap.MainRingItems + (j + 1) * 8);
+                _memory.Write(t1 + TR1RMemoryMap.MainRingItems + j * 8, nextPtr);
+                short nextQty = _memory.ReadInt16(t1 + TR1RMemoryMap.MainRingQtys + (j + 1) * 2);
+                _memory.Write(t1 + TR1RMemoryMap.MainRingQtys + j * 2, nextQty);
+            }
+            _memory.Write(t1 + TR1RMemoryMap.MainRingItems + (ringCount - 1) * 8, 0L);
+            _memory.Write(t1 + TR1RMemoryMap.MainRingQtys + (ringCount - 1) * 2, (short)0);
+            _memory.Write(t1 + TR1RMemoryMap.MainRingCount, (short)(ringCount - 1));
+            ConsoleUI.Info("[INV] Sentinel medipack removed (item removed from ring)");
+            return true;
+        }
+
+        return false; // small medipack not found in ring yet — retry next tick
+    }
 
     /// <summary>
     /// Finds the Pistols INVENTORY_ITEM pointer by cross-referencing Main Ring items.

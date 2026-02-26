@@ -205,6 +205,9 @@ public class GameStateWatcher : IDisposable
         // are gated by _levelSettleTicks to avoid writing to uninitialized memory)
         ProcessReceivedItems(levelId);
 
+        // Remove parasitic small medipacks from sentinel pickups
+        _inventory.ProcessSentinelRemovals();
+
         // Wait for game to settle after new-game detection before touching rings
         if (_levelSettleTicks > 0)
         {
@@ -244,6 +247,7 @@ public class GameStateWatcher : IDisposable
 
         // Reset key item tracking for the new level
         _inventory.ResetKeyItemEnsurance();
+        _inventory.ResetSentinelRemovals();
 
         // Reset per-level state
         _entityFlags.Clear();
@@ -325,6 +329,10 @@ public class GameStateWatcher : IDisposable
                     string locName = _session.GetLocationName(locationId);
                     ConsoleUI.ItemSent(locName, "Archipelago");
                     _entityFlags[entityIndex] = currentFlags;
+
+                    // Cancel the parasitic small medipack the game adds when
+                    // picking up a sentinel (SmallMed_S_P) entity.
+                    _inventory.QueueSentinelRemoval();
                 }
             }
             else
