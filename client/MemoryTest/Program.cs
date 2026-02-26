@@ -904,7 +904,7 @@ static void ShowKeysRingState(ProcessMemory memory, IntPtr t1, IntPtr pistolsPtr
             ? (int)(offset / TR1RMemoryMap.InventoryItemStride)
             : 99999;
 
-        string name = TR1RMemoryMap.ObjIdNames.GetValueOrDefault(objectId, $"Unknown");
+        string name = TR1RMemoryMap.InvObjIdNames.GetValueOrDefault(objectId, $"Unknown");
 
         // Try to read qty from estimated qtys offset
         short qty = memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingQtys + i * 2);
@@ -969,7 +969,7 @@ static void WatchKeyItemPickup(ProcessMemory memory, IntPtr t1, IntPtr pistolsPt
                     ? (int)(offset / TR1RMemoryMap.InventoryItemStride)
                     : 99999;
 
-                string name = TR1RMemoryMap.ObjIdNames.GetValueOrDefault(objectId, "Unknown");
+                string name = TR1RMemoryMap.InvObjIdNames.GetValueOrDefault(objectId, "Unknown");
 
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"  New item at ring index {newIdx}:");
@@ -1051,9 +1051,12 @@ static void ScanInventoryItemTable(ProcessMemory memory, IntPtr t1, IntPtr pisto
         // Skip if clearly invalid (0 or very high)
         if (objectId == 0 && relIdx != 0) continue;
 
-        string name = TR1RMemoryMap.ObjIdNames.GetValueOrDefault(objectId, $"?");
-        bool isKnown = TR1RMemoryMap.ObjIdNames.ContainsKey(objectId);
-        bool isKeyItem = objectId >= TR1RMemoryMap.ObjId.Key1 && objectId <= TR1RMemoryMap.ObjId.LeadBar;
+        string name = TR1RMemoryMap.InvObjIdNames.GetValueOrDefault(objectId, $"?");
+        bool isKnown = TR1RMemoryMap.InvObjIdNames.ContainsKey(objectId);
+        bool isKeyItem = objectId == TR1RMemoryMap.InvObjId.Key1 || objectId == TR1RMemoryMap.InvObjId.Key2
+            || objectId == TR1RMemoryMap.InvObjId.Key3 || objectId == TR1RMemoryMap.InvObjId.Key4
+            || objectId == TR1RMemoryMap.InvObjId.Puzzle1 || objectId == TR1RMemoryMap.InvObjId.Puzzle2
+            || objectId == TR1RMemoryMap.InvObjId.Puzzle3 || objectId == TR1RMemoryMap.InvObjId.Puzzle4;
 
         if (isKeyItem)
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -1183,7 +1186,7 @@ static void InjectKeyItem(ProcessMemory memory, IntPtr t1, IntPtr pistolsPtr)
 
     IntPtr targetPtr = pistolsPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
     short objectId = memory.ReadInt16(targetPtr + TR1RMemoryMap.InvItem_ObjectId);
-    string name = TR1RMemoryMap.ObjIdNames.GetValueOrDefault(objectId, "Unknown");
+    string name = TR1RMemoryMap.InvObjIdNames.GetValueOrDefault(objectId, "Unknown");
 
     Console.ForegroundColor = ConsoleColor.Yellow;
     Console.WriteLine($"  Target: relIdx={relIdx}, ptr=0x{targetPtr:X}, objId=0x{objectId:X4} ({name})");

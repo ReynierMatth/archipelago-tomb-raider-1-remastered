@@ -11,11 +11,11 @@ The game uses two inventory rings, each with the same structure:
 - **items[]** (24 x Int64): pointers to INVENTORY_ITEM structs
 - **qtys[]** (24 x Int16): quantity for each item
 
-All INVENTORY_ITEM structs are stored in a global sequential table in tomb1.dll
-with stride **0xCD0** (3280 bytes). Any item can be addressed as:
+Most INVENTORY_ITEM structs are in a global sequential table (stride **0xCD0**):
 ```
 target_ptr = pistols_ptr + relIdx * 0xCD0
 ```
+Exception: Key4 (Thor Key) is dynamically allocated, uses a raw byte offset.
 
 #### Main Ring (weapons, medipacks, compass)
 
@@ -27,25 +27,43 @@ target_ptr = pistols_ptr + relIdx * 0xCD0
 
 Confirmed items (relIdx from Pistols):
 
-| Item | RelIdx | ObjId | Status |
+| Item | RelIdx | InvObjId | Status |
 |---|---|---|---|
 | Small Medipack | -6 | 0x6C | CONFIRMED |
 | Large Medipack | -2 | 0x6D | CONFIRMED |
-| Pistols | 0 | - | CONFIRMED (reference) |
-| Shotgun | +1 | - | CONFIRMED |
-| Compass | +6 | - | CONFIRMED |
-| Uzis | +9 | - | CONFIRMED |
-| Magnums | +12 | - | CONFIRMED |
+| Pistols | 0 | 0x63 | CONFIRMED (reference) |
+| Shotgun | +1 | 0x64 | CONFIRMED |
+| Compass | +6 | 0x48 | CONFIRMED |
+| Uzis | +9 | 0x66 | CONFIRMED |
+| Magnums | +12 | 0x65 | CONFIRMED |
 
-#### Keys Ring (key items, puzzles)
+#### Keys Ring (key items, puzzles, scion)
 
 | Field | Offset | Type | Status |
 |---|---|---|---|
-| Count | 0xFD6CC | Int16 | Known |
-| Items[] | 0xF95A0 | 24 x Int64 | Known |
-| Qtys[] | 0xF9660 | 24 x Int16 | ESTIMATED (needs confirmation) |
+| Count | 0xFD6CC | Int16 | CONFIRMED |
+| Items[] | 0xF95A0 | 24 x Int64 | CONFIRMED |
+| Qtys[] | 0xF9660 | 24 x Int16 | CONFIRMED |
 
-Key item relIdx values: **TBD** - use MemoryTest Mode 6 table scanner to discover.
+Key item relIdx values (all confirmed via Mode 6 + CE injection tests):
+
+| Item | RelIdx | InvObjId | Notes |
+|---|---|---|---|
+| Key1 | -1 | 0x85 | Neptune/Silver/Gold/Rusty/Sapphire Key |
+| Key2 | -7 | 0x86 | Atlas Key, Cistern Silver Key |
+| Key3 | +7 | 0x87 | Damocles Key, Cistern Rusty Key |
+| Key4 | **N/A** | 0x88 | Thor Key — byte offset -0x9E00 from Pistols |
+| Puzzle1 | +11 | 0x72 | Gold Bar, Fuse, Ankh, Scarab |
+| Puzzle2 | -4 | 0x73 | Seal of Anubis |
+| Puzzle3 | +5 | 0x74 | |
+| Puzzle4 | -5 | 0x75 | |
+| Scion | -10 | 0x96 | Scion piece |
+
+**Key4 special case:** Its INVENTORY_ITEM is dynamically allocated (not stride-aligned).
+Address = `pistols_ptr + Key4ByteOffset` where `Key4ByteOffset = -0x9E00`.
+Only used in St. Francis' Folly (Thor Key). Confirmed working via CE injection.
+
+**Ring sorting:** The Keys Ring is sorted by inv_pos on insert (not appended).
 
 ### LARA_INFO Ammo (direct write, instant effect)
 
@@ -62,12 +80,6 @@ Key item relIdx values: **TBD** - use MemoryTest Mode 6 table scanner to discove
 | Weapons | Inject into Main Ring + set WSB weapon flag + give starting ammo |
 | Ammo | Direct write to LARA_INFO fields |
 | Medipacks | Inject into Main Ring (qty increment if exists) |
-| Key Items | Inject into Keys Ring |
+| Key Items (Key1-3, Puzzles, Scion) | Inject into Keys Ring via relIdx |
+| Key4 (Thor Key) | Inject into Keys Ring via raw byte offset |
 | Traps | Direct write to Lara health / LARA_INFO ammo |
-
-## Next Steps
-
-1. Run Mode 6 table scanner to discover key item relIdx values
-2. Confirm Keys Ring qtys[] offset (0xF9660 is estimated)
-3. Test key item injection (Silver Key at Vilcabamba)
-4. Fill in ResolveKeyItemRelIdx() in InventoryManager.cs

@@ -228,68 +228,84 @@ public static class TR1RMemoryMap
     /// </summary>
     public static class InvItemRelIndex
     {
+        // Main Ring items
         public const int SmallMedipack = -6;
-        public const int LargeMedipack = -2;   // confirmed (objId=0x6D)
+        public const int LargeMedipack = -2;
         public const int Pistols = 0;
         public const int Shotgun = 1;
         public const int Compass = 6;
         public const int Uzis = 9;
         public const int Magnums = 12;
+
+        // Keys Ring items — all confirmed via Mode 6 at St. Francis' Folly
+        public const int Key1 = -1;    // Neptune/Silver/Gold/Rusty/Sapphire Key
+        public const int Key2 = -7;    // Atlas Key, Cistern Silver Key
+        public const int Key3 = 7;     // Damocles Key, Cistern Rusty Key
+        // Key4: NOT in the stride-aligned table. Use Key4ByteOffset instead.
+        public const int Puzzle1 = 11; // Gold Bar, Fuse, Ankh, Scarab, etc.
+        public const int Puzzle2 = -4; // Seal of Anubis, etc.
+        public const int Puzzle3 = 5;
+        public const int Puzzle4 = -5;
+        public const int Scion = -10;  // Scion piece
     }
 
     /// <summary>
-    /// Known TR1 object IDs (from TR1Type enum / disassembly).
-    /// These are the object_id values stored at INVENTORY_ITEM+0x08.
+    /// Key4 (Thor Key) has its INVENTORY_ITEM dynamically allocated outside the
+    /// stride-aligned global table. Its address is at a fixed BYTE offset from Pistols.
+    /// Usage: key4_ptr = pistols_ptr - 0x9E00
+    /// Only used in St. Francis' Folly. Confirmed via CE injection test.
     /// </summary>
-    public static class ObjId
+    public const int Key4ByteOffset = -0x9E00;
+
+    /// <summary>
+    /// Inventory object IDs (from INVENTORY_ITEM+0x08 in the global table).
+    /// NOTE: These are NOT the same as TR1Type entity IDs — they are internal
+    /// inventory IDs discovered via the Mode 6 table scanner.
+    /// </summary>
+    public static class InvObjId
     {
-        public const int SmallMedipack = 0x6C; // 108
-        public const int LargeMedipack = 0x6D; // 109
-        public const int Pistols = 0x01;
-        public const int Shotgun = 0x02;
-        public const int Magnums = 0x03;
-        public const int Uzis = 0x04;
-        public const int ShotgunAmmo = 0x56; // 86
-        public const int MagnumAmmo = 0x57;  // 87
-        public const int UziAmmo = 0x58;     // 88
-        // Key items
-        public const int Key1 = 0x6E; // 110
-        public const int Key2 = 0x6F; // 111
-        public const int Key3 = 0x70; // 112
-        public const int Key4 = 0x71; // 113
-        public const int Puzzle1 = 0x72; // 114 (e.g. Gold Bar, Fuse)
-        public const int Puzzle2 = 0x73; // 115
-        public const int Puzzle3 = 0x74; // 116
-        public const int Puzzle4 = 0x75; // 117
-        public const int LeadBar = 0x7A; // 122 (Midas gold bar pickup form)
-        public const int ScionPiece = 0x76; // 118
+        // Main Ring items
+        public const int Pistols = 0x63;
+        public const int Shotgun = 0x64;
+        public const int Magnums = 0x65;
+        public const int Uzis = 0x66;
+        public const int SmallMedipack = 0x6C;
+        public const int LargeMedipack = 0x6D;
+        public const int Compass = 0x48;
+        // Keys Ring items
+        public const int Key1 = 0x85;
+        public const int Key2 = 0x86;
+        public const int Key3 = 0x87;
+        public const int Key4 = 0x88;  // Thor Key — dynamically allocated
+        public const int Puzzle1 = 0x72;
+        public const int Puzzle2 = 0x73;
+        public const int Puzzle3 = 0x74;
+        public const int Puzzle4 = 0x75;
+        public const int Scion = 0x96;
     }
 
     /// <summary>
-    /// Maps object_id values to human-readable names.
-    /// Used by the INVENTORY_ITEM table scanner.
+    /// Maps inventory object_id values to human-readable names.
+    /// Used by the INVENTORY_ITEM table scanner (Mode 6).
     /// </summary>
-    public static readonly Dictionary<int, string> ObjIdNames = new()
+    public static readonly Dictionary<int, string> InvObjIdNames = new()
     {
-        [ObjId.Pistols] = "Pistols",
-        [ObjId.Shotgun] = "Shotgun",
-        [ObjId.Magnums] = "Magnums",
-        [ObjId.Uzis] = "Uzis",
-        [ObjId.ShotgunAmmo] = "Shotgun Ammo",
-        [ObjId.MagnumAmmo] = "Magnum Ammo",
-        [ObjId.UziAmmo] = "Uzi Ammo",
-        [ObjId.SmallMedipack] = "Small Medipack",
-        [ObjId.LargeMedipack] = "Large Medipack",
-        [ObjId.Key1] = "Key 1",
-        [ObjId.Key2] = "Key 2",
-        [ObjId.Key3] = "Key 3",
-        [ObjId.Key4] = "Key 4",
-        [ObjId.Puzzle1] = "Puzzle 1 (Gold Bar/Fuse)",
-        [ObjId.Puzzle2] = "Puzzle 2",
-        [ObjId.Puzzle3] = "Puzzle 3",
-        [ObjId.Puzzle4] = "Puzzle 4",
-        [ObjId.LeadBar] = "Lead Bar",
-        [ObjId.ScionPiece] = "Scion Piece",
+        [InvObjId.Pistols] = "Pistols",
+        [InvObjId.Shotgun] = "Shotgun",
+        [InvObjId.Magnums] = "Magnums",
+        [InvObjId.Uzis] = "Uzis",
+        [InvObjId.SmallMedipack] = "Small Medipack",
+        [InvObjId.LargeMedipack] = "Large Medipack",
+        [InvObjId.Compass] = "Compass",
+        [InvObjId.Key1] = "Key 1",
+        [InvObjId.Key2] = "Key 2",
+        [InvObjId.Key3] = "Key 3",
+        [InvObjId.Key4] = "Key 4 (Thor Key)",
+        [InvObjId.Puzzle1] = "Puzzle 1 (Gold Bar/Fuse)",
+        [InvObjId.Puzzle2] = "Puzzle 2",
+        [InvObjId.Puzzle3] = "Puzzle 3",
+        [InvObjId.Puzzle4] = "Puzzle 4",
+        [InvObjId.Scion] = "Scion",
     };
 
     // ----- Camera -----

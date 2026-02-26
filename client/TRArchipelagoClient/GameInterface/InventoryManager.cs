@@ -208,30 +208,30 @@ public class InventoryManager
 
         if (targetMapperIdx == currentMapperIdx && currentMapperIdx >= 0)
         {
-            // Resolve the key item's relIdx from the AP item ID
-            int relIdx = ResolveKeyItemRelIdx(apItemId);
-            if (relIdx == int.MinValue)
+            if (!EnsurePistolsPointer())
             {
-                ConsoleUI.Warning($"[INV] Key item AP ID {apItemId}: unknown relIdx, cannot inject.");
+                ConsoleUI.Warning("[INV] Cannot inject key item: Pistols pointer not found.");
                 return;
             }
 
-            if (EnsurePistolsPointer())
+            // Resolve the key item type and compute the target pointer
+            IntPtr targetPtr = ResolveKeyItemPointer(apItemId);
+            if (targetPtr == IntPtr.Zero)
             {
-                bool injected = InjectToRing(
-                    TR1RMemoryMap.KeysRingCount,
-                    TR1RMemoryMap.KeysRingItems,
-                    TR1RMemoryMap.KeysRingQtys,
-                    relIdx, 1);
-
-                if (injected)
-                {
-                    ConsoleUI.Info($"[INV] Key item injected into Keys Ring (relIdx={relIdx})");
-                    return;
-                }
+                ConsoleUI.Warning($"[INV] Key item AP ID {apItemId}: unknown type, cannot inject.");
+                return;
             }
 
-            ConsoleUI.Warning($"[INV] Failed to inject key item (relIdx={relIdx}). Pistols ptr not found?");
+            bool injected = InjectToRingRaw(
+                TR1RMemoryMap.KeysRingCount,
+                TR1RMemoryMap.KeysRingItems,
+                TR1RMemoryMap.KeysRingQtys,
+                targetPtr, 1);
+
+            if (injected)
+                ConsoleUI.Info($"[INV] Key item injected into Keys Ring (ptr=0x{targetPtr:X})");
+            else
+                ConsoleUI.Warning("[INV] Failed to inject key item into Keys Ring.");
         }
         else
         {
@@ -301,17 +301,24 @@ public class InventoryManager
     // =================================================================
 
     /// <summary>
-    /// Injects an item into an inventory ring (Main or Keys).
+    /// Injects an item into an inventory ring using a relIdx from Pistols.
     /// If the item already exists in the ring, increments its qty.
     /// Otherwise appends it at the end with the given qty.
     /// </summary>
-    /// <returns>True if injection succeeded.</returns>
     private bool InjectToRing(int ringCountOffset, int ringItemsOffset, int ringQtysOffset, int relIdx, short qty)
     {
         if (_pistolsPtr == IntPtr.Zero) return false;
-
-        IntPtr t1 = _memory.Tomb1Base;
         IntPtr targetPtr = _pistolsPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
+        return InjectToRingRaw(ringCountOffset, ringItemsOffset, ringQtysOffset, targetPtr, qty);
+    }
+
+    /// <summary>
+    /// Injects an item into an inventory ring using a raw INVENTORY_ITEM pointer.
+    /// Used for items not in the stride-aligned table (e.g. Key4/Thor Key).
+    /// </summary>
+    private bool InjectToRingRaw(int ringCountOffset, int ringItemsOffset, int ringQtysOffset, IntPtr targetPtr, short qty)
+    {
+        IntPtr t1 = _memory.Tomb1Base;
         short ringCount = _memory.ReadInt16(t1 + ringCountOffset);
 
         // Check if item already exists in ring
@@ -333,13 +340,9 @@ public class InventoryManager
         if (ringCount >= TR1RMemoryMap.MaxRingItems)
             return false;
 
-        // Write item pointer
         _memory.Write(t1 + ringItemsOffset + ringCount * 8, targetPtr.ToInt64());
-        // Write qty
         _memory.Write(t1 + ringQtysOffset + ringCount * 2, qty);
-        // Increment count
         _memory.Write(t1 + ringCountOffset, (short)(ringCount + 1));
-
         return true;
     }
 
@@ -380,34 +383,42 @@ public class InventoryManager
     }
 
     /// <summary>
-    /// Resolves the INVENTORY_ITEM relIdx for a key item AP ID.
-    /// Key items use generic slots (Key1-4, Puzzle1-4) shared across levels.
-    /// The TR1Type enum value determines which slot.
-    ///
-    /// NOTE: relIdx values for key items must be discovered via Mode 6 table scanner
-    /// and added here. Currently returns int.MinValue for unmapped items.
+    /// Resolves the INVENTORY_ITEM pointer for a key item AP ID.
+    /// Key item AP IDs encode: 770000 + (levelBase + TR1Type enum value).
+    /// The TR1Type value (extracted via modulo 1000) determines the generic slot.
+    /// Most items use relIdx * stride from Pistols. Key4 uses a raw byte offset.
     /// </summary>
-    private static int ResolveKeyItemRelIdx(long apItemId)
+    private IntPtr ResolveKeyItemPointer(long apItemId)
     {
-        // Key item AP IDs encode: BaseId + (levelBase + typeOffset)
-        // The typeOffset within a level determines Key1/Key2/Puzzle1/etc.
-        // We need to map from the TR1Type alias to the generic inventory item relIdx.
-        //
-        // TODO: Fill these in after running Mode 6 table scanner.
-        // The relIdx values below are placeholders — replace with actual values
-        // discovered by scanning the INVENTORY_ITEM table.
-        //
-        // Expected mapping (to be confirmed):
-        //   Key1    -> relIdx TBD
-        //   Key2    -> relIdx TBD
-        //   Key3    -> relIdx TBD
-        //   Key4    -> relIdx TBD
-        //   Puzzle1 -> relIdx TBD
-        //   Puzzle2 -> relIdx TBD
-        //   Puzzle3 -> relIdx TBD
-        //   Puzzle4 -> relIdx TBD
+        // Extract the TR1Type enum value from the AP ID
+        // AP ID = 770000 + levelBase + typeValue, where levelBase is a multiple of 1000
+        int typeValue = (int)((apItemId - 770_000) % 1000);
 
-        return int.MinValue;
+        // Map TR1Type value to relIdx or byte offset
+        // TR1Type values: Key1=129, Key2=130, Key3=131, Key4=132,
+        //   Puzzle1=110, Puzzle2=111, Puzzle3=112, Puzzle4=113,
+        //   ScionPiece2=144 (Pierre drop, normal pickup)
+        int relIdx = typeValue switch
+        {
+            129 => TR1RMemoryMap.InvItemRelIndex.Key1,       // Key1_S_P
+            130 => TR1RMemoryMap.InvItemRelIndex.Key2,       // Key2_S_P
+            131 => TR1RMemoryMap.InvItemRelIndex.Key3,       // Key3_S_P
+            110 => TR1RMemoryMap.InvItemRelIndex.Puzzle1,    // Puzzle1_S_P
+            111 => TR1RMemoryMap.InvItemRelIndex.Puzzle2,    // Puzzle2_S_P
+            112 => TR1RMemoryMap.InvItemRelIndex.Puzzle3,    // Puzzle3_S_P
+            113 => TR1RMemoryMap.InvItemRelIndex.Puzzle4,    // Puzzle4_S_P
+            143 or 144 => TR1RMemoryMap.InvItemRelIndex.Scion, // ScionPiece1/2_S_P
+            _ => int.MinValue,
+        };
+
+        if (relIdx != int.MinValue)
+            return _pistolsPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
+
+        // Key4 (Thor Key) — uses fixed byte offset, not stride-aligned
+        if (typeValue == 132) // Key4_S_P
+            return _pistolsPtr + TR1RMemoryMap.Key4ByteOffset;
+
+        return IntPtr.Zero;
     }
 
     private void HalveAmmoInt32(IntPtr addr)
