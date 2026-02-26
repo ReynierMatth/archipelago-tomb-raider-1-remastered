@@ -177,11 +177,13 @@ public class GameStateWatcher : IDisposable
             _scanner.Reset();
             _inventory.InvalidatePistolsPointer();
 
-            // First frame in-game, initialize state
+            // First frame in-game — capture current state without reporting changes.
+            // This block also fires on inventory open / cutscenes (isInGameScene briefly 0),
+            // so we must NOT reset to 0 (would re-report secrets/pickups as new).
             _lastHealth = _memory.ReadInt16(_laraPtr + TR1RMemoryMap.Item_HitPoints);
             _lastLevelCompleted = _memory.ReadInt32(_tomb1Base, TR1RMemoryMap.LevelCompleted);
-            _lastSecretsFound = 0;
-            ReadSecretsState();
+            _lastSecretsFound = _memory.ReadUInt16(
+                _tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Runtime_SecretsFound);
             _entityFlags.Clear();
             SnapshotEntityFlags(levelId);
         }
