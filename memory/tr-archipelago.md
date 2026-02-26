@@ -29,12 +29,15 @@ Confirmed items (relIdx from Pistols):
 
 | Item | RelIdx | InvObjId | Status |
 |---|---|---|---|
+| Shotgun Ammo | -8 | 0x68 | CONFIRMED |
 | Small Medipack | -6 | 0x6C | CONFIRMED |
 | Large Medipack | -2 | 0x6D | CONFIRMED |
 | Pistols | 0 | 0x63 | CONFIRMED (reference) |
 | Shotgun | +1 | 0x64 | CONFIRMED |
+| Magnum Ammo | +4 | 0x69 | CONFIRMED |
 | Compass | +6 | 0x48 | CONFIRMED |
 | Uzis | +9 | 0x66 | CONFIRMED |
+| Uzi Ammo | +10 | 0x6A | CONFIRMED |
 | Magnums | +12 | 0x65 | CONFIRMED |
 
 #### Keys Ring (key items, puzzles, scion)
@@ -78,7 +81,8 @@ Only used in St. Francis' Folly (Thor Key). Confirmed working via CE injection.
 | Item Type | Method |
 |---|---|
 | Weapons | Inject into Main Ring + set WSB weapon flag + give starting ammo |
-| Ammo | Direct write to LARA_INFO fields |
+| Ammo (has weapon) | Direct write to LARA_INFO fields |
+| Ammo (no weapon) | Inject ammo item into Main Ring (visible pickup) |
 | Medipacks | Inject into Main Ring (qty increment if exists) |
 | Key Items (Key1-3, Puzzles, Scion) | Inject into Keys Ring via relIdx |
 | Key4 (Thor Key) | Inject into Keys Ring via raw byte offset |

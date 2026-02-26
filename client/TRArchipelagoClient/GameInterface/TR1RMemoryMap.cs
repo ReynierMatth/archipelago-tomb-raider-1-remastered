@@ -228,13 +228,16 @@ public static class TR1RMemoryMap
     /// </summary>
     public static class InvItemRelIndex
     {
-        // Main Ring items
+        // Main Ring items — weapons & gear
+        public const int ShotgunAmmo = -8;
         public const int SmallMedipack = -6;
         public const int LargeMedipack = -2;
         public const int Pistols = 0;
         public const int Shotgun = 1;
+        public const int MagnumAmmo = 4;
         public const int Compass = 6;
         public const int Uzis = 9;
+        public const int UziAmmo = 10;
         public const int Magnums = 12;
 
         // Keys Ring items — all confirmed via Mode 6 at St. Francis' Folly
@@ -269,6 +272,9 @@ public static class TR1RMemoryMap
         public const int Shotgun = 0x64;
         public const int Magnums = 0x65;
         public const int Uzis = 0x66;
+        public const int ShotgunAmmo = 0x68;
+        public const int MagnumAmmo = 0x69;
+        public const int UziAmmo = 0x6A;
         public const int SmallMedipack = 0x6C;
         public const int LargeMedipack = 0x6D;
         public const int Compass = 0x48;
@@ -294,6 +300,9 @@ public static class TR1RMemoryMap
         [InvObjId.Shotgun] = "Shotgun",
         [InvObjId.Magnums] = "Magnums",
         [InvObjId.Uzis] = "Uzis",
+        [InvObjId.ShotgunAmmo] = "Shotgun Ammo",
+        [InvObjId.MagnumAmmo] = "Magnum Ammo",
+        [InvObjId.UziAmmo] = "Uzi Ammo",
         [InvObjId.SmallMedipack] = "Small Medipack",
         [InvObjId.LargeMedipack] = "Large Medipack",
         [InvObjId.Compass] = "Compass",

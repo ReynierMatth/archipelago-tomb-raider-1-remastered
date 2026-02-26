@@ -114,8 +114,9 @@ public class InventoryManager
     }
 
     /// <summary>
-    /// Gives ammo by writing directly to LARA_INFO ammo fields (live, instant).
-    /// These are Int32 fields at fixed offsets in tomb1.dll.
+    /// Gives ammo. If the player owns the weapon, writes directly to LARA_INFO
+    /// ammo fields (instant). If not, injects the ammo item into the Main Ring
+    /// so it appears as a visible pickup (e.g. "Magnum Clips").
     /// Shotgun ammo is stored internally as displayed * 6.
     /// </summary>
     public void GiveAmmo(long apItemId)
@@ -123,21 +124,47 @@ public class InventoryManager
         var type = ItemMapper.GetTR1Type(apItemId);
         if (type == null) return;
 
-        (int laraInfoOffset, int amount) = type.Value switch
+        // Map ammo type to its weapon relIdx and ammo relIdx
+        (int weaponRelIdx, int ammoRelIdx, int laraInfoOffset, int amount) = type.Value switch
         {
-            TR1Type.ShotgunAmmo_S_P => (TR1RMemoryMap.Lara_ShotgunAmmo, 2 * TR1RMemoryMap.ShotgunAmmoMultiplier),
-            TR1Type.MagnumAmmo_S_P => (TR1RMemoryMap.Lara_MagnumAmmo, 50),
-            TR1Type.UziAmmo_S_P => (TR1RMemoryMap.Lara_UziAmmo, 100),
-            _ => (-1, 0),
+            TR1Type.ShotgunAmmo_S_P => (TR1RMemoryMap.InvItemRelIndex.Shotgun, TR1RMemoryMap.InvItemRelIndex.ShotgunAmmo,
+                TR1RMemoryMap.Lara_ShotgunAmmo, 2 * TR1RMemoryMap.ShotgunAmmoMultiplier),
+            TR1Type.MagnumAmmo_S_P => (TR1RMemoryMap.InvItemRelIndex.Magnums, TR1RMemoryMap.InvItemRelIndex.MagnumAmmo,
+                TR1RMemoryMap.Lara_MagnumAmmo, 50),
+            TR1Type.UziAmmo_S_P => (TR1RMemoryMap.InvItemRelIndex.Uzis, TR1RMemoryMap.InvItemRelIndex.UziAmmo,
+                TR1RMemoryMap.Lara_UziAmmo, 100),
+            _ => (int.MinValue, int.MinValue, -1, 0),
         };
 
         if (laraInfoOffset < 0) return;
 
-        IntPtr ammoAddr = _memory.Tomb1Base + laraInfoOffset;
-        int current = _memory.ReadInt32(ammoAddr);
-        int newVal = Math.Min(current + amount, 999999);
-        _memory.Write(ammoAddr, newVal);
-        ConsoleUI.Info($"[INV] Ammo: {current} -> {newVal} at tomb1.dll+0x{laraInfoOffset:X}");
+        // Check if the player has the weapon in the Main Ring
+        bool hasWeapon = EnsurePistolsPointer() && HasItemInRing(
+            TR1RMemoryMap.MainRingCount, TR1RMemoryMap.MainRingItems, weaponRelIdx);
+
+        if (hasWeapon)
+        {
+            // Player has the weapon — add directly to LARA_INFO ammo counter
+            IntPtr ammoAddr = _memory.Tomb1Base + laraInfoOffset;
+            int current = _memory.ReadInt32(ammoAddr);
+            int newVal = Math.Min(current + amount, 999999);
+            _memory.Write(ammoAddr, newVal);
+            ConsoleUI.Info($"[INV] Ammo: {current} -> {newVal} (LARA_INFO)");
+        }
+        else if (EnsurePistolsPointer())
+        {
+            // Player doesn't have the weapon — inject ammo item into Main Ring
+            bool injected = InjectToRing(
+                TR1RMemoryMap.MainRingCount,
+                TR1RMemoryMap.MainRingItems,
+                TR1RMemoryMap.MainRingQtys,
+                ammoRelIdx, 1);
+
+            if (injected)
+                ConsoleUI.Info($"[INV] Ammo item injected into Main Ring (relIdx={ammoRelIdx})");
+            else
+                ConsoleUI.Warning($"[INV] Failed to inject ammo item (relIdx={ammoRelIdx})");
+        }
     }
 
     /// <summary>
@@ -344,6 +371,23 @@ public class InventoryManager
         _memory.Write(t1 + ringQtysOffset + ringCount * 2, qty);
         _memory.Write(t1 + ringCountOffset, (short)(ringCount + 1));
         return true;
+    }
+
+    /// <summary>
+    /// Checks whether an item (by relIdx from Pistols) exists in a ring.
+    /// </summary>
+    private bool HasItemInRing(int ringCountOffset, int ringItemsOffset, int weaponRelIdx)
+    {
+        if (_pistolsPtr == IntPtr.Zero) return false;
+        IntPtr t1 = _memory.Tomb1Base;
+        IntPtr weaponPtr = _pistolsPtr + weaponRelIdx * TR1RMemoryMap.InventoryItemStride;
+        short count = _memory.ReadInt16(t1 + ringCountOffset);
+        for (int i = 0; i < count; i++)
+        {
+            if (_memory.ReadPointer(t1 + ringItemsOffset + i * 8) == weaponPtr)
+                return true;
+        }
+        return false;
     }
 
     /// <summary>
