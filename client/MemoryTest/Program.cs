@@ -618,6 +618,7 @@ static void RunInventoryRingTester(ProcessMemory memory, IntPtr t1)
         }
         Console.WriteLine($"  7 = Dump ring raw bytes");
         Console.WriteLine($"  8 = Give ammo (shotgun/magnum/uzi)");
+        Console.WriteLine($"  9 = Give weapon + convert ammo items");
         Console.WriteLine($"  0 = Refresh / re-read ring");
         Console.WriteLine($"  q = Quit");
 
@@ -638,6 +639,12 @@ static void RunInventoryRingTester(ProcessMemory memory, IntPtr t1)
         if (input == "8")
         {
             GiveAmmoMenu(memory, t1);
+            continue;
+        }
+
+        if (input == "9")
+        {
+            GiveWeaponWithConversion(memory, t1, pistolsPtr);
             continue;
         }
 
@@ -723,6 +730,9 @@ static string IdentifyItem(int relIndex)
         TR1RMemoryMap.InvItemRelIndex.Compass => "Compass",
         TR1RMemoryMap.InvItemRelIndex.Uzis => "Uzis",
         TR1RMemoryMap.InvItemRelIndex.Magnums => "Magnums",
+        TR1RMemoryMap.InvItemRelIndex.ShotgunAmmo => "Shotgun Ammo",
+        TR1RMemoryMap.InvItemRelIndex.MagnumAmmo => "Magnum Ammo",
+        TR1RMemoryMap.InvItemRelIndex.UziAmmo => "Uzi Ammo",
         _ => null,
     };
     return name ?? $"? (relIdx={relIndex})";
@@ -779,6 +789,110 @@ static void GiveAmmoMenu(ProcessMemory memory, IntPtr t1)
 
     Console.ForegroundColor = ConsoleColor.Green;
     Console.WriteLine($"  {name} ammo: {current} -> {newVal} at tomb1.dll+0x{offset:X}");
+    Console.ResetColor();
+}
+
+static void GiveWeaponWithConversion(ProcessMemory memory, IntPtr t1, IntPtr pistolsPtr)
+{
+    Console.WriteLine("\n--- Give Weapon (with ammo conversion) ---");
+    Console.WriteLine("  1 = Shotgun");
+    Console.WriteLine("  2 = Magnums");
+    Console.WriteLine("  3 = Uzis");
+    Console.Write("Choice: ");
+    string? input = Console.ReadLine()?.Trim();
+
+    (int weaponRelIdx, int ammoRelIdx, int laraAmmoOffset, int ammoPerPickup, string name) = input switch
+    {
+        "1" => (TR1RMemoryMap.InvItemRelIndex.Shotgun, TR1RMemoryMap.InvItemRelIndex.ShotgunAmmo,
+            TR1RMemoryMap.Lara_ShotgunAmmo, 2 * TR1RMemoryMap.ShotgunAmmoMultiplier, "Shotgun"),
+        "2" => (TR1RMemoryMap.InvItemRelIndex.Magnums, TR1RMemoryMap.InvItemRelIndex.MagnumAmmo,
+            TR1RMemoryMap.Lara_MagnumAmmo, 50, "Magnums"),
+        "3" => (TR1RMemoryMap.InvItemRelIndex.Uzis, TR1RMemoryMap.InvItemRelIndex.UziAmmo,
+            TR1RMemoryMap.Lara_UziAmmo, 100, "Uzis"),
+        _ => (int.MinValue, int.MinValue, -1, 0, ""),
+    };
+
+    if (laraAmmoOffset < 0) { Console.WriteLine("Invalid."); return; }
+
+    // Step 1: Check if weapon already in ring
+    IntPtr weaponPtr = pistolsPtr + weaponRelIdx * TR1RMemoryMap.InventoryItemStride;
+    short ringCount = memory.ReadInt16(t1 + TR1RMemoryMap.MainRingCount);
+    bool hasWeapon = false;
+    for (int i = 0; i < ringCount; i++)
+    {
+        if (memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems + i * 8) == weaponPtr)
+        { hasWeapon = true; break; }
+    }
+
+    if (hasWeapon)
+    {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine($"  {name} already in ring, skipping weapon inject.");
+        Console.ResetColor();
+    }
+    else
+    {
+        // Inject weapon
+        ringCount = memory.ReadInt16(t1 + TR1RMemoryMap.MainRingCount);
+        memory.Write(t1 + TR1RMemoryMap.MainRingItems + ringCount * 8, weaponPtr.ToInt64());
+        memory.Write(t1 + TR1RMemoryMap.MainRingQtys + ringCount * 2, (short)1);
+        memory.Write(t1 + TR1RMemoryMap.MainRingCount, (short)(ringCount + 1));
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"  >>> {name} injected at ring index {ringCount}");
+        Console.ResetColor();
+    }
+
+    // Step 2: Find and remove ammo item from ring
+    IntPtr ammoPtr = pistolsPtr + ammoRelIdx * TR1RMemoryMap.InventoryItemStride;
+    ringCount = memory.ReadInt16(t1 + TR1RMemoryMap.MainRingCount);
+    int foundIdx = -1;
+    short foundQty = 0;
+    for (int i = 0; i < ringCount; i++)
+    {
+        if (memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems + i * 8) == ammoPtr)
+        {
+            foundIdx = i;
+            foundQty = memory.ReadInt16(t1 + TR1RMemoryMap.MainRingQtys + i * 2);
+            break;
+        }
+    }
+
+    if (foundIdx >= 0)
+    {
+        // Shift items down
+        for (int i = foundIdx; i < ringCount - 1; i++)
+        {
+            long nextPtr = memory.ReadInt64(t1 + TR1RMemoryMap.MainRingItems + (i + 1) * 8);
+            memory.Write(t1 + TR1RMemoryMap.MainRingItems + i * 8, nextPtr);
+            short nextQty = memory.ReadInt16(t1 + TR1RMemoryMap.MainRingQtys + (i + 1) * 2);
+            memory.Write(t1 + TR1RMemoryMap.MainRingQtys + i * 2, nextQty);
+        }
+        // Clear last slot, decrement count
+        memory.Write(t1 + TR1RMemoryMap.MainRingItems + (ringCount - 1) * 8, 0L);
+        memory.Write(t1 + TR1RMemoryMap.MainRingQtys + (ringCount - 1) * 2, (short)0);
+        memory.Write(t1 + TR1RMemoryMap.MainRingCount, (short)(ringCount - 1));
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine($"  >>> Removed ammo item from ring (was at index {foundIdx}, qty={foundQty})");
+        Console.ResetColor();
+    }
+    else
+    {
+        foundQty = 0;
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.WriteLine("  No ammo item found in ring (nothing to convert).");
+        Console.ResetColor();
+    }
+
+    // Step 3: Write LARA_INFO ammo = converted pickups + starting ammo
+    IntPtr ammoAddr = t1 + laraAmmoOffset;
+    int current = memory.ReadInt32(ammoAddr);
+    int toAdd = (foundQty * ammoPerPickup) + ammoPerPickup;
+    int newVal = Math.Min(current + toAdd, 999999);
+    memory.Write(ammoAddr, newVal);
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"  >>> Ammo: {current} -> {newVal} ({foundQty} converted + starting ammo)");
     Console.ResetColor();
 }
 

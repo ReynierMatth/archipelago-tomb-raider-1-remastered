@@ -100,17 +100,32 @@ public class InventoryManager
             _memory.Write(weaponAddr, (byte)(current | weaponFlag));
         }
 
-        // Give starting ammo for the weapon
-        var ammoType = type.Value switch
+        // Convert any existing ammo items in the ring to LARA_INFO, then give starting ammo
+        (int ammoRelIdx, int laraAmmoOffset, int ammoPerPickup) = type.Value switch
         {
-            TR1Type.Shotgun_S_P => TR1Type.ShotgunAmmo_S_P,
-            TR1Type.Magnums_S_P => TR1Type.MagnumAmmo_S_P,
-            TR1Type.Uzis_S_P => TR1Type.UziAmmo_S_P,
-            _ => (TR1Type?)null,
+            TR1Type.Shotgun_S_P => (TR1RMemoryMap.InvItemRelIndex.ShotgunAmmo,
+                TR1RMemoryMap.Lara_ShotgunAmmo, 2 * TR1RMemoryMap.ShotgunAmmoMultiplier),
+            TR1Type.Magnums_S_P => (TR1RMemoryMap.InvItemRelIndex.MagnumAmmo,
+                TR1RMemoryMap.Lara_MagnumAmmo, 50),
+            TR1Type.Uzis_S_P => (TR1RMemoryMap.InvItemRelIndex.UziAmmo,
+                TR1RMemoryMap.Lara_UziAmmo, 100),
+            _ => (int.MinValue, -1, 0),
         };
 
-        if (ammoType != null)
-            GiveAmmo(ItemMapper.GetApId(ammoType.Value));
+        if (laraAmmoOffset < 0) return;
+
+        // Remove ammo item from ring if it exists, and convert its qty to LARA_INFO
+        short ammoQty = RemoveFromRing(
+            TR1RMemoryMap.MainRingCount, TR1RMemoryMap.MainRingItems,
+            TR1RMemoryMap.MainRingQtys, ammoRelIdx);
+
+        // Write to LARA_INFO: converted ring qty + starting ammo
+        IntPtr ammoAddr = _memory.Tomb1Base + laraAmmoOffset;
+        int current = _memory.ReadInt32(ammoAddr);
+        int toAdd = (ammoQty * ammoPerPickup) + ammoPerPickup; // ring pickups + starting ammo
+        int newVal = Math.Min(current + toAdd, 999999);
+        _memory.Write(ammoAddr, newVal);
+        ConsoleUI.Info($"[INV] Ammo: {current} -> {newVal} (converted {ammoQty} ring pickups + starting ammo)");
     }
 
     /// <summary>
@@ -388,6 +403,47 @@ public class InventoryManager
                 return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// Removes an item (by relIdx) from a ring. Shifts subsequent items down.
+    /// Returns the qty the item had, or 0 if not found.
+    /// </summary>
+    private short RemoveFromRing(int ringCountOffset, int ringItemsOffset, int ringQtysOffset, int relIdx)
+    {
+        if (_pistolsPtr == IntPtr.Zero) return 0;
+        IntPtr t1 = _memory.Tomb1Base;
+        IntPtr targetPtr = _pistolsPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
+        short count = _memory.ReadInt16(t1 + ringCountOffset);
+
+        // Find the item
+        int foundIdx = -1;
+        short foundQty = 0;
+        for (int i = 0; i < count; i++)
+        {
+            if (_memory.ReadPointer(t1 + ringItemsOffset + i * 8) == targetPtr)
+            {
+                foundIdx = i;
+                foundQty = _memory.ReadInt16(t1 + ringQtysOffset + i * 2);
+                break;
+            }
+        }
+        if (foundIdx < 0) return 0;
+
+        // Shift subsequent items down
+        for (int i = foundIdx; i < count - 1; i++)
+        {
+            long nextPtr = _memory.ReadInt64(t1 + ringItemsOffset + (i + 1) * 8);
+            _memory.Write(t1 + ringItemsOffset + i * 8, nextPtr);
+            short nextQty = _memory.ReadInt16(t1 + ringQtysOffset + (i + 1) * 2);
+            _memory.Write(t1 + ringQtysOffset + i * 2, nextQty);
+        }
+
+        // Clear last slot and decrement count
+        _memory.Write(t1 + ringItemsOffset + (count - 1) * 8, 0L);
+        _memory.Write(t1 + ringQtysOffset + (count - 1) * 2, (short)0);
+        _memory.Write(t1 + ringCountOffset, (short)(count - 1));
+        return foundQty;
     }
 
     /// <summary>
