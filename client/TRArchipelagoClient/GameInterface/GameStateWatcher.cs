@@ -186,6 +186,32 @@ public class GameStateWatcher : IDisposable
             SnapshotEntityFlags(levelId);
         }
 
+        // During settle after menu→game transition: skip ALL monitoring.
+        // The game engine may still be initializing rings/entities/health.
+        // At settle end, take fresh snapshots from the now-stable game state.
+        if (_levelSettleTicks > 0)
+        {
+            _levelSettleTicks--;
+            if (_levelSettleTicks == 0)
+                OnSettleComplete(levelId);
+            return;
+        }
+
+        // Detect save/load events via Save_Number change in WSB.
+        // MUST be before CheckEntityPickups — after a reload, entity flags revert
+        // to the saved state, so we need to re-snapshot before checking for changes.
+        int saveNumber = _memory.ReadInt32(
+            _memory.Tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Save_Number);
+        if (_lastSaveNumber >= 0 && saveNumber != _lastSaveNumber)
+        {
+            _entityFlags.Clear();
+            SnapshotEntityFlags(levelId);
+            _inventory.ResetKeyItemEnsurance();
+            _inventory.InvalidatePistolsPointer();
+            _inventory.ResetSentinelRemovals();
+        }
+        _lastSaveNumber = saveNumber;
+
         // Check entity pickups (real-time!)
         CheckEntityPickups(levelId);
 
@@ -201,30 +227,11 @@ public class GameStateWatcher : IDisposable
         // Auto-find live inventory address
         _scanner.Poll(_tomb1Base);
 
-        // Process received items from AP (dequeues from AP always, but ring writes
-        // are gated by _levelSettleTicks to avoid writing to uninitialized memory)
+        // Process received items from AP
         ProcessReceivedItems(levelId);
 
         // Remove parasitic small medipacks from sentinel pickups
         _inventory.ProcessSentinelRemovals();
-
-        // Wait for game to settle after new-game detection before touching rings
-        if (_levelSettleTicks > 0)
-        {
-            _levelSettleTicks--;
-            return;
-        }
-
-        // Detect save/load events via Save_Number change in WSB
-        int saveNumber = _memory.ReadInt32(
-            _memory.Tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Save_Number);
-        if (_lastSaveNumber >= 0 && saveNumber != _lastSaveNumber)
-        {
-            // Save or load just happened — re-check ring vs AP items
-            _inventory.ResetKeyItemEnsurance();
-            _inventory.InvalidatePistolsPointer();
-        }
-        _lastSaveNumber = saveNumber;
 
         // Ensure received key items are present in Keys Ring
         _inventory.EnsureKeyItemsInRing(levelId);
@@ -256,21 +263,55 @@ public class GameStateWatcher : IDisposable
         _lastHealth = TR1RMemoryMap.MaxHealth;
         _lastSaveNumber = -1; // re-capture on next tick
 
-        // Coming from menu/home — replay all ring items (new game or save loaded from menu)
-        if (previousLevelId == -1 && _allReceivedRingItems.Count > 0)
+        // Coming from menu/home — wait for the game engine to finish initializing
+        // before any monitoring. OnSettleComplete will decide whether to replay items.
+        if (previousLevelId == -1)
         {
-            _pendingItems.Clear();
-            foreach (var item in _allReceivedRingItems)
-                _pendingItems.Enqueue(item);
-
-            // Wait for the game engine to finish reinitializing the inventory.
-            // Writing to ring memory too early gets overwritten by the engine's own init.
             _levelSettleTicks = 20; // 2 seconds (20 × 100ms)
-            ConsoleUI.Info($"[GSW] New game detected — replaying {_allReceivedRingItems.Count} ring items (waiting 2s for init)");
         }
 
         // Snapshot entity flags for the new level
         SnapshotEntityFlags(newLevelId);
+    }
+
+    /// <summary>
+    /// Called when the settle period after a menu→game transition ends.
+    /// The game engine has had 2 seconds to fully initialize. Takes fresh
+    /// snapshots of all game state, then decides whether to replay ring items
+    /// (new game = ring has only Compass+Pistols) or skip (loaded save).
+    /// </summary>
+    private void OnSettleComplete(int levelId)
+    {
+        // Fresh snapshots from now-stable game state
+        _entityFlags.Clear();
+        SnapshotEntityFlags(levelId);
+        _lastSecretsFound = _memory.ReadUInt16(
+            _tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Runtime_SecretsFound);
+        _lastHealth = _memory.ReadInt16(_laraPtr + TR1RMemoryMap.Item_HitPoints);
+        _lastLevelCompleted = _memory.ReadInt32(_tomb1Base, TR1RMemoryMap.LevelCompleted);
+        _lastSaveNumber = _memory.ReadInt32(
+            _memory.Tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Save_Number);
+        _scanner.Reset();
+        _inventory.InvalidatePistolsPointer();
+
+        // Detect new game vs loaded save by checking the Main Ring.
+        // New game: ring has only Compass + Pistols (count = 2).
+        // Loaded save: ring has additional items from the save.
+        short ringCount = _memory.ReadInt16(_memory.Tomb1Base + TR1RMemoryMap.MainRingCount);
+
+        if (ringCount <= 2 && _allReceivedRingItems.Count > 0)
+        {
+            // New game — replay all ring items
+            _pendingItems.Clear();
+            foreach (var item in _allReceivedRingItems)
+                _pendingItems.Enqueue(item);
+            ConsoleUI.Info($"[GSW] New game — replaying {_allReceivedRingItems.Count} ring items");
+        }
+        else
+        {
+            _pendingItems.Clear();
+            ConsoleUI.Info("[GSW] Save loaded from menu — skipping ring item replay");
+        }
     }
 
     /// <summary>
