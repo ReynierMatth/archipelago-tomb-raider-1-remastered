@@ -157,10 +157,17 @@ public class GameStateWatcher : IDisposable
         if (!_wasInGame)
         {
             _wasInGame = true;
+
+            // Reset cached pointers — heap addresses shift on any load (even same level)
+            _scanner.Reset();
+            _inventory.InvalidatePistolsPointer();
+
             // First frame in-game, initialize state
             _lastHealth = _memory.ReadInt16(_laraPtr + TR1RMemoryMap.Item_HitPoints);
             _lastLevelCompleted = _memory.ReadInt32(_tomb1Base, TR1RMemoryMap.LevelCompleted);
+            _lastSecretsFound = 0;
             ReadSecretsState();
+            _entityFlags.Clear();
             SnapshotEntityFlags(levelId);
         }
 

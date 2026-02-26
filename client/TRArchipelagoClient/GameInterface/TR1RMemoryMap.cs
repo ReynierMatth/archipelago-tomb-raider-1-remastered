@@ -206,11 +206,11 @@ public static class TR1RMemoryMap
     public const int KeysRingItems = 0xF95A0;
 
     /// <summary>
-    /// Keys ring qtys[] array. 24 × Int16 quantities.
-    /// Estimated offset — needs confirmation via Mode 6 scanner.
-    /// Expected layout: immediately after items[] (24*8 = 0xC0 bytes).
+    /// Keys ring qtys[] array. 24 × Int16 quantities. Stride 2.
+    /// Confirmed via Cheat Engine scan (Int16 tracking cog qty 1→2→3→2).
+    /// Note: qtys[] is BEFORE items[] in memory (not after).
     /// </summary>
-    public const int KeysRingQtys = 0xF9660;
+    public const int KeysRingQtys = 0xF8FF0;
 
     /// <summary>
     /// INVENTORY_ITEM struct stride in the global table (3280 bytes).
