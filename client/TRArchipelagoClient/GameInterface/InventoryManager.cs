@@ -27,6 +27,10 @@ public class InventoryManager
     // after death/reload. InjectToRingRaw handles duplicates safely.
     private readonly Dictionary<int, List<long>> _receivedKeyItems = new();
 
+    // Once all key items have been successfully injected after a load,
+    // stop reconciling until the next load — prevents re-giving used keys.
+    private bool _keyItemsEnsured;
+
     // Cached Pistols pointer (reference for all relIdx calculations)
     private IntPtr _pistolsPtr;
 
@@ -186,7 +190,7 @@ public class InventoryManager
     /// <summary>
     /// Gives a medipack by injecting into the Main Ring.
     /// If the item is already in the ring, increments its qty.
-    /// Falls back to WSB if Pistols pointer is unavailable.
+    /// Caller (ProcessReceivedItems) ensures Pistols pointer is ready.
     /// </summary>
     public void GiveMedipack(long apItemId)
     {
@@ -202,7 +206,6 @@ public class InventoryManager
 
         if (relIdx == int.MinValue) return;
 
-        // Try Main Ring injection first
         if (EnsurePistolsPointer())
         {
             bool injected = InjectToRing(
@@ -212,28 +215,7 @@ public class InventoryManager
                 relIdx, 1);
 
             if (injected)
-            {
                 ConsoleUI.Info($"[INV] {type.Value} injected into Main Ring (relIdx={relIdx})");
-                return;
-            }
-        }
-
-        // Fallback: WSB (may not take effect until save/load)
-        int offset = type.Value switch
-        {
-            TR1Type.SmallMed_S_P => TR1RMemoryMap.Save_SmallMedipacks,
-            TR1Type.LargeMed_S_P => TR1RMemoryMap.Save_LargeMedipacks,
-            _ => -1,
-        };
-
-        if (offset < 0) return;
-
-        IntPtr medAddr = WorldStateAddr + offset;
-        byte current = _memory.ReadByte(medAddr);
-        if (current < 255)
-        {
-            _memory.Write(medAddr, (byte)(current + 1));
-            ConsoleUI.Info($"[INV] Medipack: {current} -> {current + 1} at WSB+0x{offset:X} (fallback)");
         }
     }
 
@@ -253,7 +235,10 @@ public class InventoryManager
         if (!_receivedKeyItems.ContainsKey(targetMapperIdx))
             _receivedKeyItems[targetMapperIdx] = new();
         if (!_receivedKeyItems[targetMapperIdx].Contains(apItemId))
+        {
             _receivedKeyItems[targetMapperIdx].Add(apItemId);
+            _keyItemsEnsured = false; // new item — need to re-check ring
+        }
 
         // Try immediate injection if we're on the right level
         if (targetMapperIdx == currentMapperIdx && currentMapperIdx >= 0)
@@ -342,13 +327,21 @@ public class InventoryManager
     }
 
     /// <summary>
-    /// Ensures received key items are present in the Keys Ring with correct qty.
-    /// Called every poll tick. Reads actual ring state to be fully idempotent —
-    /// handles death, reload, and reconnect automatically. Skips quickly if
-    /// no items to process or Pistols pointer not available.
+    /// Ensures received key items are present in the Keys Ring.
+    /// Called every poll tick but skips quickly once items have been injected.
+    ///
+    /// After successful injection, stops touching the ring — prevents re-giving
+    /// keys the player has legitimately used (e.g. 1 of 2 Silver Keys).
+    ///
+    /// Reset triggers (event-driven, not polling):
+    ///   - OnLevelChanged: new level → inject all items for that level
+    ///   - Save_Number change: save/load detected → re-compare ring vs AP items
+    ///   - New AP item received: GiveKeyItem → inject the new item
     /// </summary>
     public void EnsureKeyItemsInRing(int currentRuntimeLevelId)
     {
+        if (_keyItemsEnsured) return;
+
         int mapperIdx = TR1RMemoryMap.ToLocationMapperIndex(currentRuntimeLevelId);
         if (mapperIdx < 0) return;
 
@@ -366,13 +359,12 @@ public class InventoryManager
             expectedQty[ptr] = (short)(current + 1);
         }
 
-        // Read actual ring state and reconcile
+        // Inject missing items and fix qty on existing ones
         IntPtr t1 = _memory.Tomb1Base;
         short ringCount = _memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingCount);
 
         foreach (var (targetPtr, targetQty) in expectedQty)
         {
-            // Find item in ring
             int ringIdx = -1;
             for (int i = 0; i < ringCount; i++)
             {
@@ -382,14 +374,12 @@ public class InventoryManager
 
             if (ringIdx >= 0)
             {
-                // Item exists — ensure correct qty
                 short currentQty = _memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingQtys + ringIdx * 2);
                 if (currentQty < targetQty)
                     _memory.Write(t1 + TR1RMemoryMap.KeysRingQtys + ringIdx * 2, targetQty);
             }
             else if (ringCount < TR1RMemoryMap.MaxRingItems)
             {
-                // Item missing — add to ring
                 _memory.Write(t1 + TR1RMemoryMap.KeysRingItems + ringCount * 8, targetPtr.ToInt64());
                 _memory.Write(t1 + TR1RMemoryMap.KeysRingQtys + ringCount * 2, targetQty);
                 ringCount++;
@@ -397,6 +387,8 @@ public class InventoryManager
                 ConsoleUI.Info($"[INV] Key item ensured in Keys Ring (ptr=0x{targetPtr:X}, qty={targetQty})");
             }
         }
+
+        _keyItemsEnsured = true;
     }
 
     // =================================================================
@@ -519,6 +511,19 @@ public class InventoryManager
 
     /// <summary>Invalidate cached pointer (call on level change).</summary>
     public void InvalidatePistolsPointer() => _pistolsPtr = IntPtr.Zero;
+
+    /// <summary>
+    /// Returns true if the inventory ring system is ready for injection
+    /// (Pistols pointer found). Items that need ring injection should be
+    /// deferred until this returns true.
+    /// </summary>
+    public bool IsInventoryReady() => EnsurePistolsPointer();
+
+    /// <summary>
+    /// Reset key item ensurance flag. Call on any game load (level change or same-level reload)
+    /// so that EnsureKeyItemsInRing will re-inject items into the fresh ring.
+    /// </summary>
+    public void ResetKeyItemEnsurance() => _keyItemsEnsured = false;
 
     /// <summary>
     /// Finds the Pistols INVENTORY_ITEM pointer by cross-referencing Main Ring items.

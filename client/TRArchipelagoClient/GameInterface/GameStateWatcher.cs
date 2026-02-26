@@ -38,9 +38,21 @@ public class GameStateWatcher : IDisposable
     private int _lastLevelCompleted;
     private ushort _lastSecretsFound;
     private int _itemsReceivedIndex;
+    private int _lastSaveNumber = -1;
 
     // Entity tracking: entityIndex -> last known flags value
     private readonly Dictionary<int, short> _entityFlags = new();
+
+    // Items waiting for ring injection (deferred until Pistols pointer is found)
+    private readonly Queue<(long ItemId, ItemMapper.ItemCategory Category)> _pendingItems = new();
+
+    // Complete history of all received ring items (weapons, ammo, medipacks).
+    // Used to replay items when the player starts a new game from the main menu.
+    private readonly List<(long ItemId, ItemMapper.ItemCategory Category)> _allReceivedRingItems = new();
+
+    // Cooldown after new-game detection: wait for the game engine to finish
+    // reinitializing the inventory before writing to ring memory.
+    private int _levelSettleTicks;
 
     // Which entity indices are AP locations (set by LevelPatcher)
     private readonly Dictionary<int, Dictionary<int, long>> _levelEntityLocations;
@@ -140,7 +152,10 @@ public class GameStateWatcher : IDisposable
 
         // Skip non-game levels (Home=0, Menu=24)
         if (levelId == TR1RMemoryMap.Level_Home || levelId == TR1RMemoryMap.Level_MainMenu)
+        {
+            _lastLevelId = -1; // ensure OnLevelChanged fires when re-entering gameplay
             return;
+        }
 
         // Resolve Lara pointer (must dereference)
         _laraPtr = _memory.ReadPointer(_tomb1Base, TR1RMemoryMap.LaraBase);
@@ -186,10 +201,29 @@ public class GameStateWatcher : IDisposable
         // Auto-find live inventory address
         _scanner.Poll(_tomb1Base);
 
-        // Process received items from AP
+        // Process received items from AP (dequeues from AP always, but ring writes
+        // are gated by _levelSettleTicks to avoid writing to uninitialized memory)
         ProcessReceivedItems(levelId);
 
-        // Ensure received key items are present in Keys Ring (idempotent)
+        // Wait for game to settle after new-game detection before touching rings
+        if (_levelSettleTicks > 0)
+        {
+            _levelSettleTicks--;
+            return;
+        }
+
+        // Detect save/load events via Save_Number change in WSB
+        int saveNumber = _memory.ReadInt32(
+            _memory.Tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Save_Number);
+        if (_lastSaveNumber >= 0 && saveNumber != _lastSaveNumber)
+        {
+            // Save or load just happened — re-check ring vs AP items
+            _inventory.ResetKeyItemEnsurance();
+            _inventory.InvalidatePistolsPointer();
+        }
+        _lastSaveNumber = saveNumber;
+
+        // Ensure received key items are present in Keys Ring
         _inventory.EnsureKeyItemsInRing(levelId);
     }
 
@@ -208,13 +242,28 @@ public class GameStateWatcher : IDisposable
         // Invalidate Pistols pointer — will be re-found lazily when ring is stable
         _inventory.InvalidatePistolsPointer();
 
-        // Key items are ensured by EnsureKeyItemsInRing() every poll tick — no flush needed.
+        // Reset key item tracking for the new level
+        _inventory.ResetKeyItemEnsurance();
 
         // Reset per-level state
         _entityFlags.Clear();
         _lastSecretsFound = 0;
         _lastLevelCompleted = 0;
         _lastHealth = TR1RMemoryMap.MaxHealth;
+        _lastSaveNumber = -1; // re-capture on next tick
+
+        // Coming from menu/home — replay all ring items (new game or save loaded from menu)
+        if (previousLevelId == -1 && _allReceivedRingItems.Count > 0)
+        {
+            _pendingItems.Clear();
+            foreach (var item in _allReceivedRingItems)
+                _pendingItems.Enqueue(item);
+
+            // Wait for the game engine to finish reinitializing the inventory.
+            // Writing to ring memory too early gets overwritten by the engine's own init.
+            _levelSettleTicks = 20; // 2 seconds (20 × 100ms)
+            ConsoleUI.Info($"[GSW] New game detected — replaying {_allReceivedRingItems.Count} ring items (waiting 2s for init)");
+        }
 
         // Snapshot entity flags for the new level
         SnapshotEntityFlags(newLevelId);
@@ -372,36 +421,59 @@ public class GameStateWatcher : IDisposable
 
     /// <summary>
     /// Processes items received from other AP players and injects them in real-time.
+    /// Items that need ring injection (weapons, ammo, medipacks) are deferred to
+    /// _pendingItems if the inventory isn't ready yet. Traps and key items are
+    /// processed immediately (they don't need the Pistols pointer).
     /// </summary>
     private void ProcessReceivedItems(int levelId)
     {
+        // Dequeue all new items from AP
         while (_session.TryDequeueReceivedItem(out var item))
         {
             string itemName = _session.GetItemName(item.ItemId);
             string playerName = _session.GetPlayerName(item.Player);
+            ConsoleUI.ItemReceived(itemName, playerName);
+            _itemsReceivedIndex++;
 
             var category = ItemMapper.GetCategory(item.ItemId);
+
+            // Traps and key items don't need the ring — process immediately
+            if (category == ItemMapper.ItemCategory.Trap)
+            {
+                _inventory.ApplyTrap(item.ItemId);
+                continue;
+            }
+            if (category == ItemMapper.ItemCategory.KeyItem)
+            {
+                _inventory.GiveKeyItem(item.ItemId, levelId);
+                continue;
+            }
+
+            // Ring items: queue for injection (processed below) + save for new game replay
+            _pendingItems.Enqueue((item.ItemId, category));
+            _allReceivedRingItems.Add((item.ItemId, category));
+        }
+
+        // Process pending ring items (weapons, ammo, medipacks)
+        if (_pendingItems.Count == 0) return;
+        if (_levelSettleTicks > 0) return; // wait for game to finish initializing
+        if (!_inventory.IsInventoryReady()) return;
+
+        while (_pendingItems.Count > 0)
+        {
+            var (itemId, category) = _pendingItems.Dequeue();
             switch (category)
             {
                 case ItemMapper.ItemCategory.Weapon:
-                    _inventory.GiveWeapon(item.ItemId);
+                    _inventory.GiveWeapon(itemId);
                     break;
                 case ItemMapper.ItemCategory.Ammo:
-                    _inventory.GiveAmmo(item.ItemId);
+                    _inventory.GiveAmmo(itemId);
                     break;
                 case ItemMapper.ItemCategory.Medipack:
-                    _inventory.GiveMedipack(item.ItemId);
-                    break;
-                case ItemMapper.ItemCategory.KeyItem:
-                    _inventory.GiveKeyItem(item.ItemId, levelId);
-                    break;
-                case ItemMapper.ItemCategory.Trap:
-                    _inventory.ApplyTrap(item.ItemId);
+                    _inventory.GiveMedipack(itemId);
                     break;
             }
-
-            ConsoleUI.ItemReceived(itemName, playerName);
-            _itemsReceivedIndex++;
         }
     }
 
