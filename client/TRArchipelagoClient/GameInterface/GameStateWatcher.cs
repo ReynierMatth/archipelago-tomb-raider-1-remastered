@@ -375,7 +375,10 @@ public class GameStateWatcher : IDisposable
 
                     // Cancel the parasitic small medipack the game adds when
                     // picking up a sentinel (SmallMed_S_P) entity.
-                    _inventory.QueueSentinelRemoval();
+                    // Skip if level is already completed — the flag changes are from
+                    // end-of-level cleanup, not real pickups (no medipack was added).
+                    if (_lastLevelCompleted != 1)
+                        _inventory.QueueSentinelRemoval();
                 }
             }
             else
