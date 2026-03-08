@@ -485,7 +485,7 @@ public class GameStateWatcher : IDisposable
         // Items accumulate during settle — we need them in _allReceivedRingItems
         // so ReconcileAfterLoad can correctly slice by savedIndex.
         // Do NOT add to _pendingItems here; reconciliation decides what to inject.
-        DrainReceivedItemQueue();
+        DrainReceivedItemQueue(levelId);
 
         // Fresh snapshots from now-stable game state
         _entityFlags.Clear();
@@ -530,6 +530,16 @@ public class GameStateWatcher : IDisposable
             var snapshot = _stateStore.GetSnapshot(_lastSaveNumber);
             if (snapshot != null)
                 ReconcileAfterLoad(snapshot, levelId);
+        }
+        else if (_lastSaveNumber >= 0)
+        {
+            // The game saved during the level transition (e.g. typewriter save
+            // prompt between levels). The client didn't see HandleSaveNumberChange
+            // because it happened during settle. Create a baseline snapshot so
+            // reloading this save later has something to reconcile from.
+            OnGameSaved(_lastSaveNumber, levelId);
+            _activeSaveNumber = _lastSaveNumber;
+            ConsoleUI.Info($"[SAVE] Created baseline snapshot for save #{_lastSaveNumber}");
         }
     }
 
@@ -735,7 +745,7 @@ public class GameStateWatcher : IDisposable
     /// Called from OnSettleComplete so that ReconcileAfterLoad has the full
     /// item history before deciding what to inject.
     /// </summary>
-    private void DrainReceivedItemQueue()
+    private void DrainReceivedItemQueue(int levelId)
     {
         int drained = 0;
         while (_session.TryDequeueReceivedItem(out var item))
@@ -747,8 +757,14 @@ public class GameStateWatcher : IDisposable
 
             var category = ItemMapper.GetCategory(item.ItemId);
 
-            if (category != ItemMapper.ItemCategory.Trap &&
-                category != ItemMapper.ItemCategory.KeyItem)
+            if (category == ItemMapper.ItemCategory.KeyItem)
+            {
+                // Store key items so EnsureKeyItemsInRing can inject them later.
+                // GiveKeyItem only needs memory for immediate injection (same level);
+                // cross-level items are just stored in _receivedKeyItems.
+                _inventory.GiveKeyItem(item.ItemId, levelId);
+            }
+            else if (category != ItemMapper.ItemCategory.Trap)
             {
                 _allReceivedRingItems.Add((item.ItemId, category));
             }
