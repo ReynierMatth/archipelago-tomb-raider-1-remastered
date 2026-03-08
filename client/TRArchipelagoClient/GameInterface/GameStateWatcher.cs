@@ -49,6 +49,9 @@ public class GameStateWatcher : IDisposable
     // Tracks KeyItemsEnsured transition to re-snapshot the KeyItemMonitor
     private bool _lastKeyItemsEnsured;
 
+    // Saved Lara pointer to detect heap shifts (real load vs inventory open)
+    private IntPtr _laraPtrBeforeTransition;
+
     // Entity tracking: entityIndex -> last known flags value
     private readonly Dictionary<int, short> _entityFlags = new();
 
@@ -156,6 +159,11 @@ public class GameStateWatcher : IDisposable
 
         if (!isInGame)
         {
+            // Save Lara pointer before going out-of-game. On return, if the
+            // pointer changed, the heap shifted → a real load happened (not
+            // just an inventory open). Used by the !_wasInGame block below.
+            if (_wasInGame)
+                _laraPtrBeforeTransition = _laraPtr;
             _wasInGame = false;
             return;
         }
@@ -207,7 +215,32 @@ public class GameStateWatcher : IDisposable
             // loading screen (isInGameScene was 0). The settle must count from AFTER
             // the game finishes loading, not from when the levelId changed.
             if (_levelSettleTicks > 0)
+            {
                 _levelSettleTicks = 20;
+            }
+            else if (_activeSaveNumber >= 0
+                     && _laraPtrBeforeTransition != IntPtr.Zero
+                     && _laraPtr != _laraPtrBeforeTransition)
+            {
+                // Heap shifted (Lara pointer changed) → real load happened, not
+                // just an inventory open. HandleSaveNumberChange will catch most
+                // loads (different counter), but if the player reloads the exact
+                // same save (counter unchanged), only this block detects it.
+                _keyMonitor.Pause();
+                _entityFlags.Clear();
+                SnapshotEntityFlags(levelId);
+                _inventory.ResetSentinelRemovals();
+
+                var snapshot = _stateStore.GetSnapshot(_activeSaveNumber);
+                if (snapshot != null)
+                {
+                    ReconcileAfterLoad(snapshot, levelId);
+                    ConsoleUI.Info($"[SAVE] Reconciled from snapshot #{_activeSaveNumber} (same-counter reload)");
+                }
+
+                _keyMonitor.SnapshotKeysRing();
+                _keyMonitor.Resume();
+            }
         }
 
         // During settle after menu→game transition: skip ALL monitoring.
@@ -474,22 +507,17 @@ public class GameStateWatcher : IDisposable
 
             if (ringCount <= 2 && _allReceivedRingItems.Count > 0)
             {
-                // New game — replay all ring items
+                // New game — replay all ring items (no snapshot exists for fresh games)
                 _pendingItems.Clear();
                 foreach (var item in _allReceivedRingItems)
                     _pendingItems.Enqueue(item);
                 ConsoleUI.Info($"[GSW] New game — replaying {_allReceivedRingItems.Count} ring items");
                 return;
             }
-
-            _pendingItems.Clear();
-            ConsoleUI.Info("[GSW] Save loaded from menu — skipping ring item replay");
         }
 
-        // Reconcile from the current Save_Number's snapshot (works for both
-        // menu→game and level→level transitions, e.g. loading a save from
-        // a different level). This catches cross-level loads that bypass
-        // HandleSaveNumberChange because _lastSaveNumber was already set above.
+        // Reconcile from the current save's snapshot (works for menu→game,
+        // level→level transitions, and cross-level loads).
         if (_stateStore.HasSnapshot(_lastSaveNumber))
         {
             _activeSaveNumber = _lastSaveNumber;

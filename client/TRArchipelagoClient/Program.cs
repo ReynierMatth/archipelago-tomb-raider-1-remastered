@@ -53,12 +53,30 @@ class Program
         string? slotName = GetArg(args, 1, null) ?? ConsoleUI.Prompt("Slot name");
         string password = GetArg(args, 2, "") ?? "";
 
-        string? gameDir = GetArg(args, 3, null) ?? ConsoleUI.Prompt("TR1-3 Remastered game directory");
+        string? gameDir = GetArg(args, 3, null) ?? DetectGameDirectory();
+        if (gameDir == null)
+        {
+            gameDir = ConsoleUI.Prompt("TR1-3 Remastered game directory");
+        }
         if (!Directory.Exists(gameDir))
         {
             ConsoleUI.Error($"Game directory not found: {gameDir}");
             return;
         }
+
+        // Detect and swap save files before anything else
+        string? saveDir = SaveFileManager.DetectSaveDirectory();
+        if (saveDir == null)
+        {
+            saveDir = ConsoleUI.Prompt("Enter TRX save directory path");
+            if (!Directory.Exists(saveDir))
+            {
+                ConsoleUI.Error($"Save directory not found: {saveDir}");
+                return;
+            }
+        }
+
+        var saveManager = new SaveFileManager(saveDir);
 
         ConsoleUI.Info($"Connecting to {server} as {slotName}...");
 
@@ -75,6 +93,8 @@ class Program
 
         try
         {
+            saveManager.SwapIn();
+
             bool connected = await session.ConnectAsync(server ?? "localhost:38281", slotName ?? "", password);
             if (!connected)
             {
@@ -112,6 +132,8 @@ class Program
         }
         finally
         {
+            saveManager.SwapOut();
+
             if (patcher?.BackupManager.HasBackups() == true &&
                 ConsoleUI.Confirm("Restore original level files?"))
             {
@@ -1169,6 +1191,65 @@ class Program
     private static string? GetArg(string[] args, int index, string? defaultValue)
     {
         return index < args.Length ? args[index] : defaultValue;
+    }
+
+    /// <summary>
+    /// Auto-detect the TR1-3 Remastered game directory by scanning Steam library folders.
+    /// </summary>
+    private static string? DetectGameDirectory()
+    {
+        const string GameFolderName = "Tomb Raider I-III Remastered";
+        const string GameExe = "tomb123.exe";
+
+        // Find Steam install path from default location or registry-like common paths
+        var steamPaths = new List<string>();
+
+        // Default Steam install
+        string defaultSteam = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Steam");
+        if (Directory.Exists(defaultSteam))
+            steamPaths.Add(defaultSteam);
+
+        // Parse libraryfolders.vdf to find additional Steam library folders
+        string vdfPath = Path.Combine(defaultSteam, "steamapps", "libraryfolders.vdf");
+        if (File.Exists(vdfPath))
+        {
+            try
+            {
+                foreach (string line in File.ReadLines(vdfPath))
+                {
+                    // Lines look like: "path"		"D:\\SteamLibrary"
+                    string trimmed = line.Trim();
+                    if (trimmed.StartsWith("\"path\""))
+                    {
+                        int firstQuote = trimmed.IndexOf('"', 6);
+                        int lastQuote = trimmed.LastIndexOf('"');
+                        if (firstQuote >= 0 && lastQuote > firstQuote)
+                        {
+                            string libPath = trimmed[(firstQuote + 1)..lastQuote]
+                                .Replace("\\\\", "\\");
+                            if (Directory.Exists(libPath) && !steamPaths.Contains(libPath))
+                                steamPaths.Add(libPath);
+                        }
+                    }
+                }
+            }
+            catch { /* ignore VDF parse errors */ }
+        }
+
+        // Check each Steam library for the game
+        foreach (string steamPath in steamPaths)
+        {
+            string candidate = Path.Combine(steamPath, "steamapps", "common", GameFolderName);
+            if (Directory.Exists(candidate) && File.Exists(Path.Combine(candidate, GameExe)))
+            {
+                ConsoleUI.Info($"[Game] Detected: {candidate}");
+                return candidate;
+            }
+        }
+
+        ConsoleUI.Error("[Game] Could not auto-detect game directory.");
+        return null;
     }
 
     private static int CountBits(ushort v)
