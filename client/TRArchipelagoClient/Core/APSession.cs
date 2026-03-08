@@ -21,6 +21,12 @@ public class APSession
     public SlotData? SlotData { get; private set; }
     public bool IsConnected => _session?.Socket?.Connected ?? false;
 
+    /// <summary>The slot name used for the current connection.</summary>
+    public string SlotName { get; private set; } = "";
+
+    /// <summary>The seed hash for the current room, used to detect seed changes.</summary>
+    public string Seed => _session?.RoomState?.Seed ?? "";
+
     public event Action<ItemInfo>? OnItemReceived;
     public event Action<string>? OnDeathLinkReceived;
 
@@ -38,6 +44,8 @@ public class APSession
 
         // Connect then login (two-step async)
         await _session.ConnectAsync();
+
+        SlotName = slotName;
 
         var result = await _session.LoginAsync(
             "Tomb Raider 1 Remastered",
@@ -75,6 +83,9 @@ public class APSession
 
         return true;
     }
+
+    /// <summary>Returns all location IDs that have been checked (sent to AP).</summary>
+    public ICollection<long> GetCheckedLocations() => _checkedLocations.Keys;
 
     /// <summary>Returns true if this was a NEW check (not already sent).</summary>
     public bool SendLocationCheck(long locationId)

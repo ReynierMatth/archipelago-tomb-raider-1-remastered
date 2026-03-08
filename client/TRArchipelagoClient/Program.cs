@@ -93,7 +93,8 @@ class Program
             var entityLocations = patcher.GetAllMappingsByLevelIndex();
             ConsoleUI.Info($"Tracking {entityLocations.Values.Sum(m => m.Count)} pickup locations across {entityLocations.Count} levels.");
 
-            var watcher = new GameStateWatcher(session, memory, entityLocations);
+            var stateStore = new SaveStateStore(session.SlotName, session.Seed);
+            var watcher = new GameStateWatcher(session, memory, entityLocations, stateStore);
 
             ConsoleUI.Info("Waiting for game to launch...");
             ConsoleUI.Info("Start tomb123.exe and begin playing TR1!\n");

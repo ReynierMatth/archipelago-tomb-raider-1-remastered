@@ -14,6 +14,7 @@ namespace TRArchipelagoClient.GameInterface;
 ///   - Secrets via secrets bitmask in WorldStateBackup buffer
 ///   - Player death via health (Item_HitPoints)
 ///   - Game state (menu, in-game, loading)
+///   - Save/load events via Save_Number with deterministic state reconciliation
 ///
 /// Uses pointer chains from the Burns Multiplayer Mod (Patch 4.1).
 /// </summary>
@@ -25,6 +26,8 @@ public class GameStateWatcher : IDisposable
     private readonly ProcessMemory _memory;
     private readonly InventoryManager _inventory;
     private readonly InventoryScanner _scanner;
+    private readonly SaveStateStore _stateStore;
+    private readonly KeyItemMonitor _keyMonitor;
 
     // Cached base addresses
     private IntPtr _tomb1Base;
@@ -39,6 +42,12 @@ public class GameStateWatcher : IDisposable
     private ushort _lastSecretsFound;
     private int _itemsReceivedIndex;
     private int _lastSaveNumber = -1;
+
+    // The save number of the currently active snapshot (for save-aware checks)
+    private int _activeSaveNumber = -1;
+
+    // Tracks KeyItemsEnsured transition to re-snapshot the KeyItemMonitor
+    private bool _lastKeyItemsEnsured;
 
     // Entity tracking: entityIndex -> last known flags value
     private readonly Dictionary<int, short> _entityFlags = new();
@@ -55,11 +64,6 @@ public class GameStateWatcher : IDisposable
     private int _levelSettleTicks;
     private bool _settleFromMenu; // true = menu→game, false = level→level
 
-    // Post-settle grace period: entity flags may still change briefly after
-    // settle (save data applied asynchronously). During this window, entity
-    // flag changes are tracked but sentinel removal is suppressed.
-    private int _postSettleCooldown;
-
     // Which entity indices are AP locations (set by LevelPatcher)
     private readonly Dictionary<int, Dictionary<int, long>> _levelEntityLocations;
 
@@ -69,7 +73,8 @@ public class GameStateWatcher : IDisposable
     public GameStateWatcher(
         APSession session,
         ProcessMemory memory,
-        Dictionary<int, Dictionary<int, long>> levelEntityLocations)
+        Dictionary<int, Dictionary<int, long>> levelEntityLocations,
+        SaveStateStore stateStore)
     {
         _session = session;
         _memory = memory;
@@ -77,6 +82,8 @@ public class GameStateWatcher : IDisposable
         _scanner = new InventoryScanner(memory);
         _inventory.Scanner = _scanner;
         _levelEntityLocations = levelEntityLocations;
+        _stateStore = stateStore;
+        _keyMonitor = new KeyItemMonitor(memory);
     }
 
     /// <summary>
@@ -182,6 +189,7 @@ public class GameStateWatcher : IDisposable
             // Reset cached pointers — heap addresses shift on any load (even same level)
             _scanner.Reset();
             _inventory.InvalidatePistolsPointer();
+            _inventory.ResetKeyItemEnsurance();
 
             // First frame in-game — capture current state without reporting changes.
             // This block also fires on inventory open / cutscenes (isInGameScene briefly 0),
@@ -199,10 +207,7 @@ public class GameStateWatcher : IDisposable
             // loading screen (isInGameScene was 0). The settle must count from AFTER
             // the game finishes loading, not from when the levelId changed.
             if (_levelSettleTicks > 0)
-            {
-                ConsoleUI.Info($"[DEBUG] !_wasInGame during settle, resetting {_levelSettleTicks} -> 20");
                 _levelSettleTicks = 20;
-            }
         }
 
         // During settle after menu→game transition: skip ALL monitoring.
@@ -220,22 +225,12 @@ public class GameStateWatcher : IDisposable
         // MUST be before CheckEntityPickups — after a reload, entity flags revert
         // to the saved state, so we need to re-snapshot before checking for changes.
         int saveNumber = _memory.ReadInt32(
-            _memory.Tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Save_Number);
+            _memory.Tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.WSB_SaveCounter);
         if (_lastSaveNumber >= 0 && saveNumber != _lastSaveNumber)
         {
-            ConsoleUI.Info($"[DEBUG] Save_Number changed: {_lastSaveNumber} -> {saveNumber}, re-snapshotting");
-            _entityFlags.Clear();
-            SnapshotEntityFlags(levelId);
-            _inventory.ResetKeyItemEnsurance();
-            _inventory.InvalidatePistolsPointer();
-            _inventory.ResetSentinelRemovals();
-            _postSettleCooldown = 10; // suppress sentinel during save data reapplication
+            HandleSaveNumberChange(saveNumber, levelId);
         }
         _lastSaveNumber = saveNumber;
-
-        // Decrement post-settle cooldown
-        if (_postSettleCooldown > 0)
-            _postSettleCooldown--;
 
         // Check entity pickups (real-time!)
         CheckEntityPickups(levelId);
@@ -249,6 +244,9 @@ public class GameStateWatcher : IDisposable
         // Check health / death
         CheckHealth();
 
+        // Detect key items consumed in doors/locks
+        CheckKeyItemUsage(levelId);
+
         // Auto-find live inventory address
         _scanner.Poll(_tomb1Base);
 
@@ -260,6 +258,151 @@ public class GameStateWatcher : IDisposable
 
         // Ensure received key items are present in Keys Ring
         _inventory.EnsureKeyItemsInRing(levelId);
+
+        // Once key items stabilize in the ring, re-snapshot the KeyItemMonitor
+        // so it can detect future usage (key disappearing from ring = used in a door).
+        // The monitor snapshot from OnSettleComplete is stale because it was taken
+        // BEFORE EnsureKeyItemsInRing injected the items.
+        if (_inventory.KeyItemsEnsured && !_lastKeyItemsEnsured)
+        {
+            _keyMonitor.SnapshotKeysRing();
+            ConsoleUI.Info("[SAVE] Keys Ring stabilized — monitoring for key usage");
+        }
+        _lastKeyItemsEnsured = _inventory.KeyItemsEnsured;
+    }
+
+    /// <summary>
+    /// Determines whether a Save_Number change is a new save or a load,
+    /// and handles accordingly.
+    /// </summary>
+    private void HandleSaveNumberChange(int saveNumber, int levelId)
+    {
+        // Pause key item monitoring during the transition
+        _keyMonitor.Pause();
+
+        if (saveNumber > _lastSaveNumber && !_stateStore.HasSnapshot(saveNumber))
+        {
+            // Save_Number increased and we have no snapshot → player saved the game
+            OnGameSaved(saveNumber, levelId);
+        }
+        else
+        {
+            // Save_Number changed to a known value (or decreased) → player loaded a save
+            OnSaveLoaded(saveNumber, levelId);
+        }
+    }
+
+    /// <summary>
+    /// Called when the player saves the game (new save number, no existing snapshot).
+    /// Captures the current AP state into a SaveSnapshot and persists it.
+    /// </summary>
+    private void OnGameSaved(int saveNumber, int levelId)
+    {
+        int mapperIdx = TR1RMemoryMap.ToLocationMapperIndex(levelId);
+
+        // Build checked location sets from AP session
+        var checkedEntities = new HashSet<long>();
+        var checkedSecrets = new HashSet<long>();
+        foreach (long locId in _session.GetCheckedLocations())
+        {
+            var locType = LocationMapper.GetLocationType(locId);
+            if (locType == LocationMapper.LocationType.Pickup)
+                checkedEntities.Add(locId);
+            else if (locType == LocationMapper.LocationType.Secret)
+                checkedSecrets.Add(locId);
+        }
+
+        // Capture the LIVE used key items — this is the truth at save time.
+        // We must NOT copy from the active snapshot because MarkKeyItemUsed
+        // intentionally skips the active snapshot to preserve its save-time state.
+        var usedKeys = _inventory.GetUsedKeyItems();
+
+        var snapshot = new SaveSnapshot
+        {
+            LevelId = levelId,
+            MapperIndex = mapperIdx,
+            ReceivedRingItems = _allReceivedRingItems.Select(r => r.ItemId).ToList(),
+            ReceivedKeyItems = _inventory.CloneReceivedKeyItems(),
+            UsedKeyItems = usedKeys,
+            CheckedEntityLocations = checkedEntities,
+            CheckedSecretLocations = checkedSecrets,
+            ItemsReceivedIndex = _itemsReceivedIndex,
+        };
+
+        _stateStore.RecordSave(saveNumber, snapshot);
+        _activeSaveNumber = saveNumber;
+        _stateStore.Persist();
+
+        ConsoleUI.Info($"[SAVE] Game saved (save #{saveNumber}, level={levelId}, entities={checkedEntities.Count}, secrets={checkedSecrets.Count})");
+
+        // Resume key item monitoring with a fresh snapshot
+        _keyMonitor.SnapshotKeysRing();
+        _keyMonitor.Resume();
+    }
+
+    /// <summary>
+    /// Called when the player loads a save (Save_Number matches a known snapshot or decreased).
+    /// Re-snapshots entity flags and reconciles AP state from the saved snapshot.
+    /// </summary>
+    private void OnSaveLoaded(int saveNumber, int levelId)
+    {
+        ConsoleUI.Info($"[SAVE] Save loaded (save #{saveNumber})");
+
+        // Re-snapshot entity flags for the current game state (post-load)
+        _entityFlags.Clear();
+        SnapshotEntityFlags(levelId);
+
+        // Reset inventory pointers (heap shifts on any load)
+        _inventory.ResetKeyItemEnsurance();
+        _inventory.InvalidatePistolsPointer();
+        _inventory.ResetSentinelRemovals();
+
+        _activeSaveNumber = saveNumber;
+
+        // Reconcile from snapshot if available
+        var snapshot = _stateStore.GetSnapshot(saveNumber);
+        if (snapshot != null)
+        {
+            ReconcileAfterLoad(snapshot, levelId);
+        }
+        else
+        {
+            ConsoleUI.Warning($"[SAVE] No snapshot for save #{saveNumber} — skipping reconciliation");
+        }
+
+        // Take a fresh Keys Ring snapshot for usage detection
+        _keyMonitor.SnapshotKeysRing();
+        _keyMonitor.Resume();
+    }
+
+    /// <summary>
+    /// Reconciles AP state after loading a save. Queues ring items received after
+    /// the save and re-injects non-used key items.
+    /// </summary>
+    private void ReconcileAfterLoad(SaveSnapshot snapshot, int levelId)
+    {
+        int mapperIdx = TR1RMemoryMap.ToLocationMapperIndex(levelId);
+
+        // Set used key items so EnsureKeyItemsInRing skips them
+        _inventory.SetUsedKeyItems(new Dictionary<long, int>(snapshot.UsedKeyItems));
+
+        // Queue ring items received AFTER this save for re-injection
+        int savedIndex = snapshot.ItemsReceivedIndex;
+        if (savedIndex < _allReceivedRingItems.Count)
+        {
+            int count = _allReceivedRingItems.Count - savedIndex;
+            _pendingItems.Clear();
+            for (int i = savedIndex; i < _allReceivedRingItems.Count; i++)
+                _pendingItems.Enqueue(_allReceivedRingItems[i]);
+
+            ConsoleUI.Info($"[SAVE] Queued {count} ring items received after save #{_activeSaveNumber}");
+        }
+
+        // Reconcile key items for the current level
+        if (mapperIdx >= 0)
+        {
+            _inventory.ReconcileKeyItems(mapperIdx, new Dictionary<long, int>(snapshot.UsedKeyItems));
+        }
     }
 
     private void OnLevelChanged(int previousLevelId, int newLevelId)
@@ -270,6 +413,9 @@ public class GameStateWatcher : IDisposable
         // NOT here — OnLevelChanged also fires on save loads.
 
         ConsoleUI.LevelChange(newName);
+
+        // Pause key item monitoring during level transition
+        _keyMonitor.Pause();
 
         // Reset inventory scanner (heap addresses shift on level load)
         _scanner.Reset();
@@ -292,7 +438,6 @@ public class GameStateWatcher : IDisposable
         // before monitoring. OnSettleComplete takes fresh snapshots once stable.
         _settleFromMenu = previousLevelId == -1;
         _levelSettleTicks = 20; // 2 seconds (20 × 100ms)
-        ConsoleUI.Info($"[DEBUG] Settle started: {_levelSettleTicks} ticks, fromMenu={_settleFromMenu}");
     }
 
     /// <summary>
@@ -303,31 +448,22 @@ public class GameStateWatcher : IDisposable
     /// </summary>
     private void OnSettleComplete(int levelId)
     {
-        ConsoleUI.Info($"[DEBUG] OnSettleComplete fired for levelId={levelId}");
-
         // Fresh snapshots from now-stable game state
         _entityFlags.Clear();
         SnapshotEntityFlags(levelId);
-
-        // DEBUG: log captured entity flags
-        foreach (var (idx, flags) in _entityFlags)
-            ConsoleUI.Info($"[DEBUG]   entity[{idx}] flags=0x{flags:X4}");
 
         _lastSecretsFound = _memory.ReadUInt16(
             _tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Runtime_SecretsFound);
         _lastHealth = _memory.ReadInt16(_laraPtr + TR1RMemoryMap.Item_HitPoints);
         _lastLevelCompleted = _memory.ReadInt32(_tomb1Base, TR1RMemoryMap.LevelCompleted);
         _lastSaveNumber = _memory.ReadInt32(
-            _memory.Tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Save_Number);
+            _memory.Tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.WSB_SaveCounter);
         _scanner.Reset();
         _inventory.InvalidatePistolsPointer();
 
-        // Grace period: suppress sentinel removals for a short window after settle.
-        // The game may still apply save data (activation mask bits) asynchronously,
-        // causing entity flag changes that look like pickups but aren't.
-        _postSettleCooldown = 10; // 1 second (10 × 100ms)
-
-        ConsoleUI.Info($"[DEBUG] OnSettleComplete done, entitiesBase=0x{_entitiesBase:X}");
+        // Take a fresh Keys Ring snapshot and resume monitoring
+        _keyMonitor.SnapshotKeysRing();
+        _keyMonitor.Resume();
 
         if (_settleFromMenu)
         {
@@ -343,12 +479,23 @@ public class GameStateWatcher : IDisposable
                 foreach (var item in _allReceivedRingItems)
                     _pendingItems.Enqueue(item);
                 ConsoleUI.Info($"[GSW] New game — replaying {_allReceivedRingItems.Count} ring items");
+                return;
             }
-            else
-            {
-                _pendingItems.Clear();
-                ConsoleUI.Info("[GSW] Save loaded from menu — skipping ring item replay");
-            }
+
+            _pendingItems.Clear();
+            ConsoleUI.Info("[GSW] Save loaded from menu — skipping ring item replay");
+        }
+
+        // Reconcile from the current Save_Number's snapshot (works for both
+        // menu→game and level→level transitions, e.g. loading a save from
+        // a different level). This catches cross-level loads that bypass
+        // HandleSaveNumberChange because _lastSaveNumber was already set above.
+        if (_stateStore.HasSnapshot(_lastSaveNumber))
+        {
+            _activeSaveNumber = _lastSaveNumber;
+            var snapshot = _stateStore.GetSnapshot(_lastSaveNumber);
+            if (snapshot != null)
+                ReconcileAfterLoad(snapshot, levelId);
         }
     }
 
@@ -379,7 +526,7 @@ public class GameStateWatcher : IDisposable
 
     /// <summary>
     /// Checks each tracked entity for flag changes (pickup detection).
-    /// When an entity's flags change, it means the player interacted with it.
+    /// Uses the active save snapshot to distinguish real pickups from reload artifacts.
     /// </summary>
     private void CheckEntityPickups(int levelId)
     {
@@ -393,6 +540,9 @@ public class GameStateWatcher : IDisposable
             if (_entitiesBase == IntPtr.Zero) return;
         }
 
+        // Get the active snapshot for save-aware checking
+        var activeSnapshot = _stateStore.GetSnapshot(_activeSaveNumber);
+
         var entityLocations = _levelEntityLocations[mapperIdx];
         foreach (var (entityIndex, locationId) in entityLocations)
         {
@@ -405,6 +555,11 @@ public class GameStateWatcher : IDisposable
                 {
                     _entityFlags[entityIndex] = currentFlags;
 
+                    // If this location was already checked in the active snapshot,
+                    // this is a reload artifact — skip both the AP send and sentinel removal.
+                    if (activeSnapshot != null && activeSnapshot.CheckedEntityLocations.Contains(locationId))
+                        continue;
+
                     bool isNew = _session.SendLocationCheck(locationId);
                     if (isNew)
                     {
@@ -412,10 +567,12 @@ public class GameStateWatcher : IDisposable
                         ConsoleUI.ItemSent(locName, "Archipelago");
                     }
 
+                    // Update the active snapshot with the new check
+                    activeSnapshot?.CheckedEntityLocations.Add(locationId);
+
                     // Queue sentinel removal for real pickups.
-                    // Suppressed during: level completion (end-of-level flag cleanup)
-                    // and post-settle cooldown (save data applying activation mask bits).
-                    if (_lastLevelCompleted != 1 && _postSettleCooldown == 0)
+                    // Suppressed during level completion (end-of-level flag cleanup).
+                    if (_lastLevelCompleted != 1)
                         _inventory.QueueSentinelRemoval();
                 }
             }
@@ -509,6 +666,34 @@ public class GameStateWatcher : IDisposable
         }
 
         _lastHealth = health;
+    }
+
+    /// <summary>
+    /// Detects key items consumed during normal gameplay (used in a door/lock).
+    /// When a key disappears from the Keys Ring without a save/load event,
+    /// it was used. We mark it as used in all snapshots to prevent re-injection.
+    /// </summary>
+    private void CheckKeyItemUsage(int levelId)
+    {
+        int mapperIdx = TR1RMemoryMap.ToLocationMapperIndex(levelId);
+        if (mapperIdx < 0) return;
+
+        var usedKeys = _keyMonitor.DetectUsedKeys();
+        foreach (var (pointer, qtyLost) in usedKeys)
+        {
+            long apItemId = _inventory.ResolvePointerToApId(pointer, mapperIdx);
+            if (apItemId != 0)
+            {
+                // Mark as used in LIVE state only (once per unit lost).
+                // Snapshots are not modified — they stay frozen at save-time state.
+                // The next OnGameSaved will capture the live used keys into a new snapshot.
+                for (int i = 0; i < qtyLost; i++)
+                    _inventory.AddUsedKeyItem(apItemId);
+
+                string itemName = _session.GetItemName(apItemId);
+                ConsoleUI.Info($"[SAVE] Key item used: {itemName} (qty={qtyLost})");
+            }
+        }
     }
 
     /// <summary>

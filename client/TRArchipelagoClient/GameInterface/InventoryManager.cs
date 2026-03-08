@@ -38,6 +38,10 @@ public class InventoryManager
     private int _keyItemEnsureCooldown;
     private const int KeyItemEnsureCooldownTicks = 30; // 3 seconds
 
+    // Key items that have been used (consumed in a door/lock): apItemId → count used.
+    // EnsureKeyItemsInRing skips these to avoid re-injecting keys the player has already spent.
+    private Dictionary<long, int> _usedKeyItems = new();
+
     // Pending sentinel medipack removals — queued by CheckEntityPickups,
     // processed every tick. Uses a counter because the game may not have
     // added the medipack to the ring yet when the entity flag changes.
@@ -361,10 +365,17 @@ public class InventoryManager
         if (items.Count == 0) return;
         if (!EnsurePistolsPointer()) return;
 
-        // Count expected qty per pointer from received items
+        // Count expected qty per pointer from received items (skip used copies only)
+        var remainingUsed = new Dictionary<long, int>(_usedKeyItems);
         var expectedQty = new Dictionary<IntPtr, short>();
         foreach (long apItemId in items)
         {
+            if (remainingUsed.TryGetValue(apItemId, out int usedCount) && usedCount > 0)
+            {
+                remainingUsed[apItemId] = usedCount - 1;
+                continue;
+            }
+
             IntPtr ptr = ResolveKeyItemPointer(apItemId);
             if (ptr == IntPtr.Zero) continue;
             expectedQty.TryGetValue(ptr, out short current);
@@ -397,13 +408,16 @@ public class InventoryManager
                 _memory.Write(t1 + TR1RMemoryMap.KeysRingQtys + ringCount * 2, targetQty);
                 ringCount++;
                 _memory.Write(t1 + TR1RMemoryMap.KeysRingCount, ringCount);
-                ConsoleUI.Info($"[INV] Key item injected into Keys Ring (ptr=0x{targetPtr:X}, qty={targetQty})");
                 injectedAny = true;
             }
         }
 
         if (injectedAny)
         {
+            // Only log on first injection attempt, not re-injections during stabilization
+            if (_keyItemEnsureCooldown == 0)
+                ConsoleUI.Info($"[INV] Ensuring key items in Keys Ring ({expectedQty.Count} items)");
+
             // The game engine may overwrite the ring shortly after level load.
             // Reset the cooldown so we keep re-checking and re-injecting.
             _keyItemEnsureCooldown = KeyItemEnsureCooldownTicks;
@@ -419,6 +433,106 @@ public class InventoryManager
             // Cooldown expired and items are still in the ring — done.
             _keyItemsEnsured = true;
         }
+    }
+
+    /// <summary>
+    /// Deep-copies the received key items dictionary for snapshot storage.
+    /// </summary>
+    public Dictionary<int, List<long>> CloneReceivedKeyItems()
+    {
+        var clone = new Dictionary<int, List<long>>();
+        foreach (var (idx, items) in _receivedKeyItems)
+            clone[idx] = new List<long>(items);
+        return clone;
+    }
+
+    /// <summary>
+    /// Returns a copy of the live used key items (apItemId → count used).
+    /// Used by OnGameSaved to capture the current truth at save time.
+    /// </summary>
+    public Dictionary<long, int> GetUsedKeyItems() => new Dictionary<long, int>(_usedKeyItems);
+
+    /// <summary>
+    /// Sets the used key items set. EnsureKeyItemsInRing will skip these items.
+    /// </summary>
+    public void SetUsedKeyItems(Dictionary<long, int> usedKeyItems)
+    {
+        _usedKeyItems = usedKeyItems ?? new();
+        if (_usedKeyItems.Count > 0)
+            ConsoleUI.Info($"[INV] UsedKeyItems set: {string.Join(", ", _usedKeyItems.Select(kv => $"AP#{kv.Key}×{kv.Value}"))}");
+    }
+
+    /// <summary>
+    /// Marks a single key item as used at runtime. Called when KeyItemMonitor
+    /// detects a key disappearing from the ring during normal gameplay.
+    /// </summary>
+    public void AddUsedKeyItem(long apItemId)
+    {
+        _usedKeyItems.TryGetValue(apItemId, out int count);
+        _usedKeyItems[apItemId] = count + 1;
+        _keyItemsEnsured = false; // force re-evaluation with the updated used set
+    }
+
+    /// <summary>
+    /// After a save reload, re-injects key items that were received but not yet used.
+    /// Items in usedKeyItems are skipped (they were consumed before the save).
+    /// </summary>
+    public void ReconcileKeyItems(int mapperIdx, Dictionary<long, int> usedKeyItems)
+    {
+        if (!_receivedKeyItems.TryGetValue(mapperIdx, out var items))
+            return;
+
+        if (!EnsurePistolsPointer())
+            return;
+
+        var remainingUsed = new Dictionary<long, int>(usedKeyItems);
+        foreach (long apItemId in items)
+        {
+            if (remainingUsed.TryGetValue(apItemId, out int usedCount) && usedCount > 0)
+            {
+                remainingUsed[apItemId] = usedCount - 1;
+                ConsoleUI.Info($"[INV] Reconcile: skipping used key item AP#{apItemId}");
+                continue;
+            }
+
+            IntPtr targetPtr = ResolveKeyItemPointer(apItemId);
+            if (targetPtr == IntPtr.Zero) continue;
+
+            ConsoleUI.Info($"[INV] Reconcile: re-injecting key item AP#{apItemId} (ptr=0x{targetPtr:X})");
+            InjectToRingRaw(
+                TR1RMemoryMap.KeysRingCount,
+                TR1RMemoryMap.KeysRingItems,
+                TR1RMemoryMap.KeysRingQtys,
+                targetPtr, 1);
+        }
+
+        _keyItemsEnsured = false;
+        _keyItemEnsureCooldown = KeyItemEnsureCooldownTicks;
+    }
+
+    /// <summary>
+    /// Resolves a Keys Ring pointer back to an AP item ID.
+    /// Used by KeyItemMonitor to identify which AP item was consumed.
+    /// Returns 0 if not found.
+    /// </summary>
+    public long ResolvePointerToApId(long pointer, int mapperIdx)
+    {
+        if (!_receivedKeyItems.TryGetValue(mapperIdx, out var items))
+            return 0;
+
+        if (!EnsurePistolsPointer())
+            return 0;
+
+        IntPtr targetPtr = new IntPtr(pointer);
+
+        foreach (long apItemId in items)
+        {
+            IntPtr resolvedPtr = ResolveKeyItemPointer(apItemId);
+            if (resolvedPtr == targetPtr)
+                return apItemId;
+        }
+
+        return 0;
     }
 
     // =================================================================
@@ -548,6 +662,9 @@ public class InventoryManager
     /// deferred until this returns true.
     /// </summary>
     public bool IsInventoryReady() => EnsurePistolsPointer();
+
+    /// <summary>True once key items are confirmed stable in the ring after injection.</summary>
+    public bool KeyItemsEnsured => _keyItemsEnsured;
 
     /// <summary>
     /// Reset key item ensurance flag. Call on any game load (level change or same-level reload)

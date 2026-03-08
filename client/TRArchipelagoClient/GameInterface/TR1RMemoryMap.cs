@@ -431,6 +431,13 @@ public static class TR1RMemoryMap
     public const int Save_SlotStatus = 0x004;
     public const int Save_GameMode = 0x008;
     public const int Save_Number = 0x00C;
+
+    /// <summary>
+    /// Save counter offset within the WSB (runtime). The WSB layout differs from
+    /// the save file by -4 bytes (no SlotStatus field), so Save_Number (0x00C in
+    /// the file) maps to 0x008 in the WSB. Confirmed via CE: tomb1.dll+0x4C4E08.
+    /// </summary>
+    public const int WSB_SaveCounter = 0x008;
     public const int Save_MagnumAmmo = 0x4C2;
     public const int Save_UziAmmo = 0x4C4;
     public const int Save_ShotgunAmmo = 0x4C6;
