@@ -13,7 +13,7 @@ __pycache__/
 *.pyo
 *.egg-info/
 dist/
-build/
+/build/
 *.egg
 .venv/
 venv/
