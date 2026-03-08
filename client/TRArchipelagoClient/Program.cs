@@ -49,9 +49,9 @@ class Program
         }
 
         // --- Normal AP mode ---
-        string server = GetArg(args, 0, "localhost:38281");
+        string server = GetArg(args, 0, null) ?? ConsoleUI.Prompt("Archipelago server (host:port)");
         string? slotName = GetArg(args, 1, null) ?? ConsoleUI.Prompt("Slot name");
-        string password = GetArg(args, 2, "") ?? "";
+        string password = GetArg(args, 2, null) ?? ConsoleUI.Prompt("Password (leave empty if none)");
 
         string? gameDir = GetArg(args, 3, null) ?? DetectGameDirectory();
         if (gameDir == null)
@@ -95,7 +95,7 @@ class Program
         {
             saveManager.SwapIn();
 
-            bool connected = await session.ConnectAsync(server ?? "localhost:38281", slotName ?? "", password);
+            bool connected = await session.ConnectAsync(server, slotName ?? "", password);
             if (!connected)
             {
                 ConsoleUI.Error("Failed to connect to Archipelago server.");

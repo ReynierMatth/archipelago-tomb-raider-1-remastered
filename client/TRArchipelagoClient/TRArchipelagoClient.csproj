@@ -6,9 +6,15 @@
     <Nullable>enable</Nullable>
     <RootNamespace>TRArchipelagoClient</RootNamespace>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <!-- Publish as single-file self-contained exe (no .NET install needed) -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>partial</TrimMode>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\TRLevelControl\TRLevelControl.csproj" />
+    <ProjectReference Include="..\TRLevelControl\TRLevelControl.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Archipelago.MultiClient.Net" Version="6.*" />

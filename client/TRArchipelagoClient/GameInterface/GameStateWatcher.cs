@@ -481,6 +481,12 @@ public class GameStateWatcher : IDisposable
     /// </summary>
     private void OnSettleComplete(int levelId)
     {
+        // Drain the AP item queue BEFORE reconciling.
+        // Items accumulate during settle — we need them in _allReceivedRingItems
+        // so ReconcileAfterLoad can correctly slice by savedIndex.
+        // Do NOT add to _pendingItems here; reconciliation decides what to inject.
+        DrainReceivedItemQueue();
+
         // Fresh snapshots from now-stable game state
         _entityFlags.Clear();
         SnapshotEntityFlags(levelId);
@@ -722,6 +728,36 @@ public class GameStateWatcher : IDisposable
                 ConsoleUI.Info($"[SAVE] Key item used: {itemName} (qty={qtyLost})");
             }
         }
+    }
+
+    /// <summary>
+    /// Drains the AP item queue into _allReceivedRingItems without injecting.
+    /// Called from OnSettleComplete so that ReconcileAfterLoad has the full
+    /// item history before deciding what to inject.
+    /// </summary>
+    private void DrainReceivedItemQueue()
+    {
+        int drained = 0;
+        while (_session.TryDequeueReceivedItem(out var item))
+        {
+            string itemName = _session.GetItemName(item.ItemId);
+            string playerName = _session.GetPlayerName(item.Player);
+            ConsoleUI.ItemReceived(itemName, playerName);
+            _itemsReceivedIndex++;
+
+            var category = ItemMapper.GetCategory(item.ItemId);
+
+            if (category != ItemMapper.ItemCategory.Trap &&
+                category != ItemMapper.ItemCategory.KeyItem)
+            {
+                _allReceivedRingItems.Add((item.ItemId, category));
+            }
+
+            drained++;
+        }
+
+        if (drained > 0)
+            ConsoleUI.Info($"[GSW] Drained {drained} items from AP queue ({_allReceivedRingItems.Count} ring items tracked)");
     }
 
     /// <summary>
