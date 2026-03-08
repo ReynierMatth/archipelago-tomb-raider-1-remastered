@@ -30,6 +30,13 @@ public class InventoryManager
     // Once all key items have been successfully injected after a load,
     // stop reconciling until the next load — prevents re-giving used keys.
     private bool _keyItemsEnsured;
+    private bool _loggedPistolsRetry;
+
+    // After injection, keep re-checking for this many ticks to make sure the
+    // game engine doesn't overwrite the ring. Only set _keyItemsEnsured once
+    // the item survives in the ring for the full cooldown.
+    private int _keyItemEnsureCooldown;
+    private const int KeyItemEnsureCooldownTicks = 30; // 3 seconds
 
     // Pending sentinel medipack removals — queued by CheckEntityPickups,
     // processed every tick. Uses a counter because the game may not have
@@ -367,6 +374,7 @@ public class InventoryManager
         // Inject missing items and fix qty on existing ones
         IntPtr t1 = _memory.Tomb1Base;
         short ringCount = _memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingCount);
+        bool injectedAny = false;
 
         foreach (var (targetPtr, targetQty) in expectedQty)
         {
@@ -389,11 +397,28 @@ public class InventoryManager
                 _memory.Write(t1 + TR1RMemoryMap.KeysRingQtys + ringCount * 2, targetQty);
                 ringCount++;
                 _memory.Write(t1 + TR1RMemoryMap.KeysRingCount, ringCount);
-                ConsoleUI.Info($"[INV] Key item ensured in Keys Ring (ptr=0x{targetPtr:X}, qty={targetQty})");
+                ConsoleUI.Info($"[INV] Key item injected into Keys Ring (ptr=0x{targetPtr:X}, qty={targetQty})");
+                injectedAny = true;
             }
         }
 
-        _keyItemsEnsured = true;
+        if (injectedAny)
+        {
+            // The game engine may overwrite the ring shortly after level load.
+            // Reset the cooldown so we keep re-checking and re-injecting.
+            _keyItemEnsureCooldown = KeyItemEnsureCooldownTicks;
+        }
+        else if (_keyItemEnsureCooldown > 0)
+        {
+            // Items are in the ring — count down. Once the cooldown expires
+            // without needing re-injection, the ring is stable.
+            _keyItemEnsureCooldown--;
+        }
+        else
+        {
+            // Cooldown expired and items are still in the ring — done.
+            _keyItemsEnsured = true;
+        }
     }
 
     // =================================================================
@@ -528,7 +553,11 @@ public class InventoryManager
     /// Reset key item ensurance flag. Call on any game load (level change or same-level reload)
     /// so that EnsureKeyItemsInRing will re-inject items into the fresh ring.
     /// </summary>
-    public void ResetKeyItemEnsurance() => _keyItemsEnsured = false;
+    public void ResetKeyItemEnsurance()
+    {
+        _keyItemsEnsured = false;
+        _keyItemEnsureCooldown = 0;
+    }
 
     /// <summary>
     /// Queue removal of one parasitic small medipack. Called when the player

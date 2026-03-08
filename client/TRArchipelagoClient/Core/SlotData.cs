@@ -14,6 +14,7 @@ public class SlotData
     public int SecretsMode { get; set; }
     public bool DeathLink { get; set; }
     public int StartingWeapons { get; set; }
+    public int TotalSecrets { get; set; }
     public List<string> LevelSequence { get; set; } = new();
 
     public static SlotData FromDictionary(IReadOnlyDictionary<string, object> data)
@@ -33,6 +34,8 @@ public class SlotData
             slotData.DeathLink = Convert.ToBoolean(deathLink);
         if (data.TryGetValue("starting_weapons", out var startingWeapons))
             slotData.StartingWeapons = Convert.ToInt32(startingWeapons);
+        if (data.TryGetValue("total_secrets", out var totalSecrets))
+            slotData.TotalSecrets = Convert.ToInt32(totalSecrets);
         if (data.TryGetValue("level_sequence", out var levelSeq) && levelSeq is JArray arr)
             slotData.LevelSequence = arr.ToObject<List<string>>() ?? new();
 

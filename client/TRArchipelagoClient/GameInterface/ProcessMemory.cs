@@ -224,6 +224,10 @@ public class ProcessMemory : IDisposable
         return WriteBytes(address, buffer);
     }
 
+    /// <summary>Writes a 16-bit integer to process memory.</summary>
+    public bool WriteInt16(IntPtr address, short value)
+        => Write(address, value);
+
     // =================================================================
     // AOB SCANNING
     // =================================================================

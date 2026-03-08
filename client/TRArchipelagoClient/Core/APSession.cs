@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Helpers;
@@ -14,8 +15,8 @@ namespace TRArchipelagoClient.Core;
 public class APSession
 {
     private ArchipelagoSession? _session;
-    private readonly Queue<ItemInfo> _receivedItems = new();
-    private readonly HashSet<long> _checkedLocations = new();
+    private readonly ConcurrentQueue<ItemInfo> _receivedItems = new();
+    private readonly ConcurrentDictionary<long, byte> _checkedLocations = new();
 
     public SlotData? SlotData { get; private set; }
     public bool IsConnected => _session?.Socket?.Connected ?? false;
@@ -42,7 +43,7 @@ public class APSession
             "Tomb Raider 1 Remastered",
             slotName,
             ItemsHandlingFlags.AllItems,
-            tags: new[] { "TR1R" },
+            tags: new[] { "TR1R", "DeathLink" },
             password: password,
             requestSlotData: true
         );
@@ -54,6 +55,9 @@ public class APSession
             throw new Exception($"AP login failed: {errors}");
         }
 
+        // Subscribe to bounce packets (DeathLink)
+        _session.Socket.PacketReceived += OnPacketReceived;
+
         // Parse slot data from the login result
         var loginSuccess = (LoginSuccessful)result;
         if (loginSuccess.SlotData != null)
@@ -61,25 +65,31 @@ public class APSession
             SlotData = SlotData.FromDictionary(loginSuccess.SlotData);
         }
 
+        // Pre-populate checked locations from the server so we know which
+        // locations were already sent in previous sessions. This prevents
+        // duplicate sentinel removals when entity flags change on save reload.
+        foreach (long locId in _session.Locations.AllLocationsChecked)
+        {
+            _checkedLocations.TryAdd(locId, 0);
+        }
+
         return true;
     }
 
-    public void SendLocationCheck(long locationId)
+    /// <summary>Returns true if this was a NEW check (not already sent).</summary>
+    public bool SendLocationCheck(long locationId)
     {
-        if (!_checkedLocations.Contains(locationId))
+        if (_checkedLocations.TryAdd(locationId, 0))
         {
-            _checkedLocations.Add(locationId);
             _session?.Locations.CompleteLocationChecks(locationId);
+            return true;
         }
+        return false;
     }
 
     public void SendLocationChecks(IEnumerable<long> locationIds)
     {
-        var newChecks = locationIds.Where(id => !_checkedLocations.Contains(id)).ToArray();
-        foreach (var id in newChecks)
-        {
-            _checkedLocations.Add(id);
-        }
+        var newChecks = locationIds.Where(id => _checkedLocations.TryAdd(id, 0)).ToArray();
         if (newChecks.Length > 0)
         {
             _session?.Locations.CompleteLocationChecks(newChecks);
@@ -111,13 +121,23 @@ public class APSession
 
     public bool TryDequeueReceivedItem(out ItemInfo? item)
     {
-        if (_receivedItems.Count > 0)
+        if (_receivedItems.TryDequeue(out var result))
         {
-            item = _receivedItems.Dequeue();
+            item = result;
             return true;
         }
         item = default;
         return false;
+    }
+
+    private void OnPacketReceived(ArchipelagoPacketBase packet)
+    {
+        if (packet is BouncePacket bounce && bounce.Tags.Contains("DeathLink"))
+        {
+            string source = bounce.Data.TryGetValue("source", out var s) ? s.ToString() : "Unknown";
+            string cause = bounce.Data.TryGetValue("cause", out var c) ? c.ToString() : "died";
+            OnDeathLinkReceived?.Invoke($"{source}: {cause}");
+        }
     }
 
     public string GetItemName(long itemId)
@@ -137,6 +157,10 @@ public class APSession
 
     public void Disconnect()
     {
+        if (_session != null)
+        {
+            _session.Socket.PacketReceived -= OnPacketReceived;
+        }
         _session?.Socket?.DisconnectAsync();
     }
 }

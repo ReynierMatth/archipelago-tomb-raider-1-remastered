@@ -142,6 +142,7 @@ class TR1RWorld(World):
             "secrets_mode": self.options.secrets_mode.value,
             "death_link": self.options.death_link.value,
             "starting_weapons": self.options.starting_weapons.value,
+            "total_secrets": sum(SECRETS_PER_LEVEL),
             "level_sequence": [level[1] for level in LEVELS],
         }
 

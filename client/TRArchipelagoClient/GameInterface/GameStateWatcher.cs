@@ -50,9 +50,15 @@ public class GameStateWatcher : IDisposable
     // Used to replay items when the player starts a new game from the main menu.
     private readonly List<(long ItemId, ItemMapper.ItemCategory Category)> _allReceivedRingItems = new();
 
-    // Cooldown after new-game detection: wait for the game engine to finish
-    // reinitializing the inventory before writing to ring memory.
+    // Cooldown after level transition: wait for the game engine to finish
+    // reinitializing entities/inventory before monitoring.
     private int _levelSettleTicks;
+    private bool _settleFromMenu; // true = menu→game, false = level→level
+
+    // Post-settle grace period: entity flags may still change briefly after
+    // settle (save data applied asynchronously). During this window, entity
+    // flag changes are tracked but sentinel removal is suppressed.
+    private int _postSettleCooldown;
 
     // Which entity indices are AP locations (set by LevelPatcher)
     private readonly Dictionary<int, Dictionary<int, long>> _levelEntityLocations;
@@ -180,12 +186,23 @@ public class GameStateWatcher : IDisposable
             // First frame in-game — capture current state without reporting changes.
             // This block also fires on inventory open / cutscenes (isInGameScene briefly 0),
             // so we must NOT reset to 0 (would re-report secrets/pickups as new).
+            // NOTE: Do NOT snapshot entity flags here — this block fires at unstable
+            // moments (during loading flickers) and would overwrite the stable snapshot
+            // from OnSettleComplete. Entity flags are managed by OnSettleComplete (after
+            // level transitions) and the Save_Number change handler (after save loads).
             _lastHealth = _memory.ReadInt16(_laraPtr + TR1RMemoryMap.Item_HitPoints);
             _lastLevelCompleted = _memory.ReadInt32(_tomb1Base, TR1RMemoryMap.LevelCompleted);
             _lastSecretsFound = _memory.ReadUInt16(
                 _tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Runtime_SecretsFound);
-            _entityFlags.Clear();
-            SnapshotEntityFlags(levelId);
+
+            // If a settle period is active, restart it — we just came back from a
+            // loading screen (isInGameScene was 0). The settle must count from AFTER
+            // the game finishes loading, not from when the levelId changed.
+            if (_levelSettleTicks > 0)
+            {
+                ConsoleUI.Info($"[DEBUG] !_wasInGame during settle, resetting {_levelSettleTicks} -> 20");
+                _levelSettleTicks = 20;
+            }
         }
 
         // During settle after menu→game transition: skip ALL monitoring.
@@ -206,13 +223,19 @@ public class GameStateWatcher : IDisposable
             _memory.Tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Save_Number);
         if (_lastSaveNumber >= 0 && saveNumber != _lastSaveNumber)
         {
+            ConsoleUI.Info($"[DEBUG] Save_Number changed: {_lastSaveNumber} -> {saveNumber}, re-snapshotting");
             _entityFlags.Clear();
             SnapshotEntityFlags(levelId);
             _inventory.ResetKeyItemEnsurance();
             _inventory.InvalidatePistolsPointer();
             _inventory.ResetSentinelRemovals();
+            _postSettleCooldown = 10; // suppress sentinel during save data reapplication
         }
         _lastSaveNumber = saveNumber;
+
+        // Decrement post-settle cooldown
+        if (_postSettleCooldown > 0)
+            _postSettleCooldown--;
 
         // Check entity pickups (real-time!)
         CheckEntityPickups(levelId);
@@ -265,28 +288,31 @@ public class GameStateWatcher : IDisposable
         _lastHealth = TR1RMemoryMap.MaxHealth;
         _lastSaveNumber = -1; // re-capture on next tick
 
-        // Coming from menu/home — wait for the game engine to finish initializing
-        // before any monitoring. OnSettleComplete will decide whether to replay items.
-        if (previousLevelId == -1)
-        {
-            _levelSettleTicks = 20; // 2 seconds (20 × 100ms)
-        }
-
-        // Snapshot entity flags for the new level
-        SnapshotEntityFlags(newLevelId);
+        // Wait for the game engine to finish initializing entities/rings
+        // before monitoring. OnSettleComplete takes fresh snapshots once stable.
+        _settleFromMenu = previousLevelId == -1;
+        _levelSettleTicks = 20; // 2 seconds (20 × 100ms)
+        ConsoleUI.Info($"[DEBUG] Settle started: {_levelSettleTicks} ticks, fromMenu={_settleFromMenu}");
     }
 
     /// <summary>
-    /// Called when the settle period after a menu→game transition ends.
+    /// Called when the settle period after a level transition ends.
     /// The game engine has had 2 seconds to fully initialize. Takes fresh
-    /// snapshots of all game state, then decides whether to replay ring items
-    /// (new game = ring has only Compass+Pistols) or skip (loaded save).
+    /// snapshots of all game state so that CheckEntityPickups has a stable baseline.
+    /// For menu→game transitions, also decides whether to replay ring items.
     /// </summary>
     private void OnSettleComplete(int levelId)
     {
+        ConsoleUI.Info($"[DEBUG] OnSettleComplete fired for levelId={levelId}");
+
         // Fresh snapshots from now-stable game state
         _entityFlags.Clear();
         SnapshotEntityFlags(levelId);
+
+        // DEBUG: log captured entity flags
+        foreach (var (idx, flags) in _entityFlags)
+            ConsoleUI.Info($"[DEBUG]   entity[{idx}] flags=0x{flags:X4}");
+
         _lastSecretsFound = _memory.ReadUInt16(
             _tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Runtime_SecretsFound);
         _lastHealth = _memory.ReadInt16(_laraPtr + TR1RMemoryMap.Item_HitPoints);
@@ -296,23 +322,33 @@ public class GameStateWatcher : IDisposable
         _scanner.Reset();
         _inventory.InvalidatePistolsPointer();
 
-        // Detect new game vs loaded save by checking the Main Ring.
-        // New game: ring has only Compass + Pistols (count = 2).
-        // Loaded save: ring has additional items from the save.
-        short ringCount = _memory.ReadInt16(_memory.Tomb1Base + TR1RMemoryMap.MainRingCount);
+        // Grace period: suppress sentinel removals for a short window after settle.
+        // The game may still apply save data (activation mask bits) asynchronously,
+        // causing entity flag changes that look like pickups but aren't.
+        _postSettleCooldown = 10; // 1 second (10 × 100ms)
 
-        if (ringCount <= 2 && _allReceivedRingItems.Count > 0)
+        ConsoleUI.Info($"[DEBUG] OnSettleComplete done, entitiesBase=0x{_entitiesBase:X}");
+
+        if (_settleFromMenu)
         {
-            // New game — replay all ring items
-            _pendingItems.Clear();
-            foreach (var item in _allReceivedRingItems)
-                _pendingItems.Enqueue(item);
-            ConsoleUI.Info($"[GSW] New game — replaying {_allReceivedRingItems.Count} ring items");
-        }
-        else
-        {
-            _pendingItems.Clear();
-            ConsoleUI.Info("[GSW] Save loaded from menu — skipping ring item replay");
+            // Detect new game vs loaded save by checking the Main Ring.
+            // New game: ring has only Compass + Pistols (count = 2).
+            // Loaded save: ring has additional items from the save.
+            short ringCount = _memory.ReadInt16(_memory.Tomb1Base + TR1RMemoryMap.MainRingCount);
+
+            if (ringCount <= 2 && _allReceivedRingItems.Count > 0)
+            {
+                // New game — replay all ring items
+                _pendingItems.Clear();
+                foreach (var item in _allReceivedRingItems)
+                    _pendingItems.Enqueue(item);
+                ConsoleUI.Info($"[GSW] New game — replaying {_allReceivedRingItems.Count} ring items");
+            }
+            else
+            {
+                _pendingItems.Clear();
+                ConsoleUI.Info("[GSW] Save loaded from menu — skipping ring item replay");
+            }
         }
     }
 
@@ -367,17 +403,19 @@ public class GameStateWatcher : IDisposable
             {
                 if (currentFlags != previousFlags)
                 {
-                    // Entity flags changed — it was picked up!
-                    _session.SendLocationCheck(locationId);
-                    string locName = _session.GetLocationName(locationId);
-                    ConsoleUI.ItemSent(locName, "Archipelago");
                     _entityFlags[entityIndex] = currentFlags;
 
-                    // Cancel the parasitic small medipack the game adds when
-                    // picking up a sentinel (SmallMed_S_P) entity.
-                    // Skip if level is already completed — the flag changes are from
-                    // end-of-level cleanup, not real pickups (no medipack was added).
-                    if (_lastLevelCompleted != 1)
+                    bool isNew = _session.SendLocationCheck(locationId);
+                    if (isNew)
+                    {
+                        string locName = _session.GetLocationName(locationId);
+                        ConsoleUI.ItemSent(locName, "Archipelago");
+                    }
+
+                    // Queue sentinel removal for real pickups.
+                    // Suppressed during: level completion (end-of-level flag cleanup)
+                    // and post-settle cooldown (save data applying activation mask bits).
+                    if (_lastLevelCompleted != 1 && _postSettleCooldown == 0)
                         _inventory.QueueSentinelRemoval();
                 }
             }
