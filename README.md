@@ -9,8 +9,8 @@
 1. Download `TRArchipelagoClient.exe` and `tr1r.apworld` from the [latest release](../../releases/latest)
 2. Install the APWorld: copy `tr1r.apworld` into your Archipelago `lib/worlds/` folder
 3. Generate a multiworld with TR1 Remastered as one of the games
-4. Launch Tomb Raider I-III Remastered
-5. Run `TRArchipelagoClient.exe` and connect to your Archipelago server
+4. Run `TRArchipelagoClient.exe` and connect to your Archipelago server
+5. Launch Tomb Raider I-III Remastered
 
 ### Features
 
