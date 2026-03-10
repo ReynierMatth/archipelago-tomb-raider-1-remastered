@@ -124,9 +124,12 @@ public class TR2DataExporter
         { (TR2LevelNames.VEGAS, "Puzzle3_S_P"), "Circuit Board" },
     };
 
+    private readonly string _routePath;
+
     public TR2DataExporter(string gameDataDir)
     {
         _gameDataDir = gameDataDir;
+        _routePath = Path.Combine(AppContext.BaseDirectory, "Resources", "TR2", "Locations", "routes.json");
     }
 
     public TRArchipelagoData Export(bool includeGold)
@@ -220,6 +223,13 @@ public class TR2DataExporter
                     });
                 }
             }
+
+            // Route analysis: annotate pickups with key item dependencies
+            var roomOrigins = level.Rooms.Select(r => (r.Info.X, r.Info.Z)).ToList();
+            var keyItemInfos = levelData.KeyItems
+                .Select(ki => (ki.X, ki.Y, ki.Z, ki.Room, (uint)Enum.Parse<TR2Type>(ki.Type), ki.Name))
+                .ToList();
+            RouteAnalyzer.AnnotatePickups(_routePath, levelFile, levelData.Sequence, roomOrigins, keyItemInfos, levelData.Pickups);
 
             // TR2: all levels have 3 secrets (Stone, Jade, Gold dragons)
             for (int s = 0; s < 3; s++)

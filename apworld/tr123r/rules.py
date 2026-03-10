@@ -1,15 +1,17 @@
 """
 Data-driven access rules for TR Remastered Archipelago World.
 
-For each level, all its key items are required to complete the level.
-Uses two strategies:
-  1. If keyItems have "itemName" field (new exporter format): direct mapping
-  2. Fallback: match key items to item definitions by level prefix in the JSON keys
+Two layers of rules:
+  1. Level completion: requires ALL key items for that level
+  2. Per-pickup gating: pickups behind locked doors require specific key items
+
+Pickup gating uses requiredKeyItems from route analysis (populated by exporter).
 """
 
 from typing import TYPE_CHECKING, Dict, List, Set
 
 from .game_data import GameData, load_game
+from .locations import _PICKUP_TYPE_NAMES
 
 if TYPE_CHECKING:
     from . import TR1RWorld
@@ -25,7 +27,7 @@ def set_rules(world: "TR1RWorld", enabled_games: List[str]) -> None:
         if game is None:
             continue
 
-        # Check if new "itemName" field is available
+        # Level completion rules (require all key items for the level)
         has_item_name = any(
             ki.get("itemName")
             for level in game.levels
@@ -36,6 +38,9 @@ def set_rules(world: "TR1RWorld", enabled_games: List[str]) -> None:
             _set_rules_direct(multiworld, player, game)
         else:
             _set_rules_prefix_match(multiworld, player, game)
+
+        # Per-pickup gating rules (pickups behind locked doors)
+        _set_pickup_gating_rules(multiworld, player, game, game_key)
 
 
 def _set_rules_direct(multiworld, player: int, game: GameData) -> None:
@@ -87,6 +92,45 @@ def _set_rules_prefix_match(multiworld, player: int, game: GameData) -> None:
 
         if required:
             _set_completion_rule(multiworld, player, level["name"], required)
+
+
+def _set_pickup_gating_rules(
+    multiworld, player: int, game: GameData, game_key: str
+) -> None:
+    """Set access rules on individual pickup locations that are behind locked doors.
+
+    Uses requiredKeyItems from route analysis: each pickup may list key item
+    names that must be obtained before the pickup is reachable.
+    Location names must match the format in locations.py exactly.
+    """
+    for level in game.levels:
+        level_name = level["name"]
+
+        # Replicate the same type counter logic as locations.py
+        type_counters: Dict[str, int] = {}
+
+        for pickup in level.get("pickups", []):
+            pickup_type = pickup.get("type", "Unknown")
+            type_counters[pickup_type] = type_counters.get(pickup_type, 0) + 1
+            count = type_counters[pickup_type]
+
+            required_keys = pickup.get("requiredKeyItems", [])
+            if not required_keys:
+                continue
+
+            # Build the same location name as locations.py
+            type_name = _PICKUP_TYPE_NAMES.get(
+                pickup_type,
+                pickup_type.replace("_S_P", "").replace("_P", ""),
+            )
+            loc_name = f"{level_name} - {type_name} {count}"
+
+            _set_rule(
+                multiworld, player, loc_name,
+                lambda state, names=required_keys, p=player: all(
+                    state.has(n, p) for n in names
+                ),
+            )
 
 
 def _set_completion_rule(

@@ -14,7 +14,11 @@
           "x": 17536,
           "y": -256,
           "z": 37376,
-          "room": 42
+          "room": 42,
+          "requiredKeyItems": [
+            "Great Wall - Rusty Key",
+            "Great Wall - Guardhouse Key"
+          ]
         },
         {
           "entityIndex": 29,
@@ -23,7 +27,11 @@
           "x": 17536,
           "y": -256,
           "z": 37376,
-          "room": 42
+          "room": 42,
+          "requiredKeyItems": [
+            "Great Wall - Rusty Key",
+            "Great Wall - Guardhouse Key"
+          ]
         },
         {
           "entityIndex": 63,
@@ -32,7 +40,11 @@
           "x": 25472,
           "y": 8192,
           "z": 59904,
-          "room": 50
+          "room": 50,
+          "requiredKeyItems": [
+            "Great Wall - Rusty Key",
+            "Great Wall - Guardhouse Key"
+          ]
         },
         {
           "entityIndex": 92,
@@ -41,7 +53,11 @@
           "x": 55808,
           "y": 13312,
           "z": 65408,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": [
+            "Great Wall - Rusty Key",
+            "Great Wall - Guardhouse Key"
+          ]
         },
         {
           "entityIndex": 103,
@@ -50,7 +66,11 @@
           "x": 57856,
           "y": 15360,
           "z": 71168,
-          "room": 75
+          "room": 75,
+          "requiredKeyItems": [
+            "Great Wall - Rusty Key",
+            "Great Wall - Guardhouse Key"
+          ]
         }
       ],
       "keyItems": [
@@ -104,7 +124,8 @@
           "x": 54784,
           "y": 0,
           "z": 37376,
-          "room": 16
+          "room": 16,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 12,
@@ -113,7 +134,8 @@
           "x": 52736,
           "y": 0,
           "z": 38400,
-          "room": 18
+          "room": 18,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 13,
@@ -122,7 +144,8 @@
           "x": 50688,
           "y": -512,
           "z": 40448,
-          "room": 18
+          "room": 18,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 41,
@@ -131,7 +154,10 @@
           "x": 36352,
           "y": 3712,
           "z": 25088,
-          "room": 56
+          "room": 56,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key"
+          ]
         },
         {
           "entityIndex": 42,
@@ -140,7 +166,10 @@
           "x": 36352,
           "y": 3712,
           "z": 25088,
-          "room": 56
+          "room": 56,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key"
+          ]
         },
         {
           "entityIndex": 44,
@@ -149,7 +178,10 @@
           "x": 43520,
           "y": 0,
           "z": 29184,
-          "room": 58
+          "room": 58,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key"
+          ]
         },
         {
           "entityIndex": 50,
@@ -158,7 +190,10 @@
           "x": 31232,
           "y": 2048,
           "z": 31232,
-          "room": 60
+          "room": 60,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key"
+          ]
         },
         {
           "entityIndex": 51,
@@ -167,7 +202,10 @@
           "x": 29184,
           "y": 2048,
           "z": 31232,
-          "room": 60
+          "room": 60,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key"
+          ]
         },
         {
           "entityIndex": 60,
@@ -176,7 +214,11 @@
           "x": 40448,
           "y": 0,
           "z": 48640,
-          "room": 69
+          "room": 69,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key",
+            "Venice - Steel Key"
+          ]
         },
         {
           "entityIndex": 61,
@@ -185,7 +227,11 @@
           "x": 40448,
           "y": 0,
           "z": 48640,
-          "room": 69
+          "room": 69,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key",
+            "Venice - Steel Key"
+          ]
         },
         {
           "entityIndex": 62,
@@ -194,7 +240,11 @@
           "x": 40448,
           "y": 0,
           "z": 48640,
-          "room": 69
+          "room": 69,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key",
+            "Venice - Steel Key"
+          ]
         },
         {
           "entityIndex": 82,
@@ -203,7 +253,10 @@
           "x": 27136,
           "y": -1792,
           "z": 53760,
-          "room": 78
+          "room": 78,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key"
+          ]
         },
         {
           "entityIndex": 83,
@@ -212,7 +265,10 @@
           "x": 27136,
           "y": -1792,
           "z": 53760,
-          "room": 78
+          "room": 78,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key"
+          ]
         },
         {
           "entityIndex": 92,
@@ -221,7 +277,12 @@
           "x": 24064,
           "y": -768,
           "z": 64000,
-          "room": 81
+          "room": 81,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key",
+            "Venice - Steel Key",
+            "Venice - Iron Key"
+          ]
         },
         {
           "entityIndex": 93,
@@ -230,7 +291,12 @@
           "x": 24064,
           "y": -768,
           "z": 64000,
-          "room": 81
+          "room": 81,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key",
+            "Venice - Steel Key",
+            "Venice - Iron Key"
+          ]
         },
         {
           "entityIndex": 105,
@@ -239,7 +305,10 @@
           "x": 22016,
           "y": -1792,
           "z": 53760,
-          "room": 96
+          "room": 96,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key"
+          ]
         },
         {
           "entityIndex": 117,
@@ -248,7 +317,12 @@
           "x": 86528,
           "y": 0,
           "z": 61952,
-          "room": 129
+          "room": 129,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key",
+            "Venice - Steel Key",
+            "Venice - Iron Key"
+          ]
         },
         {
           "entityIndex": 122,
@@ -257,7 +331,12 @@
           "x": 58880,
           "y": 256,
           "z": 65024,
-          "room": 147
+          "room": 147,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key",
+            "Venice - Steel Key",
+            "Venice - Iron Key"
+          ]
         },
         {
           "entityIndex": 129,
@@ -266,7 +345,12 @@
           "x": 59904,
           "y": -2048,
           "z": 49664,
-          "room": 150
+          "room": 150,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key",
+            "Venice - Steel Key",
+            "Venice - Iron Key"
+          ]
         },
         {
           "entityIndex": 132,
@@ -275,7 +359,12 @@
           "x": 18944,
           "y": -1536,
           "z": 59904,
-          "room": 151
+          "room": 151,
+          "requiredKeyItems": [
+            "Venice - Boathouse Key",
+            "Venice - Steel Key",
+            "Venice - Iron Key"
+          ]
         }
       ],
       "keyItems": [
@@ -339,7 +428,8 @@
           "x": 43520,
           "y": -3840,
           "z": 39424,
-          "room": 29
+          "room": 29,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 47,
@@ -348,7 +438,8 @@
           "x": 68096,
           "y": 4352,
           "z": 41472,
-          "room": 49
+          "room": 49,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 51,
@@ -357,7 +448,10 @@
           "x": 40448,
           "y": 8704,
           "z": 32256,
-          "room": 51
+          "room": 51,
+          "requiredKeyItems": [
+            "Bartoli's Hideout - Library Key"
+          ]
         },
         {
           "entityIndex": 52,
@@ -366,7 +460,10 @@
           "x": 40448,
           "y": 8704,
           "z": 32256,
-          "room": 51
+          "room": 51,
+          "requiredKeyItems": [
+            "Bartoli's Hideout - Library Key"
+          ]
         },
         {
           "entityIndex": 57,
@@ -375,7 +472,10 @@
           "x": 49664,
           "y": 4608,
           "z": 19968,
-          "room": 59
+          "room": 59,
+          "requiredKeyItems": [
+            "Bartoli's Hideout - Library Key"
+          ]
         },
         {
           "entityIndex": 65,
@@ -384,7 +484,10 @@
           "x": 55808,
           "y": 4608,
           "z": 22016,
-          "room": 62
+          "room": 62,
+          "requiredKeyItems": [
+            "Bartoli's Hideout - Library Key"
+          ]
         },
         {
           "entityIndex": 72,
@@ -393,7 +496,10 @@
           "x": 42496,
           "y": 4352,
           "z": 19968,
-          "room": 70
+          "room": 70,
+          "requiredKeyItems": [
+            "Bartoli's Hideout - Library Key"
+          ]
         },
         {
           "entityIndex": 73,
@@ -402,7 +508,10 @@
           "x": 40448,
           "y": 4608,
           "z": 18944,
-          "room": 70
+          "room": 70,
+          "requiredKeyItems": [
+            "Bartoli's Hideout - Library Key"
+          ]
         },
         {
           "entityIndex": 79,
@@ -411,7 +520,8 @@
           "x": 68096,
           "y": 768,
           "z": 23040,
-          "room": 75
+          "room": 75,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 87,
@@ -420,7 +530,10 @@
           "x": 61952,
           "y": 4352,
           "z": 17920,
-          "room": 86
+          "room": 86,
+          "requiredKeyItems": [
+            "Bartoli's Hideout - Library Key"
+          ]
         },
         {
           "entityIndex": 90,
@@ -429,7 +542,8 @@
           "x": 58880,
           "y": -512,
           "z": 25088,
-          "room": 96
+          "room": 96,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 91,
@@ -438,7 +552,8 @@
           "x": 58880,
           "y": -512,
           "z": 25088,
-          "room": 96
+          "room": 96,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 108,
@@ -447,7 +562,8 @@
           "x": 71168,
           "y": 512,
           "z": 36352,
-          "room": 107
+          "room": 107,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 113,
@@ -456,7 +572,8 @@
           "x": 55808,
           "y": 4096,
           "z": 31232,
-          "room": 108
+          "room": 108,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 114,
@@ -465,7 +582,8 @@
           "x": 55808,
           "y": 4096,
           "z": 31232,
-          "room": 108
+          "room": 108,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 115,
@@ -474,7 +592,8 @@
           "x": 55808,
           "y": 4096,
           "z": 31232,
-          "room": 108
+          "room": 108,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 119,
@@ -483,7 +602,8 @@
           "x": 67072,
           "y": 2048,
           "z": 42496,
-          "room": 116
+          "room": 116,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 121,
@@ -492,7 +612,8 @@
           "x": 61952,
           "y": 4096,
           "z": 43520,
-          "room": 118
+          "room": 118,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 126,
@@ -501,7 +622,10 @@
           "x": 70144,
           "y": 5120,
           "z": 22016,
-          "room": 139
+          "room": 139,
+          "requiredKeyItems": [
+            "Bartoli's Hideout - Library Key"
+          ]
         }
       ],
       "keyItems": [
@@ -555,7 +679,10 @@
           "x": 80384,
           "y": -3584,
           "z": 54784,
-          "room": 12
+          "room": 12,
+          "requiredKeyItems": [
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 21,
@@ -564,7 +691,10 @@
           "x": 80384,
           "y": -3584,
           "z": 54784,
-          "room": 12
+          "room": 12,
+          "requiredKeyItems": [
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 25,
@@ -573,7 +703,10 @@
           "x": 79360,
           "y": -2432,
           "z": 50688,
-          "room": 13
+          "room": 13,
+          "requiredKeyItems": [
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 27,
@@ -582,7 +715,10 @@
           "x": 73216,
           "y": -768,
           "z": 51712,
-          "room": 14
+          "room": 14,
+          "requiredKeyItems": [
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 30,
@@ -591,7 +727,8 @@
           "x": 79360,
           "y": 7936,
           "z": 31232,
-          "room": 25
+          "room": 25,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 35,
@@ -600,7 +737,8 @@
           "x": 71168,
           "y": 4352,
           "z": 36352,
-          "room": 31
+          "room": 31,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 42,
@@ -609,7 +747,11 @@
           "x": 81408,
           "y": 1536,
           "z": 46592,
-          "room": 38
+          "room": 38,
+          "requiredKeyItems": [
+            "Opera House - Relay Box",
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 55,
@@ -618,7 +760,11 @@
           "x": 83456,
           "y": 7936,
           "z": 42496,
-          "room": 44
+          "room": 44,
+          "requiredKeyItems": [
+            "Opera House - Relay Box",
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 56,
@@ -627,7 +773,11 @@
           "x": 72192,
           "y": 7936,
           "z": 42496,
-          "room": 44
+          "room": 44,
+          "requiredKeyItems": [
+            "Opera House - Relay Box",
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 59,
@@ -636,7 +786,11 @@
           "x": 85504,
           "y": 2304,
           "z": 44544,
-          "room": 50
+          "room": 50,
+          "requiredKeyItems": [
+            "Opera House - Relay Box",
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 80,
@@ -645,7 +799,11 @@
           "x": 83456,
           "y": 3584,
           "z": 52736,
-          "room": 77
+          "room": 77,
+          "requiredKeyItems": [
+            "Opera House - Relay Box",
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 81,
@@ -654,7 +812,11 @@
           "x": 83456,
           "y": 3584,
           "z": 52736,
-          "room": 77
+          "room": 77,
+          "requiredKeyItems": [
+            "Opera House - Relay Box",
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 86,
@@ -663,7 +825,10 @@
           "x": 68096,
           "y": 7168,
           "z": 66048,
-          "room": 86
+          "room": 86,
+          "requiredKeyItems": [
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 130,
@@ -672,7 +837,12 @@
           "x": 69120,
           "y": 5376,
           "z": 54784,
-          "room": 118
+          "room": 118,
+          "requiredKeyItems": [
+            "Opera House - Relay Box",
+            "Opera House - Ornate Key",
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 139,
@@ -681,7 +851,12 @@
           "x": 67072,
           "y": 5888,
           "z": 44544,
-          "room": 122
+          "room": 122,
+          "requiredKeyItems": [
+            "Opera House - Relay Box",
+            "Opera House - Ornate Key",
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 140,
@@ -690,7 +865,12 @@
           "x": 56832,
           "y": 5888,
           "z": 46592,
-          "room": 122
+          "room": 122,
+          "requiredKeyItems": [
+            "Opera House - Relay Box",
+            "Opera House - Ornate Key",
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 141,
@@ -699,7 +879,12 @@
           "x": 67072,
           "y": 5888,
           "z": 44544,
-          "room": 122
+          "room": 122,
+          "requiredKeyItems": [
+            "Opera House - Relay Box",
+            "Opera House - Ornate Key",
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 143,
@@ -708,7 +893,12 @@
           "x": 65024,
           "y": 5888,
           "z": 43520,
-          "room": 122
+          "room": 122,
+          "requiredKeyItems": [
+            "Opera House - Relay Box",
+            "Opera House - Ornate Key",
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 144,
@@ -717,7 +907,12 @@
           "x": 65024,
           "y": 5888,
           "z": 43520,
-          "room": 122
+          "room": 122,
+          "requiredKeyItems": [
+            "Opera House - Relay Box",
+            "Opera House - Ornate Key",
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 145,
@@ -726,7 +921,12 @@
           "x": 65024,
           "y": 5888,
           "z": 43520,
-          "room": 122
+          "room": 122,
+          "requiredKeyItems": [
+            "Opera House - Relay Box",
+            "Opera House - Ornate Key",
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 169,
@@ -735,7 +935,10 @@
           "x": 77312,
           "y": 6656,
           "z": 62976,
-          "room": 161
+          "room": 161,
+          "requiredKeyItems": [
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 186,
@@ -744,7 +947,10 @@
           "x": 77312,
           "y": -768,
           "z": 61952,
-          "room": 170
+          "room": 170,
+          "requiredKeyItems": [
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 187,
@@ -753,7 +959,10 @@
           "x": 76288,
           "y": -768,
           "z": 61952,
-          "room": 170
+          "room": 170,
+          "requiredKeyItems": [
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 190,
@@ -762,7 +971,10 @@
           "x": 72192,
           "y": 6656,
           "z": 48640,
-          "room": 174
+          "room": 174,
+          "requiredKeyItems": [
+            "Opera House - Ornate Key #2"
+          ]
         },
         {
           "entityIndex": 192,
@@ -771,7 +983,10 @@
           "x": 72192,
           "y": 6656,
           "z": 60928,
-          "room": 178
+          "room": 178,
+          "requiredKeyItems": [
+            "Opera House - Ornate Key #2"
+          ]
         }
       ],
       "keyItems": [
@@ -845,7 +1060,10 @@
           "x": 33280,
           "y": -1280,
           "z": 89600,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card"
+          ]
         },
         {
           "entityIndex": 15,
@@ -854,7 +1072,10 @@
           "x": 37376,
           "y": -2816,
           "z": 76288,
-          "room": 3
+          "room": 3,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card"
+          ]
         },
         {
           "entityIndex": 29,
@@ -863,7 +1084,10 @@
           "x": 30208,
           "y": -4096,
           "z": 68096,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card"
+          ]
         },
         {
           "entityIndex": 32,
@@ -872,7 +1096,10 @@
           "x": 31232,
           "y": -4352,
           "z": 58880,
-          "room": 19
+          "room": 19,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card"
+          ]
         },
         {
           "entityIndex": 33,
@@ -881,7 +1108,10 @@
           "x": 31232,
           "y": -4352,
           "z": 58880,
-          "room": 19
+          "room": 19,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card"
+          ]
         },
         {
           "entityIndex": 34,
@@ -890,7 +1120,10 @@
           "x": 28160,
           "y": -4352,
           "z": 59904,
-          "room": 19
+          "room": 19,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card"
+          ]
         },
         {
           "entityIndex": 35,
@@ -899,7 +1132,10 @@
           "x": 28160,
           "y": -4352,
           "z": 59904,
-          "room": 19
+          "room": 19,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card"
+          ]
         },
         {
           "entityIndex": 37,
@@ -908,7 +1144,10 @@
           "x": 28160,
           "y": -4096,
           "z": 64000,
-          "room": 20
+          "room": 20,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card"
+          ]
         },
         {
           "entityIndex": 38,
@@ -917,7 +1156,10 @@
           "x": 27136,
           "y": -4352,
           "z": 72192,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card"
+          ]
         },
         {
           "entityIndex": 39,
@@ -926,7 +1168,10 @@
           "x": 27136,
           "y": -4352,
           "z": 72192,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card"
+          ]
         },
         {
           "entityIndex": 42,
@@ -935,7 +1180,10 @@
           "x": 29184,
           "y": -5376,
           "z": 69120,
-          "room": 22
+          "room": 22,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card"
+          ]
         },
         {
           "entityIndex": 43,
@@ -944,7 +1192,10 @@
           "x": 29184,
           "y": -5376,
           "z": 69120,
-          "room": 22
+          "room": 22,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card"
+          ]
         },
         {
           "entityIndex": 50,
@@ -953,7 +1204,10 @@
           "x": 39424,
           "y": -4096,
           "z": 61952,
-          "room": 30
+          "room": 30,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card"
+          ]
         },
         {
           "entityIndex": 51,
@@ -962,7 +1216,10 @@
           "x": 37376,
           "y": -4096,
           "z": 62976,
-          "room": 30
+          "room": 30,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card"
+          ]
         },
         {
           "entityIndex": 59,
@@ -971,7 +1228,11 @@
           "x": 43520,
           "y": -5120,
           "z": 58880,
-          "room": 33
+          "room": 33,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card",
+            "Oil Rig - Red Pass Card"
+          ]
         },
         {
           "entityIndex": 64,
@@ -980,7 +1241,11 @@
           "x": 44544,
           "y": -5120,
           "z": 53760,
-          "room": 34
+          "room": 34,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card",
+            "Oil Rig - Red Pass Card"
+          ]
         },
         {
           "entityIndex": 71,
@@ -989,7 +1254,11 @@
           "x": 53760,
           "y": -5888,
           "z": 47616,
-          "room": 37
+          "room": 37,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card",
+            "Oil Rig - Red Pass Card"
+          ]
         },
         {
           "entityIndex": 72,
@@ -998,7 +1267,11 @@
           "x": 52736,
           "y": -5888,
           "z": 46592,
-          "room": 37
+          "room": 37,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card",
+            "Oil Rig - Red Pass Card"
+          ]
         },
         {
           "entityIndex": 76,
@@ -1007,7 +1280,11 @@
           "x": 26112,
           "y": 2560,
           "z": 45568,
-          "room": 48
+          "room": 48,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card",
+            "Oil Rig - Red Pass Card"
+          ]
         },
         {
           "entityIndex": 81,
@@ -1016,7 +1293,8 @@
           "x": 34304,
           "y": -5120,
           "z": 53760,
-          "room": 51
+          "room": 51,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 103,
@@ -1025,7 +1303,11 @@
           "x": 31232,
           "y": 2560,
           "z": 54784,
-          "room": 101
+          "room": 101,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card",
+            "Oil Rig - Red Pass Card"
+          ]
         },
         {
           "entityIndex": 111,
@@ -1034,7 +1316,11 @@
           "x": 41472,
           "y": 6144,
           "z": 55808,
-          "room": 110
+          "room": 110,
+          "requiredKeyItems": [
+            "Oil Rig - Yellow Pass Card",
+            "Oil Rig - Red Pass Card"
+          ]
         }
       ],
       "keyItems": [
@@ -1098,7 +1384,13 @@
           "x": 41472,
           "y": -768,
           "z": 81408,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": [
+            "Diving Area - Machine Chip",
+            "Diving Area - Red Pass Card",
+            "Diving Area - Blue Pass Card",
+            "Diving Area - Machine Chip #2"
+          ]
         },
         {
           "entityIndex": 31,
@@ -1107,7 +1399,13 @@
           "x": 41472,
           "y": -768,
           "z": 75264,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": [
+            "Diving Area - Machine Chip",
+            "Diving Area - Red Pass Card",
+            "Diving Area - Blue Pass Card",
+            "Diving Area - Machine Chip #2"
+          ]
         },
         {
           "entityIndex": 32,
@@ -1116,7 +1414,13 @@
           "x": 41472,
           "y": -768,
           "z": 75264,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": [
+            "Diving Area - Machine Chip",
+            "Diving Area - Red Pass Card",
+            "Diving Area - Blue Pass Card",
+            "Diving Area - Machine Chip #2"
+          ]
         },
         {
           "entityIndex": 33,
@@ -1125,7 +1429,13 @@
           "x": 48640,
           "y": -768,
           "z": 73216,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": [
+            "Diving Area - Machine Chip",
+            "Diving Area - Red Pass Card",
+            "Diving Area - Blue Pass Card",
+            "Diving Area - Machine Chip #2"
+          ]
         },
         {
           "entityIndex": 42,
@@ -1134,7 +1444,10 @@
           "x": 45568,
           "y": -9216,
           "z": 81408,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": [
+            "Diving Area - Blue Pass Card"
+          ]
         },
         {
           "entityIndex": 43,
@@ -1143,7 +1456,10 @@
           "x": 49664,
           "y": -9216,
           "z": 77312,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": [
+            "Diving Area - Blue Pass Card"
+          ]
         },
         {
           "entityIndex": 44,
@@ -1152,7 +1468,10 @@
           "x": 41472,
           "y": -9216,
           "z": 80384,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": [
+            "Diving Area - Blue Pass Card"
+          ]
         },
         {
           "entityIndex": 49,
@@ -1161,7 +1480,10 @@
           "x": 46592,
           "y": -9216,
           "z": 86528,
-          "room": 23
+          "room": 23,
+          "requiredKeyItems": [
+            "Diving Area - Blue Pass Card"
+          ]
         },
         {
           "entityIndex": 52,
@@ -1170,7 +1492,10 @@
           "x": 57856,
           "y": -4096,
           "z": 77312,
-          "room": 29
+          "room": 29,
+          "requiredKeyItems": [
+            "Diving Area - Blue Pass Card"
+          ]
         },
         {
           "entityIndex": 63,
@@ -1179,7 +1504,11 @@
           "x": 68096,
           "y": -4608,
           "z": 73216,
-          "room": 31
+          "room": 31,
+          "requiredKeyItems": [
+            "Diving Area - Blue Pass Card",
+            "Diving Area - Machine Chip #2"
+          ]
         },
         {
           "entityIndex": 64,
@@ -1188,7 +1517,11 @@
           "x": 68096,
           "y": -4608,
           "z": 71168,
-          "room": 31
+          "room": 31,
+          "requiredKeyItems": [
+            "Diving Area - Blue Pass Card",
+            "Diving Area - Machine Chip #2"
+          ]
         },
         {
           "entityIndex": 76,
@@ -1197,7 +1530,8 @@
           "x": 33280,
           "y": 1024,
           "z": 57856,
-          "room": 42
+          "room": 42,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 77,
@@ -1206,7 +1540,8 @@
           "x": 33280,
           "y": 1024,
           "z": 54784,
-          "room": 42
+          "room": 42,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 82,
@@ -1215,7 +1550,8 @@
           "x": 38400,
           "y": 2304,
           "z": 48640,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 83,
@@ -1224,7 +1560,8 @@
           "x": 37376,
           "y": 2560,
           "z": 48640,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 84,
@@ -1233,7 +1570,8 @@
           "x": 37376,
           "y": 2560,
           "z": 48640,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 92,
@@ -1242,7 +1580,8 @@
           "x": 45568,
           "y": 3072,
           "z": 35328,
-          "room": 51
+          "room": 51,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 93,
@@ -1251,7 +1590,8 @@
           "x": 45568,
           "y": 3072,
           "z": 35328,
-          "room": 51
+          "room": 51,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 96,
@@ -1260,7 +1600,8 @@
           "x": 27136,
           "y": -5120,
           "z": 77312,
-          "room": 54
+          "room": 54,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 97,
@@ -1269,7 +1610,8 @@
           "x": 27136,
           "y": -5120,
           "z": 77312,
-          "room": 54
+          "room": 54,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 98,
@@ -1278,7 +1620,8 @@
           "x": 29184,
           "y": -11776,
           "z": 76288,
-          "room": 55
+          "room": 55,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 99,
@@ -1287,7 +1630,8 @@
           "x": 29184,
           "y": -11776,
           "z": 77312,
-          "room": 55
+          "room": 55,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 100,
@@ -1296,7 +1640,8 @@
           "x": 29184,
           "y": -11776,
           "z": 77312,
-          "room": 55
+          "room": 55,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 104,
@@ -1305,7 +1650,11 @@
           "x": 57856,
           "y": -2816,
           "z": 89600,
-          "room": 65
+          "room": 65,
+          "requiredKeyItems": [
+            "Diving Area - Blue Pass Card",
+            "Diving Area - Machine Chip #2"
+          ]
         },
         {
           "entityIndex": 105,
@@ -1314,7 +1663,11 @@
           "x": 54784,
           "y": -2816,
           "z": 86528,
-          "room": 65
+          "room": 65,
+          "requiredKeyItems": [
+            "Diving Area - Blue Pass Card",
+            "Diving Area - Machine Chip #2"
+          ]
         },
         {
           "entityIndex": 106,
@@ -1323,7 +1676,11 @@
           "x": 54784,
           "y": -2816,
           "z": 86528,
-          "room": 65
+          "room": 65,
+          "requiredKeyItems": [
+            "Diving Area - Blue Pass Card",
+            "Diving Area - Machine Chip #2"
+          ]
         },
         {
           "entityIndex": 123,
@@ -1332,7 +1689,10 @@
           "x": 40832,
           "y": -8192,
           "z": 86528,
-          "room": 80
+          "room": 80,
+          "requiredKeyItems": [
+            "Diving Area - Blue Pass Card"
+          ]
         },
         {
           "entityIndex": 124,
@@ -1341,7 +1701,10 @@
           "x": 40832,
           "y": -8192,
           "z": 86528,
-          "room": 80
+          "room": 80,
+          "requiredKeyItems": [
+            "Diving Area - Blue Pass Card"
+          ]
         }
       ],
       "keyItems": [
@@ -1415,7 +1778,8 @@
           "x": 68096,
           "y": -5888,
           "z": 72192,
-          "room": 20
+          "room": 20,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 55,
@@ -1424,7 +1788,8 @@
           "x": 79360,
           "y": -3456,
           "z": 41472,
-          "room": 49
+          "room": 49,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 58,
@@ -1433,7 +1798,8 @@
           "x": 83456,
           "y": -3456,
           "z": 43520,
-          "room": 49
+          "room": 49,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 59,
@@ -1442,7 +1808,8 @@
           "x": 82432,
           "y": -3584,
           "z": 40448,
-          "room": 49
+          "room": 49,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 60,
@@ -1451,7 +1818,8 @@
           "x": 82432,
           "y": -3584,
           "z": 40448,
-          "room": 49
+          "room": 49,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 63,
@@ -1460,7 +1828,8 @@
           "x": 66048,
           "y": -1280,
           "z": 71168,
-          "room": 62
+          "room": 62,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 64,
@@ -1469,7 +1838,8 @@
           "x": 67072,
           "y": -1280,
           "z": 77312,
-          "room": 62
+          "room": 62,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [],
@@ -1502,7 +1872,8 @@
           "x": 64000,
           "y": 0,
           "z": 28160,
-          "room": 19
+          "room": 19,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 13,
@@ -1511,7 +1882,8 @@
           "x": 64000,
           "y": 0,
           "z": 28160,
-          "room": 19
+          "room": 19,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 24,
@@ -1520,7 +1892,11 @@
           "x": 55808,
           "y": -4096,
           "z": 28160,
-          "room": 23
+          "room": 23,
+          "requiredKeyItems": [
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Rest Room Key"
+          ]
         },
         {
           "entityIndex": 25,
@@ -1529,7 +1905,11 @@
           "x": 59904,
           "y": -4096,
           "z": 28160,
-          "room": 23
+          "room": 23,
+          "requiredKeyItems": [
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Rest Room Key"
+          ]
         },
         {
           "entityIndex": 27,
@@ -1538,7 +1918,11 @@
           "x": 56832,
           "y": -4096,
           "z": 17920,
-          "room": 25
+          "room": 25,
+          "requiredKeyItems": [
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Rest Room Key"
+          ]
         },
         {
           "entityIndex": 28,
@@ -1547,7 +1931,11 @@
           "x": 56832,
           "y": -4096,
           "z": 17920,
-          "room": 25
+          "room": 25,
+          "requiredKeyItems": [
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Rest Room Key"
+          ]
         },
         {
           "entityIndex": 31,
@@ -1556,7 +1944,14 @@
           "x": 58880,
           "y": 2816,
           "z": 27136,
-          "room": 32
+          "room": 32,
+          "requiredKeyItems": [
+            "Maria Doria - Breaker",
+            "Maria Doria - Breaker #2",
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Breaker #3",
+            "Maria Doria - Rest Room Key"
+          ]
         },
         {
           "entityIndex": 32,
@@ -1565,7 +1960,14 @@
           "x": 58880,
           "y": 2816,
           "z": 27136,
-          "room": 32
+          "room": 32,
+          "requiredKeyItems": [
+            "Maria Doria - Breaker",
+            "Maria Doria - Breaker #2",
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Breaker #3",
+            "Maria Doria - Rest Room Key"
+          ]
         },
         {
           "entityIndex": 40,
@@ -1574,7 +1976,14 @@
           "x": 45184,
           "y": 3328,
           "z": 29184,
-          "room": 35
+          "room": 35,
+          "requiredKeyItems": [
+            "Maria Doria - Breaker",
+            "Maria Doria - Breaker #2",
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Breaker #3",
+            "Maria Doria - Rest Room Key"
+          ]
         },
         {
           "entityIndex": 41,
@@ -1583,7 +1992,14 @@
           "x": 45184,
           "y": 3328,
           "z": 29184,
-          "room": 35
+          "room": 35,
+          "requiredKeyItems": [
+            "Maria Doria - Breaker",
+            "Maria Doria - Breaker #2",
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Breaker #3",
+            "Maria Doria - Rest Room Key"
+          ]
         },
         {
           "entityIndex": 47,
@@ -1592,7 +2008,14 @@
           "x": 49664,
           "y": 2816,
           "z": 33280,
-          "room": 36
+          "room": 36,
+          "requiredKeyItems": [
+            "Maria Doria - Breaker",
+            "Maria Doria - Breaker #2",
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Breaker #3",
+            "Maria Doria - Rest Room Key"
+          ]
         },
         {
           "entityIndex": 54,
@@ -1601,7 +2024,14 @@
           "x": 56832,
           "y": 2816,
           "z": 36352,
-          "room": 40
+          "room": 40,
+          "requiredKeyItems": [
+            "Maria Doria - Breaker",
+            "Maria Doria - Breaker #2",
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Breaker #3",
+            "Maria Doria - Rest Room Key"
+          ]
         },
         {
           "entityIndex": 64,
@@ -1610,7 +2040,8 @@
           "x": 64000,
           "y": -3072,
           "z": 41472,
-          "room": 43
+          "room": 43,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 73,
@@ -1619,7 +2050,8 @@
           "x": 61952,
           "y": 4352,
           "z": 54784,
-          "room": 47
+          "room": 47,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 74,
@@ -1628,7 +2060,8 @@
           "x": 61952,
           "y": 4352,
           "z": 54784,
-          "room": 47
+          "room": 47,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 75,
@@ -1637,7 +2070,8 @@
           "x": 64000,
           "y": 4608,
           "z": 53760,
-          "room": 47
+          "room": 47,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 76,
@@ -1646,7 +2080,8 @@
           "x": 64000,
           "y": 4608,
           "z": 53760,
-          "room": 47
+          "room": 47,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 77,
@@ -1655,7 +2090,8 @@
           "x": 61952,
           "y": 4352,
           "z": 55808,
-          "room": 47
+          "room": 47,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 78,
@@ -1664,7 +2100,8 @@
           "x": 65024,
           "y": 4608,
           "z": 53760,
-          "room": 47
+          "room": 47,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 94,
@@ -1673,7 +2110,8 @@
           "x": 73216,
           "y": 5120,
           "z": 61952,
-          "room": 55
+          "room": 55,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 95,
@@ -1682,7 +2120,8 @@
           "x": 70144,
           "y": 5120,
           "z": 70144,
-          "room": 55
+          "room": 55,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 99,
@@ -1691,7 +2130,8 @@
           "x": 80384,
           "y": 3072,
           "z": 70144,
-          "room": 56
+          "room": 56,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 151,
@@ -1700,7 +2140,11 @@
           "x": 48640,
           "y": 5632,
           "z": 86528,
-          "room": 76
+          "room": 76,
+          "requiredKeyItems": [
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Rest Room Key"
+          ]
         },
         {
           "entityIndex": 154,
@@ -1709,7 +2153,8 @@
           "x": 60928,
           "y": 6912,
           "z": 41472,
-          "room": 79
+          "room": 79,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 170,
@@ -1718,7 +2163,15 @@
           "x": 46592,
           "y": 4608,
           "z": 23040,
-          "room": 83
+          "room": 83,
+          "requiredKeyItems": [
+            "Maria Doria - Cabin Key",
+            "Maria Doria - Breaker",
+            "Maria Doria - Breaker #2",
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Breaker #3",
+            "Maria Doria - Rest Room Key"
+          ]
         },
         {
           "entityIndex": 171,
@@ -1727,7 +2180,15 @@
           "x": 48640,
           "y": 4608,
           "z": 23040,
-          "room": 83
+          "room": 83,
+          "requiredKeyItems": [
+            "Maria Doria - Cabin Key",
+            "Maria Doria - Breaker",
+            "Maria Doria - Breaker #2",
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Breaker #3",
+            "Maria Doria - Rest Room Key"
+          ]
         },
         {
           "entityIndex": 172,
@@ -1736,7 +2197,15 @@
           "x": 45568,
           "y": 4864,
           "z": 9728,
-          "room": 84
+          "room": 84,
+          "requiredKeyItems": [
+            "Maria Doria - Cabin Key",
+            "Maria Doria - Breaker",
+            "Maria Doria - Breaker #2",
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Breaker #3",
+            "Maria Doria - Rest Room Key"
+          ]
         },
         {
           "entityIndex": 173,
@@ -1745,7 +2214,15 @@
           "x": 45568,
           "y": 4864,
           "z": 9728,
-          "room": 84
+          "room": 84,
+          "requiredKeyItems": [
+            "Maria Doria - Cabin Key",
+            "Maria Doria - Breaker",
+            "Maria Doria - Breaker #2",
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Breaker #3",
+            "Maria Doria - Rest Room Key"
+          ]
         },
         {
           "entityIndex": 174,
@@ -1754,7 +2231,15 @@
           "x": 45568,
           "y": 4864,
           "z": 9728,
-          "room": 84
+          "room": 84,
+          "requiredKeyItems": [
+            "Maria Doria - Cabin Key",
+            "Maria Doria - Breaker",
+            "Maria Doria - Breaker #2",
+            "Maria Doria - Rusty Key",
+            "Maria Doria - Breaker #3",
+            "Maria Doria - Rest Room Key"
+          ]
         }
       ],
       "keyItems": [
@@ -1848,7 +2333,8 @@
           "x": 78336,
           "y": 0,
           "z": 88576,
-          "room": 2
+          "room": 2,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 24,
@@ -1857,7 +2343,8 @@
           "x": 64000,
           "y": 1792,
           "z": 71168,
-          "room": 6
+          "room": 6,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 25,
@@ -1866,7 +2353,8 @@
           "x": 64000,
           "y": 1792,
           "z": 74240,
-          "room": 6
+          "room": 6,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 29,
@@ -1875,7 +2363,8 @@
           "x": 66048,
           "y": -4096,
           "z": 79360,
-          "room": 11
+          "room": 11,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 30,
@@ -1884,7 +2373,8 @@
           "x": 66048,
           "y": -4096,
           "z": 79360,
-          "room": 11
+          "room": 11,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 32,
@@ -1893,7 +2383,8 @@
           "x": 73216,
           "y": -4352,
           "z": 91648,
-          "room": 12
+          "room": 12,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 68,
@@ -1902,7 +2393,10 @@
           "x": 50688,
           "y": -2816,
           "z": 41472,
-          "room": 37
+          "room": 37,
+          "requiredKeyItems": [
+            "Living Quarters - Theatre Key"
+          ]
         },
         {
           "entityIndex": 72,
@@ -1911,7 +2405,10 @@
           "x": 41472,
           "y": -4096,
           "z": 35328,
-          "room": 38
+          "room": 38,
+          "requiredKeyItems": [
+            "Living Quarters - Theatre Key"
+          ]
         }
       ],
       "keyItems": [
@@ -1955,7 +2452,10 @@
           "x": 62976,
           "y": 5888,
           "z": 49664,
-          "room": 15
+          "room": 15,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 10,
@@ -1964,7 +2464,10 @@
           "x": 62976,
           "y": 5888,
           "z": 49664,
-          "room": 15
+          "room": 15,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 12,
@@ -1973,7 +2476,10 @@
           "x": 51712,
           "y": 5888,
           "z": 50688,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 13,
@@ -1982,7 +2488,10 @@
           "x": 51712,
           "y": 5888,
           "z": 50688,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 16,
@@ -1991,7 +2500,8 @@
           "x": 35328,
           "y": -2048,
           "z": 49664,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 17,
@@ -2000,7 +2510,8 @@
           "x": 36352,
           "y": -2048,
           "z": 50688,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 18,
@@ -2009,7 +2520,8 @@
           "x": 36352,
           "y": -2048,
           "z": 50688,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 34,
@@ -2018,7 +2530,10 @@
           "x": 50688,
           "y": -7424,
           "z": 60928,
-          "room": 47
+          "room": 47,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 35,
@@ -2027,7 +2542,10 @@
           "x": 50688,
           "y": -7424,
           "z": 60928,
-          "room": 47
+          "room": 47,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 37,
@@ -2036,7 +2554,10 @@
           "x": 29184,
           "y": -7424,
           "z": 60928,
-          "room": 48
+          "room": 48,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 38,
@@ -2045,7 +2566,10 @@
           "x": 61952,
           "y": -256,
           "z": 49664,
-          "room": 56
+          "room": 56,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 48,
@@ -2054,7 +2578,10 @@
           "x": 34304,
           "y": -10240,
           "z": 70144,
-          "room": 63
+          "room": 63,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 49,
@@ -2063,7 +2590,10 @@
           "x": 34304,
           "y": -10240,
           "z": 70144,
-          "room": 63
+          "room": 63,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 50,
@@ -2072,7 +2602,10 @@
           "x": 31232,
           "y": -9216,
           "z": 76288,
-          "room": 63
+          "room": 63,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 51,
@@ -2081,7 +2614,10 @@
           "x": 31616,
           "y": -9216,
           "z": 72192,
-          "room": 63
+          "room": 63,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 52,
@@ -2090,7 +2626,10 @@
           "x": 31616,
           "y": -9216,
           "z": 72192,
-          "room": 63
+          "room": 63,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 54,
@@ -2099,7 +2638,10 @@
           "x": 40448,
           "y": -10240,
           "z": 75264,
-          "room": 65
+          "room": 65,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 55,
@@ -2108,7 +2650,10 @@
           "x": 40448,
           "y": -10240,
           "z": 75264,
-          "room": 65
+          "room": 65,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 71,
@@ -2117,7 +2662,8 @@
           "x": 33280,
           "y": 1792,
           "z": 37376,
-          "room": 77
+          "room": 77,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 82,
@@ -2126,7 +2672,10 @@
           "x": 33280,
           "y": 1792,
           "z": 31232,
-          "room": 85
+          "room": 85,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 88,
@@ -2135,7 +2684,10 @@
           "x": 58880,
           "y": 0,
           "z": 59904,
-          "room": 92
+          "room": 92,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 93,
@@ -2144,7 +2696,10 @@
           "x": 23040,
           "y": -11008,
           "z": 59904,
-          "room": 97
+          "room": 97,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 101,
@@ -2153,7 +2708,10 @@
           "x": 42496,
           "y": -10240,
           "z": 61952,
-          "room": 110
+          "room": 110,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         },
         {
           "entityIndex": 102,
@@ -2162,7 +2720,10 @@
           "x": 42496,
           "y": -10240,
           "z": 61952,
-          "room": 110
+          "room": 110,
+          "requiredKeyItems": [
+            "The Deck - Stern Key"
+          ]
         }
       ],
       "keyItems": [
@@ -2236,7 +2797,8 @@
           "x": 66048,
           "y": 6784,
           "z": 33280,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 7,
@@ -2245,7 +2807,8 @@
           "x": 73216,
           "y": 1152,
           "z": 40448,
-          "room": 12
+          "room": 12,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 8,
@@ -2254,7 +2817,8 @@
           "x": 73216,
           "y": 1152,
           "z": 40448,
-          "room": 12
+          "room": 12,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 9,
@@ -2263,7 +2827,8 @@
           "x": 67072,
           "y": 1664,
           "z": 38400,
-          "room": 12
+          "room": 12,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 22,
@@ -2272,7 +2837,8 @@
           "x": 86528,
           "y": -896,
           "z": 85504,
-          "room": 41
+          "room": 41,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 23,
@@ -2281,7 +2847,8 @@
           "x": 91648,
           "y": -1280,
           "z": 73216,
-          "room": 41
+          "room": 41,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 30,
@@ -2290,7 +2857,8 @@
           "x": 94720,
           "y": -2688,
           "z": 90624,
-          "room": 52
+          "room": 52,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 31,
@@ -2299,7 +2867,8 @@
           "x": 94720,
           "y": -2688,
           "z": 90624,
-          "room": 52
+          "room": 52,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 33,
@@ -2308,7 +2877,8 @@
           "x": 40448,
           "y": 1408,
           "z": 52736,
-          "room": 53
+          "room": 53,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 59,
@@ -2317,7 +2887,8 @@
           "x": 82432,
           "y": 1024,
           "z": 3584,
-          "room": 80
+          "room": 80,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 60,
@@ -2326,7 +2897,8 @@
           "x": 82432,
           "y": 1024,
           "z": 3584,
-          "room": 80
+          "room": 80,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 80,
@@ -2335,7 +2907,11 @@
           "x": 85504,
           "y": 1280,
           "z": 44544,
-          "room": 95
+          "room": 95,
+          "requiredKeyItems": [
+            "Tibet - Hut Key",
+            "Tibet - Drawbridge Key"
+          ]
         },
         {
           "entityIndex": 81,
@@ -2344,7 +2920,11 @@
           "x": 85504,
           "y": 1280,
           "z": 43520,
-          "room": 95
+          "room": 95,
+          "requiredKeyItems": [
+            "Tibet - Hut Key",
+            "Tibet - Drawbridge Key"
+          ]
         },
         {
           "entityIndex": 82,
@@ -2353,7 +2933,11 @@
           "x": 84480,
           "y": 1280,
           "z": 43520,
-          "room": 95
+          "room": 95,
+          "requiredKeyItems": [
+            "Tibet - Hut Key",
+            "Tibet - Drawbridge Key"
+          ]
         },
         {
           "entityIndex": 93,
@@ -2362,7 +2946,11 @@
           "x": 72192,
           "y": 1024,
           "z": 43520,
-          "room": 131
+          "room": 131,
+          "requiredKeyItems": [
+            "Tibet - Hut Key",
+            "Tibet - Drawbridge Key"
+          ]
         },
         {
           "entityIndex": 94,
@@ -2371,7 +2959,11 @@
           "x": 72192,
           "y": 1024,
           "z": 43520,
-          "room": 131
+          "room": 131,
+          "requiredKeyItems": [
+            "Tibet - Hut Key",
+            "Tibet - Drawbridge Key"
+          ]
         },
         {
           "entityIndex": 95,
@@ -2380,7 +2972,11 @@
           "x": 73216,
           "y": 1024,
           "z": 44544,
-          "room": 131
+          "room": 131,
+          "requiredKeyItems": [
+            "Tibet - Hut Key",
+            "Tibet - Drawbridge Key"
+          ]
         },
         {
           "entityIndex": 96,
@@ -2389,7 +2985,11 @@
           "x": 73216,
           "y": 1024,
           "z": 44544,
-          "room": 131
+          "room": 131,
+          "requiredKeyItems": [
+            "Tibet - Hut Key",
+            "Tibet - Drawbridge Key"
+          ]
         },
         {
           "entityIndex": 97,
@@ -2398,7 +2998,11 @@
           "x": 68736,
           "y": 1024,
           "z": 45568,
-          "room": 131
+          "room": 131,
+          "requiredKeyItems": [
+            "Tibet - Hut Key",
+            "Tibet - Drawbridge Key"
+          ]
         },
         {
           "entityIndex": 98,
@@ -2407,7 +3011,11 @@
           "x": 68736,
           "y": 1024,
           "z": 45568,
-          "room": 131
+          "room": 131,
+          "requiredKeyItems": [
+            "Tibet - Hut Key",
+            "Tibet - Drawbridge Key"
+          ]
         },
         {
           "entityIndex": 106,
@@ -2416,7 +3024,8 @@
           "x": 29184,
           "y": 7936,
           "z": 95744,
-          "room": 148
+          "room": 148,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 107,
@@ -2425,7 +3034,8 @@
           "x": 29184,
           "y": 7936,
           "z": 95744,
-          "room": 148
+          "room": 148,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [
@@ -2479,7 +3089,8 @@
           "x": 78336,
           "y": 0,
           "z": 29184,
-          "room": 10
+          "room": 10,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 27,
@@ -2488,7 +3099,8 @@
           "x": 78336,
           "y": 0,
           "z": 29184,
-          "room": 10
+          "room": 10,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 36,
@@ -2497,7 +3109,8 @@
           "x": 83456,
           "y": -256,
           "z": 31232,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 37,
@@ -2506,7 +3119,8 @@
           "x": 83456,
           "y": -256,
           "z": 28160,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 40,
@@ -2515,7 +3129,13 @@
           "x": 50688,
           "y": 0,
           "z": 10752,
-          "room": 94
+          "room": 94,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Strongroom Key",
+            "Barkhang Monastery - Main Hall Key",
+            "Barkhang Monastery - Trapdoor Key"
+          ]
         },
         {
           "entityIndex": 41,
@@ -2524,7 +3144,11 @@
           "x": 59904,
           "y": 0,
           "z": 18944,
-          "room": 104
+          "room": 104,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Main Hall Key"
+          ]
         },
         {
           "entityIndex": 42,
@@ -2533,7 +3157,13 @@
           "x": 50688,
           "y": 0,
           "z": 11776,
-          "room": 94
+          "room": 94,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Strongroom Key",
+            "Barkhang Monastery - Main Hall Key",
+            "Barkhang Monastery - Trapdoor Key"
+          ]
         },
         {
           "entityIndex": 48,
@@ -2542,7 +3172,8 @@
           "x": 88576,
           "y": 5120,
           "z": 29184,
-          "room": 26
+          "room": 26,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 49,
@@ -2551,7 +3182,8 @@
           "x": 89600,
           "y": 5120,
           "z": 27136,
-          "room": 26
+          "room": 26,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 52,
@@ -2560,7 +3192,8 @@
           "x": 89600,
           "y": 5120,
           "z": 27136,
-          "room": 26
+          "room": 26,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 53,
@@ -2569,7 +3202,8 @@
           "x": 88576,
           "y": 5120,
           "z": 29184,
-          "room": 26
+          "room": 26,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 57,
@@ -2578,7 +3212,12 @@
           "x": 48640,
           "y": 0,
           "z": 48640,
-          "room": 37
+          "room": 37,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Strongroom Key",
+            "Barkhang Monastery - Main Hall Key"
+          ]
         },
         {
           "entityIndex": 58,
@@ -2587,7 +3226,12 @@
           "x": 49664,
           "y": 0,
           "z": 46592,
-          "room": 37
+          "room": 37,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Strongroom Key",
+            "Barkhang Monastery - Main Hall Key"
+          ]
         },
         {
           "entityIndex": 77,
@@ -2596,7 +3240,13 @@
           "x": 71168,
           "y": -3072,
           "z": 57856,
-          "room": 41
+          "room": 41,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Strongroom Key",
+            "Barkhang Monastery - Main Hall Key",
+            "Barkhang Monastery - Trapdoor Key"
+          ]
         },
         {
           "entityIndex": 79,
@@ -2605,7 +3255,13 @@
           "x": 71168,
           "y": -3072,
           "z": 55808,
-          "room": 41
+          "room": 41,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Strongroom Key",
+            "Barkhang Monastery - Main Hall Key",
+            "Barkhang Monastery - Trapdoor Key"
+          ]
         },
         {
           "entityIndex": 91,
@@ -2614,7 +3270,11 @@
           "x": 67072,
           "y": 0,
           "z": 25088,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Main Hall Key"
+          ]
         },
         {
           "entityIndex": 92,
@@ -2623,7 +3283,11 @@
           "x": 66048,
           "y": 0,
           "z": 24064,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Main Hall Key"
+          ]
         },
         {
           "entityIndex": 93,
@@ -2632,7 +3296,11 @@
           "x": 65024,
           "y": 0,
           "z": 24064,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Main Hall Key"
+          ]
         },
         {
           "entityIndex": 97,
@@ -2641,7 +3309,10 @@
           "x": 39424,
           "y": -5120,
           "z": 34304,
-          "room": 50
+          "room": 50,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key"
+          ]
         },
         {
           "entityIndex": 119,
@@ -2650,7 +3321,10 @@
           "x": 64000,
           "y": -5632,
           "z": 23040,
-          "room": 107
+          "room": 107,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key"
+          ]
         },
         {
           "entityIndex": 120,
@@ -2659,7 +3333,11 @@
           "x": 61952,
           "y": 0,
           "z": 25088,
-          "room": 104
+          "room": 104,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Main Hall Key"
+          ]
         },
         {
           "entityIndex": 121,
@@ -2668,7 +3346,11 @@
           "x": 29184,
           "y": 0,
           "z": 33280,
-          "room": 54
+          "room": 54,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Main Hall Key"
+          ]
         },
         {
           "entityIndex": 129,
@@ -2677,7 +3359,12 @@
           "x": 52736,
           "y": 0,
           "z": 37376,
-          "room": 61
+          "room": 61,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Strongroom Key",
+            "Barkhang Monastery - Main Hall Key"
+          ]
         },
         {
           "entityIndex": 133,
@@ -2686,7 +3373,12 @@
           "x": 53760,
           "y": -1024,
           "z": 38400,
-          "room": 61
+          "room": 61,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Strongroom Key",
+            "Barkhang Monastery - Main Hall Key"
+          ]
         },
         {
           "entityIndex": 134,
@@ -2695,7 +3387,12 @@
           "x": 53760,
           "y": -1024,
           "z": 38400,
-          "room": 61
+          "room": 61,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Strongroom Key",
+            "Barkhang Monastery - Main Hall Key"
+          ]
         },
         {
           "entityIndex": 157,
@@ -2704,7 +3401,12 @@
           "x": 56832,
           "y": 0,
           "z": 55808,
-          "room": 75
+          "room": 75,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Strongroom Key",
+            "Barkhang Monastery - Main Hall Key"
+          ]
         },
         {
           "entityIndex": 158,
@@ -2713,7 +3415,12 @@
           "x": 54784,
           "y": 0,
           "z": 55808,
-          "room": 75
+          "room": 75,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Strongroom Key",
+            "Barkhang Monastery - Main Hall Key"
+          ]
         },
         {
           "entityIndex": 159,
@@ -2722,7 +3429,12 @@
           "x": 53760,
           "y": 0,
           "z": 55808,
-          "room": 75
+          "room": 75,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Strongroom Key",
+            "Barkhang Monastery - Main Hall Key"
+          ]
         },
         {
           "entityIndex": 160,
@@ -2731,7 +3443,13 @@
           "x": 65024,
           "y": -4608,
           "z": 62976,
-          "room": 76
+          "room": 76,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Strongroom Key",
+            "Barkhang Monastery - Main Hall Key",
+            "Barkhang Monastery - Trapdoor Key"
+          ]
         },
         {
           "entityIndex": 181,
@@ -2740,7 +3458,13 @@
           "x": 15872,
           "y": -9856,
           "z": 3584,
-          "room": 114
+          "room": 114,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Strongroom Key",
+            "Barkhang Monastery - Main Hall Key",
+            "Barkhang Monastery - Trapdoor Key"
+          ]
         },
         {
           "entityIndex": 182,
@@ -2749,7 +3473,13 @@
           "x": 20992,
           "y": -8064,
           "z": 3584,
-          "room": 114
+          "room": 114,
+          "requiredKeyItems": [
+            "Barkhang Monastery - Rooftops Key",
+            "Barkhang Monastery - Strongroom Key",
+            "Barkhang Monastery - Main Hall Key",
+            "Barkhang Monastery - Trapdoor Key"
+          ]
         }
       ],
       "keyItems": [
@@ -2893,7 +3623,8 @@
           "x": 12800,
           "y": -4096,
           "z": 42496,
-          "room": 5
+          "room": 5,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 16,
@@ -2902,7 +3633,8 @@
           "x": 17920,
           "y": -256,
           "z": 44544,
-          "room": 7
+          "room": 7,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 17,
@@ -2911,7 +3643,8 @@
           "x": 16896,
           "y": -512,
           "z": 44544,
-          "room": 7
+          "room": 7,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 20,
@@ -2920,7 +3653,8 @@
           "x": 17920,
           "y": -256,
           "z": 44544,
-          "room": 7
+          "room": 7,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 21,
@@ -2929,7 +3663,8 @@
           "x": 16896,
           "y": -512,
           "z": 44544,
-          "room": 7
+          "room": 7,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 28,
@@ -2938,7 +3673,11 @@
           "x": 55808,
           "y": 11520,
           "z": 46592,
-          "room": 10
+          "room": 10,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask",
+            "Catacombs of the Talion - Tibetan Mask #2"
+          ]
         },
         {
           "entityIndex": 29,
@@ -2947,7 +3686,11 @@
           "x": 55808,
           "y": 11520,
           "z": 46592,
-          "room": 10
+          "room": 10,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask",
+            "Catacombs of the Talion - Tibetan Mask #2"
+          ]
         },
         {
           "entityIndex": 30,
@@ -2956,7 +3699,11 @@
           "x": 55808,
           "y": 11520,
           "z": 46592,
-          "room": 10
+          "room": 10,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask",
+            "Catacombs of the Talion - Tibetan Mask #2"
+          ]
         },
         {
           "entityIndex": 44,
@@ -2965,7 +3712,11 @@
           "x": 55808,
           "y": 11520,
           "z": 59904,
-          "room": 14
+          "room": 14,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask",
+            "Catacombs of the Talion - Tibetan Mask #2"
+          ]
         },
         {
           "entityIndex": 45,
@@ -2974,7 +3725,11 @@
           "x": 55808,
           "y": 11520,
           "z": 59904,
-          "room": 14
+          "room": 14,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask",
+            "Catacombs of the Talion - Tibetan Mask #2"
+          ]
         },
         {
           "entityIndex": 46,
@@ -2983,7 +3738,11 @@
           "x": 55808,
           "y": 11520,
           "z": 59904,
-          "room": 14
+          "room": 14,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask",
+            "Catacombs of the Talion - Tibetan Mask #2"
+          ]
         },
         {
           "entityIndex": 47,
@@ -2992,7 +3751,8 @@
           "x": 37376,
           "y": 7168,
           "z": 39424,
-          "room": 16
+          "room": 16,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 55,
@@ -3001,7 +3761,10 @@
           "x": 37376,
           "y": 8192,
           "z": 51712,
-          "room": 18
+          "room": 18,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 56,
@@ -3010,7 +3773,10 @@
           "x": 32256,
           "y": 8192,
           "z": 50688,
-          "room": 18
+          "room": 18,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 57,
@@ -3019,7 +3785,10 @@
           "x": 37376,
           "y": 8192,
           "z": 51712,
-          "room": 18
+          "room": 18,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 58,
@@ -3028,7 +3797,10 @@
           "x": 32256,
           "y": 8192,
           "z": 50688,
-          "room": 18
+          "room": 18,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 85,
@@ -3037,7 +3809,10 @@
           "x": 44544,
           "y": 5632,
           "z": 60928,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 86,
@@ -3046,7 +3821,10 @@
           "x": 44544,
           "y": 5632,
           "z": 60928,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 104,
@@ -3055,7 +3833,10 @@
           "x": 40448,
           "y": 8064,
           "z": 54784,
-          "room": 62
+          "room": 62,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 106,
@@ -3064,7 +3845,10 @@
           "x": 40448,
           "y": 8064,
           "z": 54784,
-          "room": 62
+          "room": 62,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 113,
@@ -3073,7 +3857,11 @@
           "x": 31232,
           "y": 8192,
           "z": 69120,
-          "room": 70
+          "room": 70,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask",
+            "Catacombs of the Talion - Tibetan Mask #2"
+          ]
         },
         {
           "entityIndex": 114,
@@ -3082,7 +3870,11 @@
           "x": 31232,
           "y": 8192,
           "z": 69120,
-          "room": 70
+          "room": 70,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask",
+            "Catacombs of the Talion - Tibetan Mask #2"
+          ]
         },
         {
           "entityIndex": 115,
@@ -3091,7 +3883,11 @@
           "x": 31232,
           "y": 8192,
           "z": 69120,
-          "room": 70
+          "room": 70,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask",
+            "Catacombs of the Talion - Tibetan Mask #2"
+          ]
         },
         {
           "entityIndex": 116,
@@ -3100,7 +3896,11 @@
           "x": 37376,
           "y": 8192,
           "z": 69120,
-          "room": 70
+          "room": 70,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask",
+            "Catacombs of the Talion - Tibetan Mask #2"
+          ]
         },
         {
           "entityIndex": 117,
@@ -3109,7 +3909,11 @@
           "x": 37376,
           "y": 8192,
           "z": 69120,
-          "room": 70
+          "room": 70,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask",
+            "Catacombs of the Talion - Tibetan Mask #2"
+          ]
         },
         {
           "entityIndex": 136,
@@ -3118,7 +3922,11 @@
           "x": 57856,
           "y": 9216,
           "z": 55808,
-          "room": 83
+          "room": 83,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask",
+            "Catacombs of the Talion - Tibetan Mask #2"
+          ]
         },
         {
           "entityIndex": 152,
@@ -3127,7 +3935,10 @@
           "x": 27136,
           "y": 8192,
           "z": 49664,
-          "room": 108
+          "room": 108,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 153,
@@ -3136,7 +3947,10 @@
           "x": 27136,
           "y": 8192,
           "z": 49664,
-          "room": 108
+          "room": 108,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 155,
@@ -3145,7 +3959,10 @@
           "x": 28160,
           "y": 8192,
           "z": 48640,
-          "room": 108
+          "room": 108,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 156,
@@ -3154,7 +3971,10 @@
           "x": 28160,
           "y": 8192,
           "z": 48640,
-          "room": 108
+          "room": 108,
+          "requiredKeyItems": [
+            "Catacombs of the Talion - Tibetan Mask"
+          ]
         }
       ],
       "keyItems": [
@@ -3218,7 +4038,8 @@
           "x": 76288,
           "y": -1024,
           "z": 64000,
-          "room": 5
+          "room": 5,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 22,
@@ -3227,7 +4048,10 @@
           "x": 28160,
           "y": 8192,
           "z": 61952,
-          "room": 22
+          "room": 22,
+          "requiredKeyItems": [
+            "Ice Palace - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 23,
@@ -3236,7 +4060,10 @@
           "x": 28160,
           "y": 8192,
           "z": 61952,
-          "room": 22
+          "room": 22,
+          "requiredKeyItems": [
+            "Ice Palace - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 56,
@@ -3245,7 +4072,8 @@
           "x": 59904,
           "y": 6656,
           "z": 62976,
-          "room": 34
+          "room": 34,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 57,
@@ -3254,7 +4082,8 @@
           "x": 59904,
           "y": 6656,
           "z": 62976,
-          "room": 34
+          "room": 34,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 67,
@@ -3263,7 +4092,8 @@
           "x": 67072,
           "y": 2816,
           "z": 72192,
-          "room": 54
+          "room": 54,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 68,
@@ -3272,7 +4102,8 @@
           "x": 67072,
           "y": 2816,
           "z": 72192,
-          "room": 54
+          "room": 54,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 71,
@@ -3281,7 +4112,10 @@
           "x": 31232,
           "y": 7296,
           "z": 25088,
-          "room": 56
+          "room": 56,
+          "requiredKeyItems": [
+            "Ice Palace - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 82,
@@ -3290,7 +4124,8 @@
           "x": 52736,
           "y": 5632,
           "z": 50688,
-          "room": 59
+          "room": 59,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 86,
@@ -3299,7 +4134,10 @@
           "x": 45568,
           "y": 7936,
           "z": 27136,
-          "room": 61
+          "room": 61,
+          "requiredKeyItems": [
+            "Ice Palace - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 87,
@@ -3308,7 +4146,10 @@
           "x": 45568,
           "y": 7936,
           "z": 30208,
-          "room": 61
+          "room": 61,
+          "requiredKeyItems": [
+            "Ice Palace - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 88,
@@ -3317,7 +4158,10 @@
           "x": 45568,
           "y": 7936,
           "z": 30208,
-          "room": 61
+          "room": 61,
+          "requiredKeyItems": [
+            "Ice Palace - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 89,
@@ -3326,7 +4170,10 @@
           "x": 45568,
           "y": 7936,
           "z": 30208,
-          "room": 61
+          "room": 61,
+          "requiredKeyItems": [
+            "Ice Palace - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 90,
@@ -3335,7 +4182,8 @@
           "x": 71168,
           "y": 5632,
           "z": 77312,
-          "room": 62
+          "room": 62,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 93,
@@ -3344,7 +4192,10 @@
           "x": 52736,
           "y": 5632,
           "z": 62976,
-          "room": 65
+          "room": 65,
+          "requiredKeyItems": [
+            "Ice Palace - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 102,
@@ -3353,7 +4204,10 @@
           "x": 30208,
           "y": 10496,
           "z": 57856,
-          "room": 71
+          "room": 71,
+          "requiredKeyItems": [
+            "Ice Palace - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 103,
@@ -3362,7 +4216,10 @@
           "x": 30208,
           "y": 10496,
           "z": 57856,
-          "room": 71
+          "room": 71,
+          "requiredKeyItems": [
+            "Ice Palace - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 127,
@@ -3371,7 +4228,10 @@
           "x": 57856,
           "y": 3072,
           "z": 49664,
-          "room": 90
+          "room": 90,
+          "requiredKeyItems": [
+            "Ice Palace - Tibetan Mask"
+          ]
         },
         {
           "entityIndex": 130,
@@ -3380,7 +4240,8 @@
           "x": 62976,
           "y": 5632,
           "z": 67072,
-          "room": 92
+          "room": 92,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 133,
@@ -3389,7 +4250,8 @@
           "x": 65024,
           "y": -256,
           "z": 62976,
-          "room": 98
+          "room": 98,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 149,
@@ -3398,7 +4260,12 @@
           "x": 68096,
           "y": 11520,
           "z": 42496,
-          "room": 143
+          "room": 143,
+          "requiredKeyItems": [
+            "Ice Palace - Gong Hammer",
+            "Ice Palace - Tibetan Mask",
+            "Ice Palace - Talion"
+          ]
         },
         {
           "entityIndex": 150,
@@ -3407,7 +4274,12 @@
           "x": 68096,
           "y": 11520,
           "z": 42496,
-          "room": 143
+          "room": 143,
+          "requiredKeyItems": [
+            "Ice Palace - Gong Hammer",
+            "Ice Palace - Tibetan Mask",
+            "Ice Palace - Talion"
+          ]
         },
         {
           "entityIndex": 151,
@@ -3416,7 +4288,12 @@
           "x": 68096,
           "y": 11520,
           "z": 41472,
-          "room": 143
+          "room": 143,
+          "requiredKeyItems": [
+            "Ice Palace - Gong Hammer",
+            "Ice Palace - Tibetan Mask",
+            "Ice Palace - Talion"
+          ]
         }
       ],
       "keyItems": [
@@ -3480,7 +4357,12 @@
           "x": 16896,
           "y": 26624,
           "z": 38400,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 18,
@@ -3489,7 +4371,8 @@
           "x": 31232,
           "y": 21888,
           "z": 50688,
-          "room": 14
+          "room": 14,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 28,
@@ -3498,7 +4381,8 @@
           "x": 10752,
           "y": 19968,
           "z": 40448,
-          "room": 20
+          "room": 20,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 38,
@@ -3507,7 +4391,8 @@
           "x": 11776,
           "y": 23296,
           "z": 46592,
-          "room": 27
+          "room": 27,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 39,
@@ -3516,7 +4401,12 @@
           "x": 27136,
           "y": 29696,
           "z": 35328,
-          "room": 29
+          "room": 29,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 52,
@@ -3525,7 +4415,11 @@
           "x": 47616,
           "y": 14336,
           "z": 7680,
-          "room": 35
+          "room": 35,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 53,
@@ -3534,7 +4428,11 @@
           "x": 47616,
           "y": 14336,
           "z": 7680,
-          "room": 35
+          "room": 35,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 69,
@@ -3543,7 +4441,10 @@
           "x": 58880,
           "y": 21760,
           "z": 43520,
-          "room": 41
+          "room": 41,
+          "requiredKeyItems": [
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 81,
@@ -3552,7 +4453,12 @@
           "x": 32256,
           "y": 17920,
           "z": 52736,
-          "room": 49
+          "room": 49,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 93,
@@ -3561,7 +4467,12 @@
           "x": 77312,
           "y": 26752,
           "z": 43136,
-          "room": 61
+          "room": 61,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 94,
@@ -3570,7 +4481,12 @@
           "x": 77312,
           "y": 26752,
           "z": 43136,
-          "room": 61
+          "room": 61,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 103,
@@ -3579,7 +4495,10 @@
           "x": 78336,
           "y": 23552,
           "z": 42496,
-          "room": 65
+          "room": 65,
+          "requiredKeyItems": [
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 133,
@@ -3588,7 +4507,12 @@
           "x": 75264,
           "y": 32256,
           "z": 56192,
-          "room": 81
+          "room": 81,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 137,
@@ -3597,7 +4521,8 @@
           "x": 24064,
           "y": 12288,
           "z": 61952,
-          "room": 88
+          "room": 88,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 157,
@@ -3606,7 +4531,12 @@
           "x": 43520,
           "y": 18688,
           "z": 37376,
-          "room": 93
+          "room": 93,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 160,
@@ -3615,7 +4545,12 @@
           "x": 26496,
           "y": 12288,
           "z": 51712,
-          "room": 98
+          "room": 98,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 161,
@@ -3624,7 +4559,12 @@
           "x": 26112,
           "y": 12288,
           "z": 52096,
-          "room": 98
+          "room": 98,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 162,
@@ -3633,7 +4573,12 @@
           "x": 26112,
           "y": 12288,
           "z": 52096,
-          "room": 98
+          "room": 98,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 181,
@@ -3642,7 +4587,12 @@
           "x": 95744,
           "y": 30848,
           "z": 40448,
-          "room": 111
+          "room": 111,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 196,
@@ -3651,7 +4601,11 @@
           "x": 46592,
           "y": 14848,
           "z": 10752,
-          "room": 121
+          "room": 121,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 202,
@@ -3660,7 +4614,12 @@
           "x": 77312,
           "y": 26368,
           "z": 52736,
-          "room": 132
+          "room": 132,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 203,
@@ -3669,7 +4628,12 @@
           "x": 77312,
           "y": 26368,
           "z": 52736,
-          "room": 132
+          "room": 132,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 213,
@@ -3678,7 +4642,12 @@
           "x": 4608,
           "y": 17408,
           "z": 18944,
-          "room": 152
+          "room": 152,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 217,
@@ -3687,7 +4656,12 @@
           "x": 4608,
           "y": 19456,
           "z": 11776,
-          "room": 156
+          "room": 156,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         },
         {
           "entityIndex": 239,
@@ -3696,7 +4670,12 @@
           "x": 78336,
           "y": 24832,
           "z": 42496,
-          "room": 192
+          "room": 192,
+          "requiredKeyItems": [
+            "Xian Caves - Gold Key",
+            "Xian Caves - The Dragon Seal",
+            "Xian Caves - Silver Key"
+          ]
         }
       ],
       "keyItems": [
@@ -3770,7 +4749,8 @@
           "x": 71168,
           "y": -5632,
           "z": 65024,
-          "room": 2
+          "room": 2,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 5,
@@ -3779,7 +4759,8 @@
           "x": 71168,
           "y": -5632,
           "z": 65024,
-          "room": 2
+          "room": 2,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 6,
@@ -3788,7 +4769,8 @@
           "x": 74240,
           "y": -5632,
           "z": 65024,
-          "room": 2
+          "room": 2,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 7,
@@ -3797,7 +4779,8 @@
           "x": 74240,
           "y": -5632,
           "z": 65024,
-          "room": 2
+          "room": 2,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 19,
@@ -3806,7 +4789,8 @@
           "x": 51328,
           "y": -7168,
           "z": 59904,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 20,
@@ -3815,7 +4799,8 @@
           "x": 51328,
           "y": -7168,
           "z": 54784,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 21,
@@ -3824,7 +4809,10 @@
           "x": 48640,
           "y": -7168,
           "z": 60928,
-          "room": 24
+          "room": 24,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 22,
@@ -3833,7 +4821,10 @@
           "x": 48640,
           "y": -7168,
           "z": 60928,
-          "room": 24
+          "room": 24,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 26,
@@ -3842,7 +4833,10 @@
           "x": 32256,
           "y": 3328,
           "z": 94720,
-          "room": 26
+          "room": 26,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 27,
@@ -3851,7 +4845,10 @@
           "x": 32256,
           "y": 3328,
           "z": 94720,
-          "room": 26
+          "room": 26,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 45,
@@ -3860,7 +4857,10 @@
           "x": 39424,
           "y": -3072,
           "z": 49664,
-          "room": 63
+          "room": 63,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 55,
@@ -3869,7 +4869,10 @@
           "x": 33280,
           "y": -3840,
           "z": 69120,
-          "room": 75
+          "room": 75,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 56,
@@ -3878,7 +4881,10 @@
           "x": 33280,
           "y": -3840,
           "z": 69120,
-          "room": 75
+          "room": 75,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 78,
@@ -3887,7 +4893,10 @@
           "x": 19968,
           "y": -9728,
           "z": 74240,
-          "room": 90
+          "room": 90,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 84,
@@ -3896,7 +4905,8 @@
           "x": 79360,
           "y": -7456,
           "z": 53376,
-          "room": 99
+          "room": 99,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 96,
@@ -3905,7 +4915,10 @@
           "x": 27136,
           "y": 4224,
           "z": 68096,
-          "room": 118
+          "room": 118,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 105,
@@ -3914,7 +4927,10 @@
           "x": 26112,
           "y": 2304,
           "z": 96768,
-          "room": 129
+          "room": 129,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 106,
@@ -3923,7 +4939,10 @@
           "x": 26112,
           "y": 2304,
           "z": 96768,
-          "room": 129
+          "room": 129,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 112,
@@ -3932,7 +4951,10 @@
           "x": 38400,
           "y": 4608,
           "z": 83456,
-          "room": 145
+          "room": 145,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 113,
@@ -3941,7 +4963,10 @@
           "x": 38400,
           "y": 4608,
           "z": 83456,
-          "room": 145
+          "room": 145,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 117,
@@ -3950,7 +4975,10 @@
           "x": 26112,
           "y": 4608,
           "z": 82432,
-          "room": 146
+          "room": 146,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 118,
@@ -3959,7 +4987,10 @@
           "x": 26112,
           "y": 4608,
           "z": 82432,
-          "room": 146
+          "room": 146,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 123,
@@ -3968,7 +4999,10 @@
           "x": 30208,
           "y": 4608,
           "z": 77312,
-          "room": 148
+          "room": 148,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 124,
@@ -3977,7 +5011,10 @@
           "x": 34304,
           "y": 4608,
           "z": 77312,
-          "room": 148
+          "room": 148,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 125,
@@ -3986,7 +5023,10 @@
           "x": 30208,
           "y": 4608,
           "z": 77312,
-          "room": 148
+          "room": 148,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 126,
@@ -3995,7 +5035,10 @@
           "x": 34304,
           "y": 4608,
           "z": 77312,
-          "room": 148
+          "room": 148,
+          "requiredKeyItems": [
+            "Dragon's Lair - Mystic Plaque"
+          ]
         }
       ],
       "keyItems": [
@@ -4049,7 +5092,8 @@
           "x": 74240,
           "y": -9472,
           "z": 77312,
-          "room": 0
+          "room": 0,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 1,
@@ -4058,7 +5102,8 @@
           "x": 72192,
           "y": -9472,
           "z": 77312,
-          "room": 0
+          "room": 0,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 2,
@@ -4067,7 +5112,8 @@
           "x": 72192,
           "y": -9472,
           "z": 77312,
-          "room": 0
+          "room": 0,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 13,
@@ -4076,7 +5122,8 @@
           "x": 65024,
           "y": -8960,
           "z": 72192,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 14,
@@ -4085,7 +5132,8 @@
           "x": 54784,
           "y": -8960,
           "z": 69120,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 15,
@@ -4094,7 +5142,8 @@
           "x": 57856,
           "y": -8960,
           "z": 72192,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 16,
@@ -4103,7 +5152,8 @@
           "x": 57856,
           "y": -8960,
           "z": 72192,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 17,
@@ -4112,7 +5162,8 @@
           "x": 57856,
           "y": -8960,
           "z": 59904,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 18,
@@ -4121,7 +5172,8 @@
           "x": 57856,
           "y": -8960,
           "z": 59904,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 19,
@@ -4130,7 +5182,8 @@
           "x": 65024,
           "y": -8960,
           "z": 59904,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 20,
@@ -4139,7 +5192,8 @@
           "x": 65024,
           "y": -8960,
           "z": 59904,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 29,
@@ -4148,7 +5202,10 @@
           "x": 56832,
           "y": -4864,
           "z": 36352,
-          "room": 5
+          "room": 5,
+          "requiredKeyItems": [
+            "House of the Spirit - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 30,
@@ -4157,7 +5214,10 @@
           "x": 56832,
           "y": -4864,
           "z": 36352,
-          "room": 5
+          "room": 5,
+          "requiredKeyItems": [
+            "House of the Spirit - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 31,
@@ -4166,7 +5226,10 @@
           "x": 57856,
           "y": -4864,
           "z": 39424,
-          "room": 5
+          "room": 5,
+          "requiredKeyItems": [
+            "House of the Spirit - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 32,
@@ -4175,7 +5238,10 @@
           "x": 49664,
           "y": -4864,
           "z": 34304,
-          "room": 13
+          "room": 13,
+          "requiredKeyItems": [
+            "House of the Spirit - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 33,
@@ -4184,7 +5250,10 @@
           "x": 49664,
           "y": -4864,
           "z": 34304,
-          "room": 13
+          "room": 13,
+          "requiredKeyItems": [
+            "House of the Spirit - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 34,
@@ -4193,7 +5262,10 @@
           "x": 45568,
           "y": -4864,
           "z": 35328,
-          "room": 13
+          "room": 13,
+          "requiredKeyItems": [
+            "House of the Spirit - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 35,
@@ -4202,7 +5274,10 @@
           "x": 55808,
           "y": -4864,
           "z": 45568,
-          "room": 14
+          "room": 14,
+          "requiredKeyItems": [
+            "House of the Spirit - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 36,
@@ -4211,7 +5286,10 @@
           "x": 55808,
           "y": -4864,
           "z": 45568,
-          "room": 14
+          "room": 14,
+          "requiredKeyItems": [
+            "House of the Spirit - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 37,
@@ -4220,7 +5298,10 @@
           "x": 58880,
           "y": -4864,
           "z": 41472,
-          "room": 14
+          "room": 14,
+          "requiredKeyItems": [
+            "House of the Spirit - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 38,
@@ -4229,7 +5310,10 @@
           "x": 46592,
           "y": -4864,
           "z": 44544,
-          "room": 15
+          "room": 15,
+          "requiredKeyItems": [
+            "House of the Spirit - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 39,
@@ -4238,7 +5322,10 @@
           "x": 46592,
           "y": -4864,
           "z": 44544,
-          "room": 15
+          "room": 15,
+          "requiredKeyItems": [
+            "House of the Spirit - Mystic Plaque"
+          ]
         },
         {
           "entityIndex": 40,
@@ -4247,7 +5334,10 @@
           "x": 51712,
           "y": -4864,
           "z": 43520,
-          "room": 15
+          "room": 15,
+          "requiredKeyItems": [
+            "House of the Spirit - Mystic Plaque"
+          ]
         }
       ],
       "keyItems": [
@@ -4291,7 +5381,8 @@
           "x": 56832,
           "y": 2560,
           "z": 57472,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 3,
@@ -4300,7 +5391,8 @@
           "x": 56832,
           "y": 2560,
           "z": 57856,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 22,
@@ -4309,7 +5401,8 @@
           "x": 28160,
           "y": 0,
           "z": 62976,
-          "room": 27
+          "room": 27,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 56,
@@ -4318,7 +5411,8 @@
           "x": 30208,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 57,
@@ -4327,7 +5421,8 @@
           "x": 31232,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 58,
@@ -4336,7 +5431,8 @@
           "x": 31232,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 59,
@@ -4345,7 +5441,8 @@
           "x": 32256,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 60,
@@ -4354,7 +5451,8 @@
           "x": 32256,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 61,
@@ -4363,7 +5461,8 @@
           "x": 32256,
           "y": -256,
           "z": 66048,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 62,
@@ -4372,7 +5471,8 @@
           "x": 32256,
           "y": -256,
           "z": 66048,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 63,
@@ -4381,7 +5481,8 @@
           "x": 30208,
           "y": -256,
           "z": 65664,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 64,
@@ -4390,7 +5491,8 @@
           "x": 30592,
           "y": -256,
           "z": 66048,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 65,
@@ -4399,7 +5501,8 @@
           "x": 32256,
           "y": -256,
           "z": 66432,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 66,
@@ -4408,7 +5511,8 @@
           "x": 30208,
           "y": -256,
           "z": 66432,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 67,
@@ -4417,7 +5521,8 @@
           "x": 31232,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 68,
@@ -4426,7 +5531,8 @@
           "x": 31232,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 69,
@@ -4435,7 +5541,8 @@
           "x": 32256,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 70,
@@ -4444,7 +5551,8 @@
           "x": 32256,
           "y": -256,
           "z": 66048,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 71,
@@ -4453,7 +5561,8 @@
           "x": 32256,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 72,
@@ -4462,7 +5571,8 @@
           "x": 30208,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 73,
@@ -4471,7 +5581,8 @@
           "x": 29824,
           "y": -256,
           "z": 66048,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 74,
@@ -4480,7 +5591,8 @@
           "x": 31232,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 75,
@@ -4489,7 +5601,8 @@
           "x": 31232,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 76,
@@ -4498,7 +5611,8 @@
           "x": 32256,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 77,
@@ -4507,7 +5621,8 @@
           "x": 32256,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 78,
@@ -4516,7 +5631,8 @@
           "x": 30208,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 79,
@@ -4525,7 +5641,8 @@
           "x": 30208,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 80,
@@ -4534,7 +5651,8 @@
           "x": 30208,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 81,
@@ -4543,7 +5661,8 @@
           "x": 32256,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 82,
@@ -4552,7 +5671,8 @@
           "x": 32256,
           "y": -256,
           "z": 66048,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 83,
@@ -4561,7 +5681,8 @@
           "x": 32256,
           "y": -256,
           "z": 66048,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 84,
@@ -4570,7 +5691,8 @@
           "x": 32256,
           "y": -256,
           "z": 66048,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 85,
@@ -4579,7 +5701,8 @@
           "x": 30208,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 86,
@@ -4588,7 +5711,8 @@
           "x": 30208,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 87,
@@ -4597,7 +5721,8 @@
           "x": 31232,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 88,
@@ -4606,7 +5731,8 @@
           "x": 31232,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 89,
@@ -4615,7 +5741,8 @@
           "x": 32256,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 90,
@@ -4624,7 +5751,8 @@
           "x": 32256,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 91,
@@ -4633,7 +5761,8 @@
           "x": 32256,
           "y": -256,
           "z": 66048,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 92,
@@ -4642,7 +5771,8 @@
           "x": 32256,
           "y": -256,
           "z": 66048,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 93,
@@ -4651,7 +5781,8 @@
           "x": 30208,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 94,
@@ -4660,7 +5791,8 @@
           "x": 31232,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 95,
@@ -4669,7 +5801,8 @@
           "x": 32256,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 96,
@@ -4678,7 +5811,8 @@
           "x": 32256,
           "y": -256,
           "z": 66048,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 97,
@@ -4687,7 +5821,8 @@
           "x": 30208,
           "y": -256,
           "z": 67072,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [],

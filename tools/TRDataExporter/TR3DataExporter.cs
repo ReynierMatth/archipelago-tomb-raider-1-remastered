@@ -113,9 +113,12 @@ public class TR3DataExporter
         { (TR3LevelNames.HALLOWS, "Key1_P"), "Vault Key" },
     };
 
+    private readonly string _routePath;
+
     public TR3DataExporter(string gameDataDir)
     {
         _gameDataDir = gameDataDir;
+        _routePath = Path.Combine(AppContext.BaseDirectory, "Resources", "TR3", "Locations", "routes.json");
     }
 
     public TRArchipelagoData Export(bool includeGold)
@@ -210,6 +213,13 @@ public class TR3DataExporter
                     });
                 }
             }
+
+            // Route analysis: annotate pickups with key item dependencies
+            var roomOrigins = level.Rooms.Select(r => (r.Info.X, r.Info.Z)).ToList();
+            var keyItemInfos = levelData.KeyItems
+                .Select(ki => (ki.X, ki.Y, ki.Z, ki.Room, (uint)Enum.Parse<TR3Type>(ki.Type), ki.Name))
+                .ToList();
+            RouteAnalyzer.AnnotatePickups(_routePath, levelFile, levelData.Sequence, roomOrigins, keyItemInfos, levelData.Pickups);
 
             int secretCount = _secretCounts.GetValueOrDefault(levelFile, 0);
             for (int s = 0; s < secretCount; s++)

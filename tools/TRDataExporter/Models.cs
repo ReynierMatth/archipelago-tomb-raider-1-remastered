@@ -30,6 +30,7 @@ public class PickupData
     public int Y { get; set; }
     public int Z { get; set; }
     public short Room { get; set; }
+    public List<string> RequiredKeyItems { get; set; } = new();
 }
 
 public class KeyItemData

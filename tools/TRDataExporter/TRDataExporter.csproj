@@ -16,5 +16,13 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Link>Resources\TR1\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </Content>
+    <Content Include="..\..\..\TRRandomizerCore\Resources\TR2\Locations\routes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Resources\TR2\Locations\routes.json</Link>
+    </Content>
+    <Content Include="..\..\..\TRRandomizerCore\Resources\TR3\Locations\routes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Resources\TR3\Locations\routes.json</Link>
+    </Content>
   </ItemGroup>
 </Project>

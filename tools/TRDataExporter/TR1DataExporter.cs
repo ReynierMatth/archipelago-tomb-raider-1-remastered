@@ -91,10 +91,13 @@ public class TR1DataExporter
         { (TR1LevelNames.MINES, "Puzzle2_S_P"), "Pyramid Key" },
     };
 
+    private readonly string _routePath;
+
     public TR1DataExporter(string gameDataDir, string resourceBase)
     {
         _gameDataDir = gameDataDir;
         _resourceBase = resourceBase;
+        _routePath = Path.Combine(resourceBase, "Locations", "routes.json");
     }
 
     public TRArchipelagoData Export()
@@ -195,6 +198,13 @@ public class TR1DataExporter
                     });
                 }
             }
+
+            // Route analysis: annotate pickups with key item dependencies
+            var roomOrigins = level.Rooms.Select(r => (r.Info.X, r.Info.Z)).ToList();
+            var keyItemInfos = levelData.KeyItems
+                .Select(ki => (ki.X, ki.Y, ki.Z, ki.Room, (uint)Enum.Parse<TR1Type>(ki.Type), ki.Name))
+                .ToList();
+            RouteAnalyzer.AnnotatePickups(_routePath, levelFile, levelData.Sequence, roomOrigins, keyItemInfos, levelData.Pickups);
 
             // Secrets: use known counts per level
             int secretCount = _secretCounts.GetValueOrDefault(levelFile, 0);

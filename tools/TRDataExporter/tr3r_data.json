@@ -14,7 +14,8 @@
           "x": 43520,
           "y": 26112,
           "z": 57856,
-          "room": 6
+          "room": 6,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 9,
@@ -23,7 +24,8 @@
           "x": 92672,
           "y": 22528,
           "z": 60928,
-          "room": 14
+          "room": 14,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 15,
@@ -32,7 +34,8 @@
           "x": 25088,
           "y": 17408,
           "z": 53760,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 16,
@@ -41,7 +44,8 @@
           "x": 26112,
           "y": 17664,
           "z": 52736,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 18,
@@ -50,7 +54,8 @@
           "x": 27136,
           "y": 2816,
           "z": 32256,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 19,
@@ -59,7 +64,8 @@
           "x": 27136,
           "y": 2816,
           "z": 32256,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 26,
@@ -68,7 +74,8 @@
           "x": 10752,
           "y": 26240,
           "z": 73216,
-          "room": 24
+          "room": 24,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 30,
@@ -77,7 +84,8 @@
           "x": 29184,
           "y": 16896,
           "z": 59904,
-          "room": 29
+          "room": 29,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 31,
@@ -86,7 +94,8 @@
           "x": 74240,
           "y": 24064,
           "z": 59904,
-          "room": 39
+          "room": 39,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 33,
@@ -95,7 +104,8 @@
           "x": 58880,
           "y": 26624,
           "z": 56832,
-          "room": 42
+          "room": 42,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 41,
@@ -104,7 +114,8 @@
           "x": 77312,
           "y": 24192,
           "z": 49664,
-          "room": 48
+          "room": 48,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 42,
@@ -113,7 +124,8 @@
           "x": 78336,
           "y": 24320,
           "z": 47616,
-          "room": 48
+          "room": 48,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 57,
@@ -122,7 +134,8 @@
           "x": 87552,
           "y": 27136,
           "z": 69120,
-          "room": 62
+          "room": 62,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 58,
@@ -131,7 +144,8 @@
           "x": 83456,
           "y": 22528,
           "z": 45568,
-          "room": 67
+          "room": 67,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 62,
@@ -140,7 +154,8 @@
           "x": 88576,
           "y": 25344,
           "z": 52736,
-          "room": 70
+          "room": 70,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 63,
@@ -149,7 +164,8 @@
           "x": 91648,
           "y": 25344,
           "z": 51712,
-          "room": 70
+          "room": 70,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 64,
@@ -158,7 +174,8 @@
           "x": 89600,
           "y": 24064,
           "z": 52736,
-          "room": 72
+          "room": 72,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 65,
@@ -167,7 +184,8 @@
           "x": 89600,
           "y": 24064,
           "z": 51712,
-          "room": 72
+          "room": 72,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 72,
@@ -176,7 +194,8 @@
           "x": 81408,
           "y": 27904,
           "z": 70144,
-          "room": 80
+          "room": 80,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 82,
@@ -185,7 +204,8 @@
           "x": 81408,
           "y": 26880,
           "z": 65024,
-          "room": 99
+          "room": 99,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 92,
@@ -194,7 +214,8 @@
           "x": 50688,
           "y": 27904,
           "z": 91648,
-          "room": 106
+          "room": 106,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 112,
@@ -203,7 +224,8 @@
           "x": 20992,
           "y": 26368,
           "z": 76288,
-          "room": 122
+          "room": 122,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 113,
@@ -212,7 +234,8 @@
           "x": 20992,
           "y": 26368,
           "z": 69120,
-          "room": 122
+          "room": 122,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 119,
@@ -221,7 +244,8 @@
           "x": 25088,
           "y": 25088,
           "z": 54784,
-          "room": 141
+          "room": 141,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 120,
@@ -230,7 +254,8 @@
           "x": 20992,
           "y": 23296,
           "z": 53760,
-          "room": 141
+          "room": 141,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 121,
@@ -239,7 +264,8 @@
           "x": 16896,
           "y": 23296,
           "z": 53760,
-          "room": 141
+          "room": 141,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 122,
@@ -248,7 +274,8 @@
           "x": 93696,
           "y": 17152,
           "z": 70144,
-          "room": 143
+          "room": 143,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 123,
@@ -257,7 +284,8 @@
           "x": 94720,
           "y": 17152,
           "z": 70144,
-          "room": 143
+          "room": 143,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 125,
@@ -266,7 +294,8 @@
           "x": 30208,
           "y": 27136,
           "z": 70144,
-          "room": 147
+          "room": 147,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 130,
@@ -275,7 +304,8 @@
           "x": 77312,
           "y": 27136,
           "z": 77312,
-          "room": 151
+          "room": 151,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 132,
@@ -284,7 +314,8 @@
           "x": 37376,
           "y": 30592,
           "z": 48640,
-          "room": 157
+          "room": 157,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 139,
@@ -293,7 +324,8 @@
           "x": 43520,
           "y": 26368,
           "z": 61952,
-          "room": 164
+          "room": 164,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [
@@ -337,7 +369,8 @@
           "x": 86528,
           "y": -768,
           "z": 51712,
-          "room": 10
+          "room": 10,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 4,
@@ -346,7 +379,8 @@
           "x": 94720,
           "y": -2560,
           "z": 47616,
-          "room": 10
+          "room": 10,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 5,
@@ -355,7 +389,8 @@
           "x": 94720,
           "y": -2048,
           "z": 46592,
-          "room": 10
+          "room": 10,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 8,
@@ -364,7 +399,11 @@
           "x": 56832,
           "y": -1536,
           "z": 94720,
-          "room": 14
+          "room": 14,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         },
         {
           "entityIndex": 9,
@@ -373,7 +412,11 @@
           "x": 54784,
           "y": -1536,
           "z": 94720,
-          "room": 14
+          "room": 14,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         },
         {
           "entityIndex": 12,
@@ -382,7 +425,8 @@
           "x": 89600,
           "y": -3456,
           "z": 36352,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 13,
@@ -391,7 +435,8 @@
           "x": 92672,
           "y": -512,
           "z": 29184,
-          "room": 18
+          "room": 18,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 16,
@@ -400,7 +445,8 @@
           "x": 86528,
           "y": -3200,
           "z": 27136,
-          "room": 19
+          "room": 19,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 22,
@@ -409,7 +455,8 @@
           "x": 82432,
           "y": -3200,
           "z": 26112,
-          "room": 25
+          "room": 25,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 27,
@@ -418,7 +465,8 @@
           "x": 75264,
           "y": -3328,
           "z": 61952,
-          "room": 36
+          "room": 36,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 29,
@@ -427,7 +475,8 @@
           "x": 80384,
           "y": -3072,
           "z": 46592,
-          "room": 38
+          "room": 38,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 35,
@@ -436,7 +485,8 @@
           "x": 91648,
           "y": 1280,
           "z": 42496,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 37,
@@ -445,7 +495,8 @@
           "x": 84480,
           "y": -256,
           "z": 23040,
-          "room": 65
+          "room": 65,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 39,
@@ -454,7 +505,8 @@
           "x": 77312,
           "y": -3072,
           "z": 24064,
-          "room": 70
+          "room": 70,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 44,
@@ -463,7 +515,8 @@
           "x": 61952,
           "y": 6912,
           "z": 49664,
-          "room": 77
+          "room": 77,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 45,
@@ -472,7 +525,8 @@
           "x": 60928,
           "y": 7168,
           "z": 52736,
-          "room": 79
+          "room": 79,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 62,
@@ -481,7 +535,11 @@
           "x": 64000,
           "y": 8960,
           "z": 62976,
-          "room": 88
+          "room": 88,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         },
         {
           "entityIndex": 63,
@@ -490,7 +548,11 @@
           "x": 66048,
           "y": 7936,
           "z": 66048,
-          "room": 88
+          "room": 88,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         },
         {
           "entityIndex": 64,
@@ -499,7 +561,11 @@
           "x": 61952,
           "y": 7936,
           "z": 69120,
-          "room": 88
+          "room": 88,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         },
         {
           "entityIndex": 65,
@@ -508,7 +574,11 @@
           "x": 66048,
           "y": 7936,
           "z": 69120,
-          "room": 88
+          "room": 88,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         },
         {
           "entityIndex": 68,
@@ -517,7 +587,11 @@
           "x": 55808,
           "y": 4864,
           "z": 72192,
-          "room": 100
+          "room": 100,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         },
         {
           "entityIndex": 103,
@@ -526,7 +600,11 @@
           "x": 40448,
           "y": 7168,
           "z": 90624,
-          "room": 143
+          "room": 143,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         },
         {
           "entityIndex": 104,
@@ -535,7 +613,11 @@
           "x": 39424,
           "y": 7168,
           "z": 91648,
-          "room": 143
+          "room": 143,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         },
         {
           "entityIndex": 105,
@@ -544,7 +626,11 @@
           "x": 40448,
           "y": 7168,
           "z": 91648,
-          "room": 143
+          "room": 143,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         },
         {
           "entityIndex": 111,
@@ -553,7 +639,11 @@
           "x": 35328,
           "y": 4864,
           "z": 98816,
-          "room": 146
+          "room": 146,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         },
         {
           "entityIndex": 112,
@@ -562,7 +652,11 @@
           "x": 34304,
           "y": 4864,
           "z": 98816,
-          "room": 146
+          "room": 146,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         },
         {
           "entityIndex": 114,
@@ -571,7 +665,11 @@
           "x": 55808,
           "y": 1280,
           "z": 82432,
-          "room": 162
+          "room": 162,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         },
         {
           "entityIndex": 130,
@@ -580,7 +678,10 @@
           "x": 46592,
           "y": 6656,
           "z": 20992,
-          "room": 174
+          "room": 174,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key"
+          ]
         },
         {
           "entityIndex": 136,
@@ -589,7 +690,10 @@
           "x": 40448,
           "y": 1024,
           "z": 18944,
-          "room": 176
+          "room": 176,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key"
+          ]
         },
         {
           "entityIndex": 146,
@@ -598,7 +702,10 @@
           "x": 50688,
           "y": 3840,
           "z": 13824,
-          "room": 184
+          "room": 184,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key"
+          ]
         },
         {
           "entityIndex": 147,
@@ -607,7 +714,10 @@
           "x": 48640,
           "y": 3840,
           "z": 13824,
-          "room": 184
+          "room": 184,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key"
+          ]
         },
         {
           "entityIndex": 183,
@@ -616,7 +726,11 @@
           "x": 54784,
           "y": -512,
           "z": 58880,
-          "room": 198
+          "room": 198,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         },
         {
           "entityIndex": 196,
@@ -625,7 +739,11 @@
           "x": 33280,
           "y": 1536,
           "z": 56832,
-          "room": 207
+          "room": 207,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         },
         {
           "entityIndex": 199,
@@ -634,7 +752,12 @@
           "x": 31232,
           "y": 5120,
           "z": 57856,
-          "room": 208
+          "room": 208,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2",
+            "Temple Ruins - Scimitar"
+          ]
         },
         {
           "entityIndex": 204,
@@ -643,7 +766,12 @@
           "x": 9728,
           "y": 3328,
           "z": 57856,
-          "room": 211
+          "room": 211,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2",
+            "Temple Ruins - Scimitar"
+          ]
         },
         {
           "entityIndex": 221,
@@ -652,7 +780,11 @@
           "x": 42496,
           "y": 4608,
           "z": 58880,
-          "room": 219
+          "room": 219,
+          "requiredKeyItems": [
+            "Temple Ruins - Ganesha Key",
+            "Temple Ruins - Ganesha Key #2"
+          ]
         }
       ],
       "keyItems": [
@@ -752,7 +884,8 @@
           "x": 91648,
           "y": 6912,
           "z": 30208,
-          "room": 26
+          "room": 26,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 9,
@@ -761,7 +894,8 @@
           "x": 88576,
           "y": 6912,
           "z": 30208,
-          "room": 26
+          "room": 26,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 10,
@@ -770,7 +904,8 @@
           "x": 90624,
           "y": 6912,
           "z": 32256,
-          "room": 26
+          "room": 26,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 11,
@@ -779,7 +914,8 @@
           "x": 55808,
           "y": 768,
           "z": 55808,
-          "room": 30
+          "room": 30,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 12,
@@ -788,7 +924,8 @@
           "x": 55808,
           "y": 768,
           "z": 55808,
-          "room": 30
+          "room": 30,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 16,
@@ -797,7 +934,8 @@
           "x": 85504,
           "y": -5376,
           "z": 14848,
-          "room": 48
+          "room": 48,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 21,
@@ -806,7 +944,8 @@
           "x": 78336,
           "y": 640,
           "z": 26112,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 26,
@@ -815,7 +954,8 @@
           "x": 70144,
           "y": 512,
           "z": 30208,
-          "room": 60
+          "room": 60,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 27,
@@ -824,7 +964,8 @@
           "x": 70144,
           "y": 512,
           "z": 29184,
-          "room": 60
+          "room": 60,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 31,
@@ -833,7 +974,8 @@
           "x": 71168,
           "y": 256,
           "z": 38400,
-          "room": 78
+          "room": 78,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 36,
@@ -842,7 +984,8 @@
           "x": 71168,
           "y": 1536,
           "z": 41472,
-          "room": 79
+          "room": 79,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 52,
@@ -851,7 +994,8 @@
           "x": 54784,
           "y": -2688,
           "z": 35328,
-          "room": 90
+          "room": 90,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 60,
@@ -860,7 +1004,8 @@
           "x": 53760,
           "y": -2816,
           "z": 38400,
-          "room": 99
+          "room": 99,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 61,
@@ -869,7 +1014,8 @@
           "x": 53760,
           "y": -2816,
           "z": 36352,
-          "room": 99
+          "room": 99,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 69,
@@ -878,7 +1024,11 @@
           "x": 55808,
           "y": -3840,
           "z": 25088,
-          "room": 113
+          "room": 113,
+          "requiredKeyItems": [
+            "River Ganges - Gate Key",
+            "River Ganges - Gate Key #2"
+          ]
         },
         {
           "entityIndex": 71,
@@ -887,7 +1037,11 @@
           "x": 49664,
           "y": 4608,
           "z": 75264,
-          "room": 122
+          "room": 122,
+          "requiredKeyItems": [
+            "River Ganges - Gate Key",
+            "River Ganges - Gate Key #2"
+          ]
         },
         {
           "entityIndex": 72,
@@ -896,7 +1050,11 @@
           "x": 49664,
           "y": 4608,
           "z": 75264,
-          "room": 122
+          "room": 122,
+          "requiredKeyItems": [
+            "River Ganges - Gate Key",
+            "River Ganges - Gate Key #2"
+          ]
         },
         {
           "entityIndex": 74,
@@ -905,7 +1063,8 @@
           "x": 91648,
           "y": -2048,
           "z": 61952,
-          "room": 124
+          "room": 124,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 75,
@@ -914,7 +1073,8 @@
           "x": 90624,
           "y": -2048,
           "z": 61952,
-          "room": 124
+          "room": 124,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 77,
@@ -923,7 +1083,11 @@
           "x": 54784,
           "y": -5120,
           "z": 26112,
-          "room": 125
+          "room": 125,
+          "requiredKeyItems": [
+            "River Ganges - Gate Key",
+            "River Ganges - Gate Key #2"
+          ]
         },
         {
           "entityIndex": 78,
@@ -932,7 +1096,11 @@
           "x": 54784,
           "y": -5120,
           "z": 28160,
-          "room": 125
+          "room": 125,
+          "requiredKeyItems": [
+            "River Ganges - Gate Key",
+            "River Ganges - Gate Key #2"
+          ]
         },
         {
           "entityIndex": 80,
@@ -941,7 +1109,11 @@
           "x": 43520,
           "y": -2560,
           "z": 33280,
-          "room": 137
+          "room": 137,
+          "requiredKeyItems": [
+            "River Ganges - Gate Key",
+            "River Ganges - Gate Key #2"
+          ]
         },
         {
           "entityIndex": 84,
@@ -950,7 +1122,11 @@
           "x": 42496,
           "y": -2560,
           "z": 44544,
-          "room": 141
+          "room": 141,
+          "requiredKeyItems": [
+            "River Ganges - Gate Key",
+            "River Ganges - Gate Key #2"
+          ]
         },
         {
           "entityIndex": 98,
@@ -959,7 +1135,11 @@
           "x": 42496,
           "y": 4736,
           "z": 79360,
-          "room": 162
+          "room": 162,
+          "requiredKeyItems": [
+            "River Ganges - Gate Key",
+            "River Ganges - Gate Key #2"
+          ]
         },
         {
           "entityIndex": 99,
@@ -968,7 +1148,11 @@
           "x": 42496,
           "y": 4736,
           "z": 79360,
-          "room": 162
+          "room": 162,
+          "requiredKeyItems": [
+            "River Ganges - Gate Key",
+            "River Ganges - Gate Key #2"
+          ]
         },
         {
           "entityIndex": 105,
@@ -977,7 +1161,11 @@
           "x": 45568,
           "y": 10112,
           "z": 75264,
-          "room": 166
+          "room": 166,
+          "requiredKeyItems": [
+            "River Ganges - Gate Key",
+            "River Ganges - Gate Key #2"
+          ]
         },
         {
           "entityIndex": 107,
@@ -986,7 +1174,11 @@
           "x": 39424,
           "y": -5120,
           "z": 62976,
-          "room": 174
+          "room": 174,
+          "requiredKeyItems": [
+            "River Ganges - Gate Key",
+            "River Ganges - Gate Key #2"
+          ]
         },
         {
           "entityIndex": 108,
@@ -995,7 +1187,11 @@
           "x": 40448,
           "y": -5120,
           "z": 62976,
-          "room": 174
+          "room": 174,
+          "requiredKeyItems": [
+            "River Ganges - Gate Key",
+            "River Ganges - Gate Key #2"
+          ]
         },
         {
           "entityIndex": 115,
@@ -1004,7 +1200,8 @@
           "x": 85504,
           "y": -1280,
           "z": 33280,
-          "room": 176
+          "room": 176,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 116,
@@ -1013,7 +1210,8 @@
           "x": 81408,
           "y": -1792,
           "z": 35328,
-          "room": 176
+          "room": 176,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [
@@ -1067,7 +1265,8 @@
           "x": 23040,
           "y": -11008,
           "z": 56832,
-          "room": 5
+          "room": 5,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 14,
@@ -1076,7 +1275,8 @@
           "x": 16896,
           "y": -15360,
           "z": 53760,
-          "room": 9
+          "room": 9,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 15,
@@ -1085,7 +1285,8 @@
           "x": 11776,
           "y": -12032,
           "z": 59904,
-          "room": 10
+          "room": 10,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 20,
@@ -1094,7 +1295,8 @@
           "x": 26112,
           "y": -14848,
           "z": 61952,
-          "room": 16
+          "room": 16,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 22,
@@ -1103,7 +1305,8 @@
           "x": 25088,
           "y": -14848,
           "z": 55808,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 26,
@@ -1112,7 +1315,8 @@
           "x": 51712,
           "y": -256,
           "z": 56832,
-          "room": 22
+          "room": 22,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 29,
@@ -1121,7 +1325,8 @@
           "x": 55808,
           "y": -256,
           "z": 52736,
-          "room": 22
+          "room": 22,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 30,
@@ -1130,7 +1335,8 @@
           "x": 51712,
           "y": -256,
           "z": 48640,
-          "room": 22
+          "room": 22,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 31,
@@ -1139,7 +1345,8 @@
           "x": 40448,
           "y": -4864,
           "z": 52736,
-          "room": 24
+          "room": 24,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [
@@ -1183,7 +1390,8 @@
           "x": 13824,
           "y": -512,
           "z": 38400,
-          "room": 2
+          "room": 2,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 3,
@@ -1192,7 +1400,8 @@
           "x": 5632,
           "y": -512,
           "z": 33280,
-          "room": 2
+          "room": 2,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 4,
@@ -1201,7 +1410,8 @@
           "x": 14848,
           "y": -1280,
           "z": 26112,
-          "room": 3
+          "room": 3,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 31,
@@ -1210,7 +1420,10 @@
           "x": 18944,
           "y": -1792,
           "z": 80384,
-          "room": 14
+          "room": 14,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key"
+          ]
         },
         {
           "entityIndex": 32,
@@ -1219,7 +1432,13 @@
           "x": 13824,
           "y": -7680,
           "z": 72192,
-          "room": 15
+          "room": 15,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 38,
@@ -1228,7 +1447,13 @@
           "x": 25088,
           "y": -4608,
           "z": 52736,
-          "room": 30
+          "room": 30,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 44,
@@ -1237,7 +1462,8 @@
           "x": 43520,
           "y": -2048,
           "z": 81408,
-          "room": 37
+          "room": 37,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 53,
@@ -1246,7 +1472,13 @@
           "x": 30208,
           "y": -6912,
           "z": 79360,
-          "room": 42
+          "room": 42,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 55,
@@ -1255,7 +1487,13 @@
           "x": 52736,
           "y": 0,
           "z": 80384,
-          "room": 48
+          "room": 48,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 56,
@@ -1264,7 +1502,13 @@
           "x": 46592,
           "y": -512,
           "z": 70144,
-          "room": 49
+          "room": 49,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 60,
@@ -1273,7 +1517,13 @@
           "x": 43520,
           "y": 0,
           "z": 85504,
-          "room": 54
+          "room": 54,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 65,
@@ -1282,7 +1532,13 @@
           "x": 8704,
           "y": -6400,
           "z": 69120,
-          "room": 62
+          "room": 62,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 67,
@@ -1291,7 +1547,13 @@
           "x": 3584,
           "y": -5248,
           "z": 82432,
-          "room": 62
+          "room": 62,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 68,
@@ -1300,7 +1562,13 @@
           "x": 6656,
           "y": -6656,
           "z": 76288,
-          "room": 62
+          "room": 62,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 71,
@@ -1309,7 +1577,13 @@
           "x": 3584,
           "y": 4352,
           "z": 65024,
-          "room": 63
+          "room": 63,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 72,
@@ -1318,7 +1592,13 @@
           "x": 4608,
           "y": 4352,
           "z": 65024,
-          "room": 63
+          "room": 63,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 73,
@@ -1327,7 +1607,13 @@
           "x": 3584,
           "y": 4352,
           "z": 79360,
-          "room": 63
+          "room": 63,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 74,
@@ -1336,7 +1622,13 @@
           "x": 8704,
           "y": 4352,
           "z": 72192,
-          "room": 63
+          "room": 63,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 76,
@@ -1345,7 +1637,13 @@
           "x": 22016,
           "y": -768,
           "z": 74240,
-          "room": 70
+          "room": 70,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 77,
@@ -1354,7 +1652,13 @@
           "x": 22016,
           "y": -768,
           "z": 75264,
-          "room": 70
+          "room": 70,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 89,
@@ -1363,7 +1667,13 @@
           "x": 38400,
           "y": -2176,
           "z": 68096,
-          "room": 75
+          "room": 75,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 96,
@@ -1372,7 +1682,13 @@
           "x": 56832,
           "y": -2048,
           "z": 92672,
-          "room": 89
+          "room": 89,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 108,
@@ -1381,7 +1697,10 @@
           "x": 17920,
           "y": -6784,
           "z": 92672,
-          "room": 123
+          "room": 123,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key"
+          ]
         },
         {
           "entityIndex": 121,
@@ -1390,7 +1709,10 @@
           "x": 36352,
           "y": -2304,
           "z": 94720,
-          "room": 127
+          "room": 127,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key"
+          ]
         },
         {
           "entityIndex": 161,
@@ -1399,7 +1721,13 @@
           "x": 30208,
           "y": -512,
           "z": 62976,
-          "room": 147
+          "room": 147,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key",
+            "Coastal Village - Serpent Stone",
+            "Coastal Village - Serpent Stone #2",
+            "Coastal Village - Serpent Stone #3"
+          ]
         },
         {
           "entityIndex": 170,
@@ -1408,7 +1736,10 @@
           "x": 25088,
           "y": -7424,
           "z": 84480,
-          "room": 178
+          "room": 178,
+          "requiredKeyItems": [
+            "Coastal Village - Smuggler's Key"
+          ]
         }
       ],
       "keyItems": [
@@ -1482,7 +1813,10 @@
           "x": 72192,
           "y": -256,
           "z": 48640,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": [
+            "Crash Site - Bishop's Key"
+          ]
         },
         {
           "entityIndex": 8,
@@ -1491,7 +1825,10 @@
           "x": 70144,
           "y": 0,
           "z": 49664,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": [
+            "Crash Site - Bishop's Key"
+          ]
         },
         {
           "entityIndex": 12,
@@ -1500,7 +1837,10 @@
           "x": 56832,
           "y": -2048,
           "z": 49664,
-          "room": 4
+          "room": 4,
+          "requiredKeyItems": [
+            "Crash Site - Bishop's Key"
+          ]
         },
         {
           "entityIndex": 37,
@@ -1509,7 +1849,8 @@
           "x": 61952,
           "y": -2048,
           "z": 62976,
-          "room": 25
+          "room": 25,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 52,
@@ -1518,7 +1859,10 @@
           "x": 56832,
           "y": 1024,
           "z": 32256,
-          "room": 29
+          "room": 29,
+          "requiredKeyItems": [
+            "Crash Site - Bishop's Key"
+          ]
         },
         {
           "entityIndex": 54,
@@ -1527,7 +1871,10 @@
           "x": 55808,
           "y": 1024,
           "z": 33280,
-          "room": 29
+          "room": 29,
+          "requiredKeyItems": [
+            "Crash Site - Bishop's Key"
+          ]
         },
         {
           "entityIndex": 69,
@@ -1536,7 +1883,11 @@
           "x": 84480,
           "y": -2048,
           "z": 55808,
-          "room": 42
+          "room": 42,
+          "requiredKeyItems": [
+            "Crash Site - Tuckerman's Key",
+            "Crash Site - Bishop's Key"
+          ]
         },
         {
           "entityIndex": 72,
@@ -1545,7 +1896,10 @@
           "x": 57856,
           "y": 1024,
           "z": 40448,
-          "room": 43
+          "room": 43,
+          "requiredKeyItems": [
+            "Crash Site - Bishop's Key"
+          ]
         },
         {
           "entityIndex": 73,
@@ -1554,7 +1908,8 @@
           "x": 38400,
           "y": -2304,
           "z": 81408,
-          "room": 44
+          "room": 44,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 80,
@@ -1563,7 +1918,8 @@
           "x": 26112,
           "y": 2048,
           "z": 45568,
-          "room": 45
+          "room": 45,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 82,
@@ -1572,7 +1928,8 @@
           "x": 18944,
           "y": 1024,
           "z": 50688,
-          "room": 45
+          "room": 45,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 85,
@@ -1581,7 +1938,8 @@
           "x": 19968,
           "y": 1792,
           "z": 68096,
-          "room": 47
+          "room": 47,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 86,
@@ -1590,7 +1948,8 @@
           "x": 29184,
           "y": 768,
           "z": 59904,
-          "room": 47
+          "room": 47,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 92,
@@ -1599,7 +1958,8 @@
           "x": 33280,
           "y": 512,
           "z": 53760,
-          "room": 48
+          "room": 48,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 93,
@@ -1608,7 +1968,8 @@
           "x": 41472,
           "y": -512,
           "z": 47616,
-          "room": 48
+          "room": 48,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 95,
@@ -1617,7 +1978,8 @@
           "x": 35328,
           "y": -1920,
           "z": 53760,
-          "room": 53
+          "room": 53,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 96,
@@ -1626,7 +1988,8 @@
           "x": 37376,
           "y": -1664,
           "z": 53760,
-          "room": 53
+          "room": 53,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 104,
@@ -1635,7 +1998,10 @@
           "x": 64000,
           "y": -128,
           "z": 32256,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": [
+            "Crash Site - Bishop's Key"
+          ]
         },
         {
           "entityIndex": 112,
@@ -1644,7 +2010,10 @@
           "x": 64000,
           "y": -6144,
           "z": 23040,
-          "room": 60
+          "room": 60,
+          "requiredKeyItems": [
+            "Crash Site - Bishop's Key"
+          ]
         },
         {
           "entityIndex": 116,
@@ -1653,7 +2022,10 @@
           "x": 70144,
           "y": -8576,
           "z": 25088,
-          "room": 62
+          "room": 62,
+          "requiredKeyItems": [
+            "Crash Site - Bishop's Key"
+          ]
         },
         {
           "entityIndex": 136,
@@ -1662,7 +2034,8 @@
           "x": 27136,
           "y": 2048,
           "z": 44544,
-          "room": 80
+          "room": 80,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 137,
@@ -1671,7 +2044,8 @@
           "x": 28160,
           "y": 1792,
           "z": 44544,
-          "room": 80
+          "room": 80,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 146,
@@ -1680,7 +2054,8 @@
           "x": 33280,
           "y": -2304,
           "z": 83456,
-          "room": 93
+          "room": 93,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 147,
@@ -1689,7 +2064,8 @@
           "x": 33280,
           "y": -2304,
           "z": 82432,
-          "room": 93
+          "room": 93,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [
@@ -1735,7 +2111,8 @@
           "x": 73216,
           "y": -17408,
           "z": 37376,
-          "room": 11
+          "room": 11,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 27,
@@ -1744,7 +2121,8 @@
           "x": 78336,
           "y": -20992,
           "z": 12800,
-          "room": 25
+          "room": 25,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 28,
@@ -1753,7 +2131,8 @@
           "x": 79360,
           "y": -20992,
           "z": 12800,
-          "room": 25
+          "room": 25,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 62,
@@ -1762,7 +2141,8 @@
           "x": 88576,
           "y": -22016,
           "z": 40448,
-          "room": 76
+          "room": 76,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 67,
@@ -1771,7 +2151,8 @@
           "x": 44544,
           "y": 2048,
           "z": 44544,
-          "room": 79
+          "room": 79,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 68,
@@ -1780,7 +2161,8 @@
           "x": 44544,
           "y": 2048,
           "z": 43520,
-          "room": 79
+          "room": 79,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 72,
@@ -1789,7 +2171,8 @@
           "x": 33280,
           "y": 4352,
           "z": 50688,
-          "room": 84
+          "room": 84,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 73,
@@ -1798,7 +2181,8 @@
           "x": 33280,
           "y": 4352,
           "z": 54784,
-          "room": 84
+          "room": 84,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 98,
@@ -1807,7 +2191,8 @@
           "x": 77312,
           "y": -28160,
           "z": 50688,
-          "room": 99
+          "room": 99,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 99,
@@ -1816,7 +2201,8 @@
           "x": 79360,
           "y": -28160,
           "z": 51712,
-          "room": 99
+          "room": 99,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 100,
@@ -1825,7 +2211,8 @@
           "x": 79360,
           "y": -28160,
           "z": 50688,
-          "room": 99
+          "room": 99,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 118,
@@ -1834,7 +2221,8 @@
           "x": 43520,
           "y": 4864,
           "z": 59904,
-          "room": 125
+          "room": 125,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [],
@@ -1863,7 +2251,8 @@
           "x": 40448,
           "y": -10496,
           "z": 58880,
-          "room": 5
+          "room": 5,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 11,
@@ -1872,7 +2261,8 @@
           "x": 32256,
           "y": -18176,
           "z": 64000,
-          "room": 13
+          "room": 13,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 12,
@@ -1881,7 +2271,8 @@
           "x": 28160,
           "y": -18176,
           "z": 64000,
-          "room": 13
+          "room": 13,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 13,
@@ -1890,7 +2281,8 @@
           "x": 28160,
           "y": -18176,
           "z": 61952,
-          "room": 13
+          "room": 13,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 14,
@@ -1899,7 +2291,8 @@
           "x": 32256,
           "y": -18176,
           "z": 61952,
-          "room": 13
+          "room": 13,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 15,
@@ -1908,7 +2301,8 @@
           "x": 30208,
           "y": -18176,
           "z": 62976,
-          "room": 13
+          "room": 13,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 31,
@@ -1917,7 +2311,8 @@
           "x": 37376,
           "y": -17920,
           "z": 51712,
-          "room": 16
+          "room": 16,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 39,
@@ -1926,7 +2321,8 @@
           "x": 50688,
           "y": -10240,
           "z": 48640,
-          "room": 22
+          "room": 22,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 63,
@@ -1935,7 +2331,8 @@
           "x": 61952,
           "y": -5376,
           "z": 53760,
-          "room": 29
+          "room": 29,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 64,
@@ -1944,7 +2341,8 @@
           "x": 61952,
           "y": -5376,
           "z": 61952,
-          "room": 29
+          "room": 29,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [
@@ -1980,7 +2378,10 @@
           "x": 59904,
           "y": -21504,
           "z": 45568,
-          "room": 0
+          "room": 0,
+          "requiredKeyItems": [
+            "Thames Wharf - Flue Room Key"
+          ]
         },
         {
           "entityIndex": 8,
@@ -1989,7 +2390,10 @@
           "x": 23040,
           "y": -512,
           "z": 44544,
-          "room": 3
+          "room": 3,
+          "requiredKeyItems": [
+            "Thames Wharf - Flue Room Key"
+          ]
         },
         {
           "entityIndex": 9,
@@ -1998,7 +2402,10 @@
           "x": 24064,
           "y": -512,
           "z": 43520,
-          "room": 3
+          "room": 3,
+          "requiredKeyItems": [
+            "Thames Wharf - Flue Room Key"
+          ]
         },
         {
           "entityIndex": 32,
@@ -2007,7 +2414,8 @@
           "x": 44544,
           "y": -11520,
           "z": 23040,
-          "room": 35
+          "room": 35,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 33,
@@ -2016,7 +2424,8 @@
           "x": 45568,
           "y": -11520,
           "z": 24064,
-          "room": 35
+          "room": 35,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 48,
@@ -2025,7 +2434,10 @@
           "x": 46592,
           "y": -8704,
           "z": 32256,
-          "room": 51
+          "room": 51,
+          "requiredKeyItems": [
+            "Thames Wharf - Flue Room Key"
+          ]
         },
         {
           "entityIndex": 59,
@@ -2034,7 +2446,8 @@
           "x": 38400,
           "y": -19200,
           "z": 54784,
-          "room": 62
+          "room": 62,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 60,
@@ -2043,7 +2456,8 @@
           "x": 44544,
           "y": -19968,
           "z": 51712,
-          "room": 62
+          "room": 62,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 64,
@@ -2052,7 +2466,10 @@
           "x": 44544,
           "y": -22784,
           "z": 49664,
-          "room": 65
+          "room": 65,
+          "requiredKeyItems": [
+            "Thames Wharf - Flue Room Key"
+          ]
         },
         {
           "entityIndex": 97,
@@ -2061,7 +2478,10 @@
           "x": 19968,
           "y": -11264,
           "z": 41472,
-          "room": 80
+          "room": 80,
+          "requiredKeyItems": [
+            "Thames Wharf - Flue Room Key"
+          ]
         },
         {
           "entityIndex": 102,
@@ -2070,7 +2490,10 @@
           "x": 24064,
           "y": -4352,
           "z": 61952,
-          "room": 83
+          "room": 83,
+          "requiredKeyItems": [
+            "Thames Wharf - Flue Room Key"
+          ]
         },
         {
           "entityIndex": 103,
@@ -2079,7 +2502,10 @@
           "x": 52736,
           "y": -5632,
           "z": 20992,
-          "room": 84
+          "room": 84,
+          "requiredKeyItems": [
+            "Thames Wharf - Flue Room Key"
+          ]
         },
         {
           "entityIndex": 104,
@@ -2088,7 +2514,10 @@
           "x": 52736,
           "y": -5632,
           "z": 30208,
-          "room": 84
+          "room": 84,
+          "requiredKeyItems": [
+            "Thames Wharf - Flue Room Key"
+          ]
         },
         {
           "entityIndex": 108,
@@ -2097,7 +2526,8 @@
           "x": 39424,
           "y": -17792,
           "z": 45568,
-          "room": 86
+          "room": 86,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 109,
@@ -2106,7 +2536,10 @@
           "x": 23040,
           "y": 1536,
           "z": 24064,
-          "room": 87
+          "room": 87,
+          "requiredKeyItems": [
+            "Thames Wharf - Flue Room Key"
+          ]
         },
         {
           "entityIndex": 118,
@@ -2115,7 +2548,8 @@
           "x": 38400,
           "y": -14848,
           "z": 45568,
-          "room": 95
+          "room": 95,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 129,
@@ -2124,7 +2558,10 @@
           "x": 62976,
           "y": -15104,
           "z": 41472,
-          "room": 108
+          "room": 108,
+          "requiredKeyItems": [
+            "Thames Wharf - Flue Room Key"
+          ]
         },
         {
           "entityIndex": 146,
@@ -2133,7 +2570,8 @@
           "x": 37376,
           "y": -20736,
           "z": 58880,
-          "room": 122
+          "room": 122,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 149,
@@ -2142,7 +2580,10 @@
           "x": 18944,
           "y": -11264,
           "z": 29184,
-          "room": 123
+          "room": 123,
+          "requiredKeyItems": [
+            "Thames Wharf - Flue Room Key"
+          ]
         },
         {
           "entityIndex": 152,
@@ -2151,7 +2592,8 @@
           "x": 42496,
           "y": -19200,
           "z": 32256,
-          "room": 127
+          "room": 127,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 155,
@@ -2160,7 +2602,10 @@
           "x": 50688,
           "y": -13312,
           "z": 55808,
-          "room": 140
+          "room": 140,
+          "requiredKeyItems": [
+            "Thames Wharf - Flue Room Key"
+          ]
         },
         {
           "entityIndex": 174,
@@ -2169,7 +2614,8 @@
           "x": 43520,
           "y": -13824,
           "z": 46592,
-          "room": 156
+          "room": 156,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 175,
@@ -2178,7 +2624,8 @@
           "x": 41472,
           "y": -13824,
           "z": 46592,
-          "room": 156
+          "room": 156,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 187,
@@ -2187,7 +2634,8 @@
           "x": 43520,
           "y": -6400,
           "z": 41472,
-          "room": 166
+          "room": 166,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 188,
@@ -2196,7 +2644,8 @@
           "x": 36352,
           "y": -6400,
           "z": 41472,
-          "room": 166
+          "room": 166,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 197,
@@ -2205,7 +2654,8 @@
           "x": 41472,
           "y": -12032,
           "z": 50688,
-          "room": 173
+          "room": 173,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 199,
@@ -2214,7 +2664,8 @@
           "x": 37376,
           "y": -8704,
           "z": 50688,
-          "room": 174
+          "room": 174,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 201,
@@ -2223,7 +2674,8 @@
           "x": 37376,
           "y": -8704,
           "z": 47616,
-          "room": 174
+          "room": 174,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 209,
@@ -2232,7 +2684,10 @@
           "x": 40448,
           "y": -12800,
           "z": 61952,
-          "room": 182
+          "room": 182,
+          "requiredKeyItems": [
+            "Thames Wharf - Flue Room Key"
+          ]
         },
         {
           "entityIndex": 216,
@@ -2241,7 +2696,10 @@
           "x": 16896,
           "y": -3840,
           "z": 65024,
-          "room": 189
+          "room": 189,
+          "requiredKeyItems": [
+            "Thames Wharf - Flue Room Key"
+          ]
         }
       ],
       "keyItems": [
@@ -2291,7 +2749,13 @@
           "x": 49664,
           "y": 1024,
           "z": 24064,
-          "room": 1
+          "room": 1,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 26,
@@ -2300,7 +2764,11 @@
           "x": 55808,
           "y": 12800,
           "z": 68096,
-          "room": 5
+          "room": 5,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 45,
@@ -2309,7 +2777,13 @@
           "x": 60928,
           "y": 1024,
           "z": 32256,
-          "room": 10
+          "room": 10,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 48,
@@ -2318,7 +2792,13 @@
           "x": 68096,
           "y": 1024,
           "z": 25088,
-          "room": 10
+          "room": 10,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 49,
@@ -2327,7 +2807,13 @@
           "x": 58880,
           "y": 1024,
           "z": 32256,
-          "room": 10
+          "room": 10,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 57,
@@ -2336,7 +2822,11 @@
           "x": 42496,
           "y": 768,
           "z": 57856,
-          "room": 20
+          "room": 20,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 63,
@@ -2345,7 +2835,13 @@
           "x": 54784,
           "y": 1024,
           "z": 27136,
-          "room": 27
+          "room": 27,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 64,
@@ -2354,7 +2850,13 @@
           "x": 53760,
           "y": 1024,
           "z": 28160,
-          "room": 27
+          "room": 27,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 80,
@@ -2363,7 +2865,8 @@
           "x": 65024,
           "y": -5888,
           "z": 86528,
-          "room": 37
+          "room": 37,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 84,
@@ -2372,7 +2875,10 @@
           "x": 70144,
           "y": -6400,
           "z": 83456,
-          "room": 38
+          "room": 38,
+          "requiredKeyItems": [
+            "Aldwych - Ticket"
+          ]
         },
         {
           "entityIndex": 100,
@@ -2381,7 +2887,15 @@
           "x": 60928,
           "y": 768,
           "z": 50688,
-          "room": 43
+          "room": 43,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin",
+            "Aldwych - Ornate Star",
+            "Aldwych - Hammer"
+          ]
         },
         {
           "entityIndex": 101,
@@ -2390,7 +2904,15 @@
           "x": 46592,
           "y": -384,
           "z": 47616,
-          "room": 43
+          "room": 43,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin",
+            "Aldwych - Ornate Star",
+            "Aldwych - Hammer"
+          ]
         },
         {
           "entityIndex": 103,
@@ -2399,7 +2921,15 @@
           "x": 49664,
           "y": -768,
           "z": 57856,
-          "room": 45
+          "room": 45,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin",
+            "Aldwych - Ornate Star",
+            "Aldwych - Hammer"
+          ]
         },
         {
           "entityIndex": 108,
@@ -2408,7 +2938,8 @@
           "x": 69120,
           "y": -7168,
           "z": 98816,
-          "room": 49
+          "room": 49,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 118,
@@ -2417,7 +2948,12 @@
           "x": 51712,
           "y": -3328,
           "z": 70144,
-          "room": 55
+          "room": 55,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 119,
@@ -2426,7 +2962,12 @@
           "x": 51712,
           "y": -3328,
           "z": 68096,
-          "room": 55
+          "room": 55,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 125,
@@ -2435,7 +2976,12 @@
           "x": 43520,
           "y": -3328,
           "z": 73216,
-          "room": 55
+          "room": 55,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 126,
@@ -2444,7 +2990,12 @@
           "x": 48640,
           "y": -3840,
           "z": 64000,
-          "room": 55
+          "room": 55,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 127,
@@ -2453,7 +3004,12 @@
           "x": 50688,
           "y": -3328,
           "z": 70144,
-          "room": 55
+          "room": 55,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 129,
@@ -2462,7 +3018,12 @@
           "x": 51712,
           "y": -3328,
           "z": 69120,
-          "room": 55
+          "room": 55,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 132,
@@ -2471,7 +3032,11 @@
           "x": 56832,
           "y": -1024,
           "z": 66048,
-          "room": 58
+          "room": 58,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 146,
@@ -2480,7 +3045,11 @@
           "x": 57856,
           "y": 15360,
           "z": 70144,
-          "room": 65
+          "room": 65,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 151,
@@ -2489,7 +3058,11 @@
           "x": 44544,
           "y": 768,
           "z": 58880,
-          "room": 68
+          "room": 68,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 153,
@@ -2498,7 +3071,11 @@
           "x": 62976,
           "y": -2304,
           "z": 64000,
-          "room": 69
+          "room": 69,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 154,
@@ -2507,7 +3084,11 @@
           "x": 62976,
           "y": -2304,
           "z": 64000,
-          "room": 69
+          "room": 69,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 161,
@@ -2516,7 +3097,11 @@
           "x": 48640,
           "y": 3584,
           "z": 68096,
-          "room": 70
+          "room": 70,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 166,
@@ -2525,7 +3110,12 @@
           "x": 44544,
           "y": -5376,
           "z": 89600,
-          "room": 76
+          "room": 76,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 189,
@@ -2534,7 +3124,11 @@
           "x": 53760,
           "y": 3584,
           "z": 66048,
-          "room": 102
+          "room": 102,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 198,
@@ -2543,7 +3137,15 @@
           "x": 53760,
           "y": 2560,
           "z": 36352,
-          "room": 104
+          "room": 104,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin",
+            "Aldwych - Ornate Star",
+            "Aldwych - Hammer"
+          ]
         },
         {
           "entityIndex": 201,
@@ -2552,7 +3154,15 @@
           "x": 50688,
           "y": 3840,
           "z": 37376,
-          "room": 104
+          "room": 104,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin",
+            "Aldwych - Ornate Star",
+            "Aldwych - Hammer"
+          ]
         },
         {
           "entityIndex": 207,
@@ -2561,7 +3171,11 @@
           "x": 52736,
           "y": -1536,
           "z": 65024,
-          "room": 107
+          "room": 107,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 208,
@@ -2570,7 +3184,11 @@
           "x": 51712,
           "y": -1536,
           "z": 69120,
-          "room": 107
+          "room": 107,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 214,
@@ -2579,7 +3197,8 @@
           "x": 60928,
           "y": -8704,
           "z": 90624,
-          "room": 110
+          "room": 110,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 215,
@@ -2588,7 +3207,8 @@
           "x": 60928,
           "y": -8704,
           "z": 82432,
-          "room": 110
+          "room": 110,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 217,
@@ -2597,7 +3217,8 @@
           "x": 60928,
           "y": -8704,
           "z": 86528,
-          "room": 110
+          "room": 110,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 218,
@@ -2606,7 +3227,11 @@
           "x": 50688,
           "y": -256,
           "z": 70144,
-          "room": 112
+          "room": 112,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 221,
@@ -2615,7 +3240,13 @@
           "x": 44544,
           "y": 1280,
           "z": 17920,
-          "room": 117
+          "room": 117,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 228,
@@ -2624,7 +3255,13 @@
           "x": 52736,
           "y": -4608,
           "z": 38400,
-          "room": 126
+          "room": 126,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 232,
@@ -2633,7 +3270,12 @@
           "x": 48640,
           "y": -2048,
           "z": 91648,
-          "room": 131
+          "room": 131,
+          "requiredKeyItems": [
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 243,
@@ -2642,7 +3284,13 @@
           "x": 66048,
           "y": 0,
           "z": 49664,
-          "room": 159
+          "room": 159,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin"
+          ]
         },
         {
           "entityIndex": 244,
@@ -2651,7 +3299,15 @@
           "x": 48640,
           "y": -3840,
           "z": 51712,
-          "room": 160
+          "room": 160,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin",
+            "Aldwych - Ornate Star",
+            "Aldwych - Hammer"
+          ]
         },
         {
           "entityIndex": 245,
@@ -2660,7 +3316,15 @@
           "x": 69120,
           "y": 1792,
           "z": 47616,
-          "room": 161
+          "room": 161,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin",
+            "Aldwych - Ornate Star",
+            "Aldwych - Hammer"
+          ]
         },
         {
           "entityIndex": 246,
@@ -2669,7 +3333,15 @@
           "x": 69120,
           "y": 1792,
           "z": 47616,
-          "room": 161
+          "room": 161,
+          "requiredKeyItems": [
+            "Aldwych - Solomon's Key",
+            "Aldwych - Ticket",
+            "Aldwych - Maintenance Key",
+            "Aldwych - Old Coin",
+            "Aldwych - Ornate Star",
+            "Aldwych - Hammer"
+          ]
         }
       ],
       "keyItems": [
@@ -2769,7 +3441,8 @@
           "x": 62976,
           "y": -22016,
           "z": 31232,
-          "room": 0
+          "room": 0,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 8,
@@ -2778,7 +3451,10 @@
           "x": 56832,
           "y": 4608,
           "z": 49664,
-          "room": 11
+          "room": 11,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 10,
@@ -2787,7 +3463,10 @@
           "x": 54784,
           "y": 5248,
           "z": 46592,
-          "room": 11
+          "room": 11,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 11,
@@ -2796,7 +3475,10 @@
           "x": 61952,
           "y": 3328,
           "z": 50688,
-          "room": 11
+          "room": 11,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 12,
@@ -2805,7 +3487,10 @@
           "x": 61952,
           "y": 3328,
           "z": 50688,
-          "room": 11
+          "room": 11,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 13,
@@ -2814,7 +3499,10 @@
           "x": 49664,
           "y": -23552,
           "z": 28160,
-          "room": 15
+          "room": 15,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 14,
@@ -2823,7 +3511,10 @@
           "x": 51712,
           "y": -24576,
           "z": 25088,
-          "room": 15
+          "room": 15,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 16,
@@ -2832,7 +3523,8 @@
           "x": 62976,
           "y": -20736,
           "z": 31232,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 21,
@@ -2841,7 +3533,10 @@
           "x": 66048,
           "y": -14592,
           "z": 25088,
-          "room": 20
+          "room": 20,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 25,
@@ -2850,7 +3545,10 @@
           "x": 42496,
           "y": -6912,
           "z": 22016,
-          "room": 24
+          "room": 24,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 37,
@@ -2859,7 +3557,8 @@
           "x": 62976,
           "y": -15616,
           "z": 31232,
-          "room": 38
+          "room": 38,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 40,
@@ -2868,7 +3567,8 @@
           "x": 31232,
           "y": 1280,
           "z": 28160,
-          "room": 39
+          "room": 39,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 43,
@@ -2877,7 +3577,10 @@
           "x": 53760,
           "y": -1536,
           "z": 37376,
-          "room": 47
+          "room": 47,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 52,
@@ -2886,7 +3589,10 @@
           "x": 69120,
           "y": -18432,
           "z": 25088,
-          "room": 54
+          "room": 54,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 53,
@@ -2895,7 +3601,10 @@
           "x": 70144,
           "y": -18432,
           "z": 25088,
-          "room": 54
+          "room": 54,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 57,
@@ -2904,7 +3613,10 @@
           "x": 43520,
           "y": -22016,
           "z": 19968,
-          "room": 68
+          "room": 68,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 58,
@@ -2913,7 +3625,10 @@
           "x": 43520,
           "y": -22016,
           "z": 18944,
-          "room": 68
+          "room": 68,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 68,
@@ -2922,7 +3637,10 @@
           "x": 53760,
           "y": -5120,
           "z": 37376,
-          "room": 69
+          "room": 69,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 69,
@@ -2931,7 +3649,10 @@
           "x": 59904,
           "y": -4352,
           "z": 33280,
-          "room": 69
+          "room": 69,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 70,
@@ -2940,7 +3661,10 @@
           "x": 54784,
           "y": -4992,
           "z": 27136,
-          "room": 69
+          "room": 69,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 71,
@@ -2949,7 +3673,10 @@
           "x": 49664,
           "y": -5632,
           "z": 24064,
-          "room": 69
+          "room": 69,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 73,
@@ -2958,7 +3685,10 @@
           "x": 55808,
           "y": -6144,
           "z": 28160,
-          "room": 69
+          "room": 69,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 74,
@@ -2967,7 +3697,10 @@
           "x": 59904,
           "y": -4352,
           "z": 33280,
-          "room": 69
+          "room": 69,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 75,
@@ -2976,7 +3709,10 @@
           "x": 59904,
           "y": -4352,
           "z": 33280,
-          "room": 69
+          "room": 69,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 88,
@@ -2985,7 +3721,8 @@
           "x": 59904,
           "y": -8704,
           "z": 26112,
-          "room": 72
+          "room": 72,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 89,
@@ -2994,7 +3731,8 @@
           "x": 59904,
           "y": -8704,
           "z": 27136,
-          "room": 72
+          "room": 72,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 90,
@@ -3003,7 +3741,8 @@
           "x": 46592,
           "y": -8704,
           "z": 31232,
-          "room": 72
+          "room": 72,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 94,
@@ -3012,7 +3751,10 @@
           "x": 59904,
           "y": -13824,
           "z": 31232,
-          "room": 77
+          "room": 77,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 103,
@@ -3021,7 +3763,8 @@
           "x": 44544,
           "y": -24064,
           "z": 37376,
-          "room": 87
+          "room": 87,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 112,
@@ -3030,7 +3773,11 @@
           "x": 59904,
           "y": -1536,
           "z": 23040,
-          "room": 103
+          "room": 103,
+          "requiredKeyItems": [
+            "Lud's Gate - Boiler Room Key",
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 113,
@@ -3039,7 +3786,11 @@
           "x": 59904,
           "y": -1536,
           "z": 24064,
-          "room": 103
+          "room": 103,
+          "requiredKeyItems": [
+            "Lud's Gate - Boiler Room Key",
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 114,
@@ -3048,7 +3799,11 @@
           "x": 59904,
           "y": -1536,
           "z": 25088,
-          "room": 103
+          "room": 103,
+          "requiredKeyItems": [
+            "Lud's Gate - Boiler Room Key",
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 115,
@@ -3057,7 +3812,11 @@
           "x": 58880,
           "y": -1536,
           "z": 25088,
-          "room": 103
+          "room": 103,
+          "requiredKeyItems": [
+            "Lud's Gate - Boiler Room Key",
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 116,
@@ -3066,7 +3825,11 @@
           "x": 58880,
           "y": -1536,
           "z": 24064,
-          "room": 103
+          "room": 103,
+          "requiredKeyItems": [
+            "Lud's Gate - Boiler Room Key",
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 118,
@@ -3075,7 +3838,8 @@
           "x": 46592,
           "y": -26880,
           "z": 33280,
-          "room": 105
+          "room": 105,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 123,
@@ -3084,7 +3848,8 @@
           "x": 51712,
           "y": -26368,
           "z": 42496,
-          "room": 108
+          "room": 108,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 124,
@@ -3093,7 +3858,8 @@
           "x": 40448,
           "y": -31488,
           "z": 37376,
-          "room": 109
+          "room": 109,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 129,
@@ -3102,7 +3868,8 @@
           "x": 54784,
           "y": -28672,
           "z": 33280,
-          "room": 120
+          "room": 120,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 141,
@@ -3111,7 +3878,8 @@
           "x": 53760,
           "y": -30976,
           "z": 41472,
-          "room": 130
+          "room": 130,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 142,
@@ -3120,7 +3888,8 @@
           "x": 53760,
           "y": -30976,
           "z": 42496,
-          "room": 130
+          "room": 130,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 144,
@@ -3129,7 +3898,10 @@
           "x": 46592,
           "y": -1280,
           "z": 40448,
-          "room": 134
+          "room": 134,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 147,
@@ -3138,7 +3910,10 @@
           "x": 66048,
           "y": 2304,
           "z": 55808,
-          "room": 137
+          "room": 137,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 150,
@@ -3147,7 +3922,11 @@
           "x": 36352,
           "y": 2816,
           "z": 30208,
-          "room": 140
+          "room": 140,
+          "requiredKeyItems": [
+            "Lud's Gate - Boiler Room Key",
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 162,
@@ -3156,7 +3935,8 @@
           "x": 44544,
           "y": -30464,
           "z": 29184,
-          "room": 152
+          "room": 152,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 167,
@@ -3165,7 +3945,8 @@
           "x": 27136,
           "y": -27392,
           "z": 42496,
-          "room": 156
+          "room": 156,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 168,
@@ -3174,7 +3955,8 @@
           "x": 27136,
           "y": -27392,
           "z": 43520,
-          "room": 156
+          "room": 156,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 172,
@@ -3183,7 +3965,11 @@
           "x": 33280,
           "y": -26624,
           "z": 32256,
-          "room": 158
+          "room": 158,
+          "requiredKeyItems": [
+            "Lud's Gate - Boiler Room Key",
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 173,
@@ -3192,7 +3978,11 @@
           "x": 26112,
           "y": -26624,
           "z": 32256,
-          "room": 159
+          "room": 159,
+          "requiredKeyItems": [
+            "Lud's Gate - Boiler Room Key",
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 174,
@@ -3201,7 +3991,11 @@
           "x": 26112,
           "y": -26624,
           "z": 33280,
-          "room": 159
+          "room": 159,
+          "requiredKeyItems": [
+            "Lud's Gate - Boiler Room Key",
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 175,
@@ -3210,7 +4004,11 @@
           "x": 29184,
           "y": -21760,
           "z": 44544,
-          "room": 160
+          "room": 160,
+          "requiredKeyItems": [
+            "Lud's Gate - Boiler Room Key",
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 189,
@@ -3219,7 +4017,10 @@
           "x": 70144,
           "y": -512,
           "z": 42496,
-          "room": 182
+          "room": 182,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 190,
@@ -3228,7 +4029,10 @@
           "x": 70144,
           "y": -512,
           "z": 43520,
-          "room": 182
+          "room": 182,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 192,
@@ -3237,7 +4041,10 @@
           "x": 66048,
           "y": 768,
           "z": 40448,
-          "room": 183
+          "room": 183,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 193,
@@ -3246,7 +4053,10 @@
           "x": 66048,
           "y": 256,
           "z": 42496,
-          "room": 183
+          "room": 183,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 194,
@@ -3255,7 +4065,10 @@
           "x": 66048,
           "y": 256,
           "z": 43520,
-          "room": 183
+          "room": 183,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 204,
@@ -3264,7 +4077,10 @@
           "x": 58880,
           "y": -2816,
           "z": 37376,
-          "room": 195
+          "room": 195,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         },
         {
           "entityIndex": 205,
@@ -3273,7 +4089,10 @@
           "x": 58880,
           "y": -2816,
           "z": 38400,
-          "room": 195
+          "room": 195,
+          "requiredKeyItems": [
+            "Lud's Gate - Embalming Fluid"
+          ]
         }
       ],
       "keyItems": [
@@ -3323,7 +4142,8 @@
           "x": 41472,
           "y": -1280,
           "z": 51712,
-          "room": 8
+          "room": 8,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 14,
@@ -3332,7 +4152,8 @@
           "x": 41472,
           "y": -2048,
           "z": 52736,
-          "room": 8
+          "room": 8,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 18,
@@ -3341,7 +4162,8 @@
           "x": 39424,
           "y": -4608,
           "z": 56832,
-          "room": 10
+          "room": 10,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 22,
@@ -3350,7 +4172,8 @@
           "x": 42496,
           "y": -7936,
           "z": 52736,
-          "room": 12
+          "room": 12,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 24,
@@ -3359,7 +4182,8 @@
           "x": 39424,
           "y": -8192,
           "z": 55808,
-          "room": 12
+          "room": 12,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 27,
@@ -3368,7 +4192,8 @@
           "x": 37376,
           "y": -10496,
           "z": 59904,
-          "room": 13
+          "room": 13,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [
@@ -3408,7 +4233,8 @@
           "x": 48640,
           "y": -13568,
           "z": 65024,
-          "room": 0
+          "room": 0,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 21,
@@ -3417,7 +4243,8 @@
           "x": 52736,
           "y": -10496,
           "z": 56832,
-          "room": 20
+          "room": 20,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 23,
@@ -3426,7 +4253,8 @@
           "x": 30208,
           "y": 1536,
           "z": 37376,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 24,
@@ -3435,7 +4263,8 @@
           "x": 31232,
           "y": 1536,
           "z": 37376,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 25,
@@ -3444,7 +4273,8 @@
           "x": 31232,
           "y": 1536,
           "z": 40448,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 26,
@@ -3453,7 +4283,8 @@
           "x": 31232,
           "y": 1536,
           "z": 40448,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 27,
@@ -3462,7 +4293,8 @@
           "x": 30208,
           "y": 1536,
           "z": 40448,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 28,
@@ -3471,7 +4303,8 @@
           "x": 32256,
           "y": 1536,
           "z": 38400,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 29,
@@ -3480,7 +4313,8 @@
           "x": 32256,
           "y": 1536,
           "z": 39424,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 30,
@@ -3489,7 +4323,8 @@
           "x": 31232,
           "y": 1536,
           "z": 38400,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 31,
@@ -3498,7 +4333,8 @@
           "x": 31232,
           "y": 1536,
           "z": 39424,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 41,
@@ -3507,7 +4343,8 @@
           "x": 46592,
           "y": -256,
           "z": 66048,
-          "room": 37
+          "room": 37,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 44,
@@ -3516,7 +4353,8 @@
           "x": 42496,
           "y": 5632,
           "z": 57856,
-          "room": 41
+          "room": 41,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 60,
@@ -3525,7 +4363,8 @@
           "x": 40448,
           "y": -2816,
           "z": 61952,
-          "room": 44
+          "room": 44,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 61,
@@ -3534,7 +4373,8 @@
           "x": 41472,
           "y": -2048,
           "z": 54784,
-          "room": 44
+          "room": 44,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 62,
@@ -3543,7 +4383,8 @@
           "x": 44544,
           "y": -7424,
           "z": 57856,
-          "room": 45
+          "room": 45,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 64,
@@ -3552,7 +4393,8 @@
           "x": 46592,
           "y": -7168,
           "z": 54784,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 67,
@@ -3561,7 +4403,8 @@
           "x": 49664,
           "y": -3840,
           "z": 55808,
-          "room": 47
+          "room": 47,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 68,
@@ -3570,7 +4413,8 @@
           "x": 49664,
           "y": -3840,
           "z": 55808,
-          "room": 47
+          "room": 47,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 75,
@@ -3579,7 +4423,8 @@
           "x": 49664,
           "y": -16128,
           "z": 58880,
-          "room": 50
+          "room": 50,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 76,
@@ -3588,7 +4433,8 @@
           "x": 46592,
           "y": -15104,
           "z": 53760,
-          "room": 50
+          "room": 50,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 96,
@@ -3597,7 +4443,8 @@
           "x": 49664,
           "y": 5632,
           "z": 53760,
-          "room": 58
+          "room": 58,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 99,
@@ -3606,7 +4453,8 @@
           "x": 39424,
           "y": 128,
           "z": 66048,
-          "room": 62
+          "room": 62,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [
@@ -3646,7 +4494,8 @@
           "x": 32256,
           "y": 0,
           "z": 23040,
-          "room": 6
+          "room": 6,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 10,
@@ -3655,7 +4504,8 @@
           "x": 29184,
           "y": -512,
           "z": 33280,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 16,
@@ -3664,7 +4514,8 @@
           "x": 32256,
           "y": 128,
           "z": 34304,
-          "room": 18
+          "room": 18,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 17,
@@ -3673,7 +4524,8 @@
           "x": 33280,
           "y": 0,
           "z": 33280,
-          "room": 18
+          "room": 18,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 22,
@@ -3682,7 +4534,8 @@
           "x": 13824,
           "y": -2048,
           "z": 18944,
-          "room": 19
+          "room": 19,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 23,
@@ -3691,7 +4544,8 @@
           "x": 36352,
           "y": 3840,
           "z": 43520,
-          "room": 29
+          "room": 29,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 29,
@@ -3700,7 +4554,8 @@
           "x": 30208,
           "y": -3968,
           "z": 38400,
-          "room": 30
+          "room": 30,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 30,
@@ -3709,7 +4564,8 @@
           "x": 35328,
           "y": 10240,
           "z": 39424,
-          "room": 31
+          "room": 31,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 31,
@@ -3718,7 +4574,8 @@
           "x": 31232,
           "y": 10240,
           "z": 40448,
-          "room": 31
+          "room": 31,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 32,
@@ -3727,7 +4584,8 @@
           "x": 43520,
           "y": 7936,
           "z": 43520,
-          "room": 31
+          "room": 31,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 33,
@@ -3736,7 +4594,8 @@
           "x": 41472,
           "y": 2304,
           "z": 51712,
-          "room": 33
+          "room": 33,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 34,
@@ -3745,7 +4604,8 @@
           "x": 41472,
           "y": 2304,
           "z": 50688,
-          "room": 33
+          "room": 33,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 36,
@@ -3754,7 +4614,8 @@
           "x": 46592,
           "y": -4096,
           "z": 44544,
-          "room": 35
+          "room": 35,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 38,
@@ -3763,7 +4624,8 @@
           "x": 33280,
           "y": -3072,
           "z": 47616,
-          "room": 36
+          "room": 36,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 39,
@@ -3772,7 +4634,8 @@
           "x": 28160,
           "y": 9472,
           "z": 39424,
-          "room": 40
+          "room": 40,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 40,
@@ -3781,7 +4644,8 @@
           "x": 28160,
           "y": 8704,
           "z": 42496,
-          "room": 40
+          "room": 40,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 44,
@@ -3790,7 +4654,8 @@
           "x": 14848,
           "y": -5376,
           "z": 47616,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 48,
@@ -3799,7 +4664,8 @@
           "x": 34304,
           "y": -8448,
           "z": 60928,
-          "room": 63
+          "room": 63,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 49,
@@ -3808,7 +4674,8 @@
           "x": 32256,
           "y": -9600,
           "z": 56832,
-          "room": 64
+          "room": 64,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 55,
@@ -3817,7 +4684,8 @@
           "x": 41472,
           "y": -9728,
           "z": 74240,
-          "room": 65
+          "room": 65,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 71,
@@ -3826,7 +4694,8 @@
           "x": 47616,
           "y": -3072,
           "z": 70144,
-          "room": 113
+          "room": 113,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 72,
@@ -3835,7 +4704,8 @@
           "x": 42496,
           "y": -3072,
           "z": 66048,
-          "room": 113
+          "room": 113,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 94,
@@ -3844,7 +4714,8 @@
           "x": 54784,
           "y": -2816,
           "z": 56832,
-          "room": 116
+          "room": 116,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 151,
@@ -3853,7 +4724,8 @@
           "x": 39424,
           "y": -128,
           "z": 60928,
-          "room": 174
+          "room": 174,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 152,
@@ -3862,7 +4734,8 @@
           "x": 35328,
           "y": -5632,
           "z": 71168,
-          "room": 177
+          "room": 177,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 153,
@@ -3871,7 +4744,8 @@
           "x": 30208,
           "y": -6656,
           "z": 56832,
-          "room": 179
+          "room": 179,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [
@@ -3931,7 +4805,8 @@
           "x": 19968,
           "y": 2048,
           "z": 33280,
-          "room": 10
+          "room": 10,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 20,
@@ -3940,7 +4815,8 @@
           "x": 19968,
           "y": 2048,
           "z": 33280,
-          "room": 10
+          "room": 10,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 44,
@@ -3949,7 +4825,8 @@
           "x": 40448,
           "y": 1536,
           "z": 39424,
-          "room": 22
+          "room": 22,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 58,
@@ -3958,7 +4835,8 @@
           "x": 73216,
           "y": -2048,
           "z": 53760,
-          "room": 34
+          "room": 34,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 76,
@@ -3967,7 +4845,8 @@
           "x": 1536,
           "y": -512,
           "z": 38400,
-          "room": 54
+          "room": 54,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 108,
@@ -3976,7 +4855,8 @@
           "x": 92672,
           "y": -4864,
           "z": 79360,
-          "room": 74
+          "room": 74,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 119,
@@ -3985,7 +4865,8 @@
           "x": 50688,
           "y": 0,
           "z": 71168,
-          "room": 81
+          "room": 81,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 120,
@@ -3994,7 +4875,8 @@
           "x": 50688,
           "y": 0,
           "z": 71168,
-          "room": 81
+          "room": 81,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 129,
@@ -4003,7 +4885,8 @@
           "x": 45568,
           "y": 2048,
           "z": 36352,
-          "room": 86
+          "room": 86,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 139,
@@ -4012,7 +4895,8 @@
           "x": 49664,
           "y": -1024,
           "z": 61952,
-          "room": 96
+          "room": 96,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 140,
@@ -4021,7 +4905,8 @@
           "x": 49664,
           "y": -1024,
           "z": 61952,
-          "room": 96
+          "room": 96,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 175,
@@ -4030,7 +4915,8 @@
           "x": 75264,
           "y": -256,
           "z": 7680,
-          "room": 125
+          "room": 125,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 176,
@@ -4039,7 +4925,8 @@
           "x": 75264,
           "y": -256,
           "z": 7680,
-          "room": 125
+          "room": 125,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 184,
@@ -4048,7 +4935,8 @@
           "x": 54784,
           "y": -6400,
           "z": 48640,
-          "room": 133
+          "room": 133,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 202,
@@ -4057,7 +4945,8 @@
           "x": 62976,
           "y": -10496,
           "z": 43520,
-          "room": 149
+          "room": 149,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 203,
@@ -4066,7 +4955,8 @@
           "x": 62976,
           "y": -10496,
           "z": 43520,
-          "room": 149
+          "room": 149,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 204,
@@ -4075,7 +4965,8 @@
           "x": 79360,
           "y": 9472,
           "z": 44544,
-          "room": 152
+          "room": 152,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 217,
@@ -4084,7 +4975,8 @@
           "x": 53760,
           "y": -4864,
           "z": 22016,
-          "room": 160
+          "room": 160,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 221,
@@ -4093,7 +4985,8 @@
           "x": 76288,
           "y": 512,
           "z": 51712,
-          "room": 167
+          "room": 167,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 222,
@@ -4102,7 +4995,8 @@
           "x": 77312,
           "y": 512,
           "z": 51712,
-          "room": 167
+          "room": 167,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 223,
@@ -4111,7 +5005,8 @@
           "x": 76288,
           "y": 512,
           "z": 49664,
-          "room": 168
+          "room": 168,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 224,
@@ -4120,7 +5015,8 @@
           "x": 76288,
           "y": 512,
           "z": 49664,
-          "room": 168
+          "room": 168,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 225,
@@ -4129,7 +5025,8 @@
           "x": 76288,
           "y": 512,
           "z": 49664,
-          "room": 168
+          "room": 168,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 229,
@@ -4138,7 +5035,8 @@
           "x": 89600,
           "y": -4864,
           "z": 80384,
-          "room": 169
+          "room": 169,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 230,
@@ -4147,7 +5045,8 @@
           "x": 82432,
           "y": 11264,
           "z": 22016,
-          "room": 170
+          "room": 170,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 235,
@@ -4156,7 +5055,8 @@
           "x": 79360,
           "y": 12544,
           "z": 36352,
-          "room": 175
+          "room": 175,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 240,
@@ -4165,7 +5065,8 @@
           "x": 82432,
           "y": -256,
           "z": 10752,
-          "room": 177
+          "room": 177,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 241,
@@ -4174,7 +5075,8 @@
           "x": 77312,
           "y": 512,
           "z": 49664,
-          "room": 168
+          "room": 168,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 242,
@@ -4183,7 +5085,8 @@
           "x": 77483,
           "y": 512,
           "z": 49761,
-          "room": 168
+          "room": 168,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 243,
@@ -4192,7 +5095,8 @@
           "x": 77207,
           "y": 512,
           "z": 49514,
-          "room": 168
+          "room": 168,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 244,
@@ -4201,7 +5105,8 @@
           "x": 77424,
           "y": 512,
           "z": 49367,
-          "room": 168
+          "room": 168,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 245,
@@ -4210,7 +5115,8 @@
           "x": 77250,
           "y": 512,
           "z": 49921,
-          "room": 168
+          "room": 168,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [
@@ -4314,7 +5220,8 @@
           "x": 32256,
           "y": 0,
           "z": 58880,
-          "room": 0
+          "room": 0,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 30,
@@ -4323,7 +5230,8 @@
           "x": 61952,
           "y": 3072,
           "z": 55808,
-          "room": 11
+          "room": 11,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 40,
@@ -4332,7 +5240,8 @@
           "x": 53760,
           "y": 3072,
           "z": 58880,
-          "room": 14
+          "room": 14,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 42,
@@ -4341,7 +5250,8 @@
           "x": 54784,
           "y": 3072,
           "z": 57856,
-          "room": 14
+          "room": 14,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 43,
@@ -4350,7 +5260,8 @@
           "x": 54784,
           "y": 3072,
           "z": 58880,
-          "room": 14
+          "room": 14,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 61,
@@ -4359,7 +5270,8 @@
           "x": 51712,
           "y": -1024,
           "z": 53760,
-          "room": 35
+          "room": 35,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 62,
@@ -4368,7 +5280,8 @@
           "x": 29184,
           "y": -1280,
           "z": 48640,
-          "room": 36
+          "room": 36,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 63,
@@ -4377,7 +5290,8 @@
           "x": 29184,
           "y": -1280,
           "z": 47616,
-          "room": 36
+          "room": 36,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 64,
@@ -4386,7 +5300,8 @@
           "x": 44544,
           "y": 1024,
           "z": 60928,
-          "room": 41
+          "room": 41,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 68,
@@ -4395,7 +5310,8 @@
           "x": 26112,
           "y": -2304,
           "z": 57856,
-          "room": 45
+          "room": 45,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 83,
@@ -4404,7 +5320,8 @@
           "x": 25088,
           "y": -512,
           "z": 62976,
-          "room": 53
+          "room": 53,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 84,
@@ -4413,7 +5330,8 @@
           "x": 56832,
           "y": 3072,
           "z": 59904,
-          "room": 54
+          "room": 54,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 95,
@@ -4422,7 +5340,8 @@
           "x": 34304,
           "y": 3584,
           "z": 62976,
-          "room": 63
+          "room": 63,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 96,
@@ -4431,7 +5350,8 @@
           "x": 36352,
           "y": 3584,
           "z": 62976,
-          "room": 63
+          "room": 63,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 100,
@@ -4440,7 +5360,8 @@
           "x": 34304,
           "y": 5632,
           "z": 62976,
-          "room": 64
+          "room": 64,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 107,
@@ -4449,7 +5370,8 @@
           "x": 28160,
           "y": 5632,
           "z": 70144,
-          "room": 68
+          "room": 68,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 132,
@@ -4458,7 +5380,8 @@
           "x": 11776,
           "y": 5504,
           "z": 51712,
-          "room": 75
+          "room": 75,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 134,
@@ -4467,7 +5390,8 @@
           "x": 14848,
           "y": 3584,
           "z": 53760,
-          "room": 76
+          "room": 76,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 145,
@@ -4476,7 +5400,8 @@
           "x": 33280,
           "y": 4608,
           "z": 50688,
-          "room": 91
+          "room": 91,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 184,
@@ -4485,7 +5410,8 @@
           "x": 41472,
           "y": -8192,
           "z": 38400,
-          "room": 102
+          "room": 102,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 197,
@@ -4494,7 +5420,8 @@
           "x": 34304,
           "y": -1024,
           "z": 33280,
-          "room": 111
+          "room": 111,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 213,
@@ -4503,7 +5430,8 @@
           "x": 44544,
           "y": -3328,
           "z": 76288,
-          "room": 124
+          "room": 124,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 214,
@@ -4512,7 +5440,8 @@
           "x": 43520,
           "y": -3328,
           "z": 76288,
-          "room": 124
+          "room": 124,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 215,
@@ -4521,7 +5450,8 @@
           "x": 43520,
           "y": -3328,
           "z": 75264,
-          "room": 124
+          "room": 124,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 221,
@@ -4530,7 +5460,8 @@
           "x": 61952,
           "y": 1536,
           "z": 55808,
-          "room": 128
+          "room": 128,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 222,
@@ -4539,7 +5470,8 @@
           "x": 52736,
           "y": -1024,
           "z": 64000,
-          "room": 131
+          "room": 131,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 223,
@@ -4548,7 +5480,8 @@
           "x": 37376,
           "y": 5632,
           "z": 47616,
-          "room": 136
+          "room": 136,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 224,
@@ -4557,7 +5490,8 @@
           "x": 38400,
           "y": 6400,
           "z": 47616,
-          "room": 136
+          "room": 136,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 229,
@@ -4566,7 +5500,8 @@
           "x": 38400,
           "y": 2816,
           "z": 70144,
-          "room": 141
+          "room": 141,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 234,
@@ -4575,7 +5510,8 @@
           "x": 38400,
           "y": 7424,
           "z": 55808,
-          "room": 144
+          "room": 144,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 241,
@@ -4584,7 +5520,8 @@
           "x": 18944,
           "y": -7936,
           "z": 47616,
-          "room": 150
+          "room": 150,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [
@@ -4664,7 +5601,8 @@
           "x": 29184,
           "y": 128,
           "z": 3584,
-          "room": 11
+          "room": 11,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 13,
@@ -4673,7 +5611,8 @@
           "x": 39424,
           "y": -4608,
           "z": 65024,
-          "room": 27
+          "room": 27,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 17,
@@ -4682,7 +5621,8 @@
           "x": 57856,
           "y": -1280,
           "z": 24064,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 29,
@@ -4691,7 +5631,8 @@
           "x": 27136,
           "y": -3072,
           "z": 15872,
-          "room": 53
+          "room": 53,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 30,
@@ -4700,7 +5641,8 @@
           "x": 44544,
           "y": -7424,
           "z": 16896,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 31,
@@ -4709,7 +5651,8 @@
           "x": 43520,
           "y": -7424,
           "z": 16896,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 33,
@@ -4718,7 +5661,8 @@
           "x": 44544,
           "y": -7296,
           "z": 17920,
-          "room": 57
+          "room": 57,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 40,
@@ -4727,7 +5671,8 @@
           "x": 47616,
           "y": -4224,
           "z": 39424,
-          "room": 70
+          "room": 70,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 68,
@@ -4736,7 +5681,8 @@
           "x": 60928,
           "y": -6400,
           "z": 43520,
-          "room": 95
+          "room": 95,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 71,
@@ -4745,7 +5691,8 @@
           "x": 69120,
           "y": -1152,
           "z": 34304,
-          "room": 101
+          "room": 101,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 72,
@@ -4754,7 +5701,8 @@
           "x": 52736,
           "y": -3072,
           "z": 52736,
-          "room": 105
+          "room": 105,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 82,
@@ -4763,7 +5711,8 @@
           "x": 78336,
           "y": -3072,
           "z": 77312,
-          "room": 115
+          "room": 115,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 84,
@@ -4772,7 +5721,8 @@
           "x": 51712,
           "y": -2816,
           "z": 60928,
-          "room": 117
+          "room": 117,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 88,
@@ -4781,7 +5731,8 @@
           "x": 58880,
           "y": -2816,
           "z": 61952,
-          "room": 119
+          "room": 119,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 97,
@@ -4790,7 +5741,8 @@
           "x": 44544,
           "y": -4608,
           "z": 71168,
-          "room": 134
+          "room": 134,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 100,
@@ -4799,7 +5751,8 @@
           "x": 68096,
           "y": 768,
           "z": 61952,
-          "room": 141
+          "room": 141,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 103,
@@ -4808,7 +5761,8 @@
           "x": 30208,
           "y": -7680,
           "z": 1536,
-          "room": 153
+          "room": 153,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 106,
@@ -4817,7 +5771,8 @@
           "x": 26112,
           "y": -4352,
           "z": 17920,
-          "room": 159
+          "room": 159,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 108,
@@ -4826,7 +5781,8 @@
           "x": 38400,
           "y": -4608,
           "z": 66048,
-          "room": 161
+          "room": 161,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 109,
@@ -4835,7 +5791,8 @@
           "x": 19968,
           "y": -4224,
           "z": 29184,
-          "room": 163
+          "room": 163,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 110,
@@ -4844,7 +5801,8 @@
           "x": 50688,
           "y": -6400,
           "z": 25088,
-          "room": 164
+          "room": 164,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 111,
@@ -4853,7 +5811,8 @@
           "x": 50688,
           "y": -6400,
           "z": 25088,
-          "room": 164
+          "room": 164,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 112,
@@ -4862,7 +5821,8 @@
           "x": 50688,
           "y": -6400,
           "z": 25088,
-          "room": 164
+          "room": 164,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 117,
@@ -4871,7 +5831,8 @@
           "x": 58880,
           "y": -2816,
           "z": 53760,
-          "room": 170
+          "room": 170,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 125,
@@ -4880,7 +5841,8 @@
           "x": 46592,
           "y": -4864,
           "z": 77312,
-          "room": 172
+          "room": 172,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 137,
@@ -4889,7 +5851,8 @@
           "x": 48640,
           "y": -3584,
           "z": 37376,
-          "room": 179
+          "room": 179,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 147,
@@ -4898,7 +5861,8 @@
           "x": 39424,
           "y": -5120,
           "z": 20992,
-          "room": 201
+          "room": 201,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 148,
@@ -4907,7 +5871,8 @@
           "x": 39424,
           "y": -5120,
           "z": 20992,
-          "room": 201
+          "room": 201,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 149,
@@ -4916,7 +5881,8 @@
           "x": 39424,
           "y": -5120,
           "z": 20992,
-          "room": 201
+          "room": 201,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [
@@ -4996,7 +5962,8 @@
           "x": 36352,
           "y": 4864,
           "z": 42496,
-          "room": 2
+          "room": 2,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 6,
@@ -5005,7 +5972,8 @@
           "x": 36352,
           "y": 4864,
           "z": 42496,
-          "room": 2
+          "room": 2,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 14,
@@ -5014,7 +5982,8 @@
           "x": 12800,
           "y": 2816,
           "z": 20992,
-          "room": 5
+          "room": 5,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 19,
@@ -5023,7 +5992,8 @@
           "x": 6656,
           "y": -1792,
           "z": 16896,
-          "room": 6
+          "room": 6,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 27,
@@ -5032,7 +6002,8 @@
           "x": 22016,
           "y": 6528,
           "z": 32256,
-          "room": 21
+          "room": 21,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 32,
@@ -5041,7 +6012,8 @@
           "x": 17920,
           "y": -8960,
           "z": 27136,
-          "room": 32
+          "room": 32,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 33,
@@ -5050,7 +6022,8 @@
           "x": 26112,
           "y": 3328,
           "z": 25088,
-          "room": 34
+          "room": 34,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 42,
@@ -5059,7 +6032,8 @@
           "x": 46592,
           "y": 3840,
           "z": 50688,
-          "room": 64
+          "room": 64,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 43,
@@ -5068,7 +6042,8 @@
           "x": 46592,
           "y": 3840,
           "z": 50688,
-          "room": 64
+          "room": 64,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 46,
@@ -5077,7 +6052,8 @@
           "x": 60928,
           "y": 6144,
           "z": 33280,
-          "room": 65
+          "room": 65,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 73,
@@ -5086,7 +6062,8 @@
           "x": 54784,
           "y": 7936,
           "z": 58880,
-          "room": 77
+          "room": 77,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 121,
@@ -5095,7 +6072,8 @@
           "x": 15872,
           "y": 7424,
           "z": 66048,
-          "room": 122
+          "room": 122,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 126,
@@ -5104,7 +6082,8 @@
           "x": 12800,
           "y": 7424,
           "z": 62976,
-          "room": 124
+          "room": 124,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 127,
@@ -5113,7 +6092,8 @@
           "x": 12800,
           "y": 7424,
           "z": 62976,
-          "room": 124
+          "room": 124,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 149,
@@ -5122,7 +6102,8 @@
           "x": 12800,
           "y": 15360,
           "z": 57856,
-          "room": 159
+          "room": 159,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 150,
@@ -5131,7 +6112,8 @@
           "x": 10752,
           "y": 15360,
           "z": 58880,
-          "room": 159
+          "room": 159,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 174,
@@ -5140,7 +6122,8 @@
           "x": 15872,
           "y": 4096,
           "z": 31232,
-          "room": 173
+          "room": 173,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 175,
@@ -5149,7 +6132,8 @@
           "x": 15872,
           "y": 3840,
           "z": 30208,
-          "room": 173
+          "room": 173,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 176,
@@ -5158,7 +6142,8 @@
           "x": 15872,
           "y": 3840,
           "z": 30208,
-          "room": 173
+          "room": 173,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 179,
@@ -5167,7 +6152,8 @@
           "x": 23040,
           "y": 15872,
           "z": 27136,
-          "room": 181
+          "room": 181,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 182,
@@ -5176,7 +6162,8 @@
           "x": 10752,
           "y": 10624,
           "z": 62976,
-          "room": 187
+          "room": 187,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 183,
@@ -5185,7 +6172,8 @@
           "x": 10752,
           "y": 10624,
           "z": 62976,
-          "room": 187
+          "room": 187,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 184,
@@ -5194,7 +6182,8 @@
           "x": 61952,
           "y": 28672,
           "z": 58880,
-          "room": 188
+          "room": 188,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [
@@ -5254,7 +6243,8 @@
           "x": 94720,
           "y": -2816,
           "z": 66048,
-          "room": 17
+          "room": 17,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 32,
@@ -5263,7 +6253,8 @@
           "x": 81408,
           "y": -3968,
           "z": 59904,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 33,
@@ -5272,7 +6263,8 @@
           "x": 81408,
           "y": -3968,
           "z": 59904,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 34,
@@ -5281,7 +6273,8 @@
           "x": 80384,
           "y": -3968,
           "z": 58880,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 35,
@@ -5290,7 +6283,8 @@
           "x": 80384,
           "y": -3968,
           "z": 58880,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 36,
@@ -5299,7 +6293,8 @@
           "x": 81408,
           "y": -3968,
           "z": 59904,
-          "room": 46
+          "room": 46,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 39,
@@ -5308,7 +6303,8 @@
           "x": 67072,
           "y": 0,
           "z": 47616,
-          "room": 51
+          "room": 51,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 64,
@@ -5317,7 +6313,8 @@
           "x": 17920,
           "y": -3328,
           "z": 38400,
-          "room": 81
+          "room": 81,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 65,
@@ -5326,7 +6323,8 @@
           "x": 10752,
           "y": -3328,
           "z": 42496,
-          "room": 87
+          "room": 87,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 71,
@@ -5335,7 +6333,8 @@
           "x": 19968,
           "y": -3328,
           "z": 38400,
-          "room": 92
+          "room": 92,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 92,
@@ -5344,7 +6343,8 @@
           "x": 3584,
           "y": -2560,
           "z": 69120,
-          "room": 104
+          "room": 104,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 93,
@@ -5353,7 +6353,8 @@
           "x": 3584,
           "y": -2560,
           "z": 69120,
-          "room": 104
+          "room": 104,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 96,
@@ -5362,7 +6363,8 @@
           "x": 3584,
           "y": -3072,
           "z": 76288,
-          "room": 111
+          "room": 111,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 116,
@@ -5371,7 +6373,8 @@
           "x": 23040,
           "y": 1792,
           "z": 82432,
-          "room": 128
+          "room": 128,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 121,
@@ -5380,7 +6383,8 @@
           "x": 34304,
           "y": -2560,
           "z": 77312,
-          "room": 141
+          "room": 141,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 122,
@@ -5389,7 +6393,8 @@
           "x": 36352,
           "y": -2560,
           "z": 72192,
-          "room": 141
+          "room": 141,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 125,
@@ -5398,7 +6403,8 @@
           "x": 28160,
           "y": 6400,
           "z": 73216,
-          "room": 143
+          "room": 143,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 141,
@@ -5407,7 +6413,8 @@
           "x": 46592,
           "y": 6144,
           "z": 47616,
-          "room": 156
+          "room": 156,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 144,
@@ -5416,7 +6423,8 @@
           "x": 46592,
           "y": 6144,
           "z": 47616,
-          "room": 156
+          "room": 156,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 178,
@@ -5425,7 +6433,8 @@
           "x": 27136,
           "y": -3328,
           "z": 26112,
-          "room": 202
+          "room": 202,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 179,
@@ -5434,7 +6443,8 @@
           "x": 27136,
           "y": -3328,
           "z": 26112,
-          "room": 202
+          "room": 202,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 182,
@@ -5443,7 +6453,8 @@
           "x": 44544,
           "y": -4608,
           "z": 76288,
-          "room": 204
+          "room": 204,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 191,
@@ -5452,7 +6463,8 @@
           "x": 22016,
           "y": 3840,
           "z": 66048,
-          "room": 226
+          "room": 226,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 192,
@@ -5461,7 +6473,8 @@
           "x": 29184,
           "y": -4096,
           "z": 51712,
-          "room": 227
+          "room": 227,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 195,
@@ -5470,7 +6483,8 @@
           "x": 29184,
           "y": -3328,
           "z": 39424,
-          "room": 230
+          "room": 230,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 196,
@@ -5479,7 +6493,8 @@
           "x": 29184,
           "y": -3328,
           "z": 39424,
-          "room": 230
+          "room": 230,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 200,
@@ -5488,7 +6503,8 @@
           "x": 27136,
           "y": -3328,
           "z": 49664,
-          "room": 232
+          "room": 232,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [
@@ -5578,7 +6594,8 @@
           "x": 49664,
           "y": 0,
           "z": 36352,
-          "room": 23
+          "room": 23,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 31,
@@ -5587,7 +6604,8 @@
           "x": 43520,
           "y": 0,
           "z": 37376,
-          "room": 24
+          "room": 24,
+          "requiredKeyItems": []
         },
         {
           "entityIndex": 32,
@@ -5596,7 +6614,8 @@
           "x": 43520,
           "y": 0,
           "z": 36352,
-          "room": 24
+          "room": 24,
+          "requiredKeyItems": []
         }
       ],
       "keyItems": [
