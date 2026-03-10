@@ -1,8 +1,8 @@
 namespace TRDataExporter;
 
-public class TR1ArchipelagoData
+public class TRArchipelagoData
 {
-    public string Game { get; set; } = "Tomb Raider 1 Remastered";
+    public string Game { get; set; } = "Tomb Raider Remastered";
     public List<LevelData> Levels { get; set; } = new();
     public List<string> LevelSequence { get; set; } = new();
     public Dictionary<string, KeyDependency> KeyDependencies { get; set; } = new();
@@ -38,6 +38,7 @@ public class KeyItemData
     public string Type { get; set; }
     public string Alias { get; set; }
     public string Name { get; set; }
+    public string ItemName { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
     public int Z { get; set; }

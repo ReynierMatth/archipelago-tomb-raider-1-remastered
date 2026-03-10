@@ -10,12 +10,29 @@ from Options import (
 )
 
 
+class IncludeTR1(DefaultOnToggle):
+    """Include Tomb Raider 1 levels in the multiworld."""
+    display_name = "Include Tomb Raider 1"
+
+
+class IncludeTR2(Toggle):
+    """Include Tomb Raider 2 levels in the multiworld.
+    Requires tr2r_data.json in the data folder."""
+    display_name = "Include Tomb Raider 2"
+
+
+class IncludeTR3(Toggle):
+    """Include Tomb Raider 3 levels in the multiworld.
+    Requires tr3r_data.json in the data folder."""
+    display_name = "Include Tomb Raider 3"
+
+
 class Goal(Choice):
     """
     Determines the win condition for this game.
 
-    Final Boss: Complete The Great Pyramid (final level).
-    All Secrets: Collect all 45 secrets across the game.
+    Final Boss: Complete the final level of the last enabled game.
+    All Secrets: Collect all secrets across all enabled games.
     N Levels: Complete a configurable number of levels.
     """
     display_name = "Goal"
@@ -31,7 +48,7 @@ class LevelsForGoal(Range):
     """
     display_name = "Levels Required for Goal"
     range_start = 1
-    range_end = 15
+    range_end = 60
     default = 15
 
 
@@ -77,6 +94,9 @@ class StartingWeapons(Choice):
 
 @dataclass
 class TR1ROptions(PerGameCommonOptions):
+    include_tr1: IncludeTR1
+    include_tr2: IncludeTR2
+    include_tr3: IncludeTR3
     goal: Goal
     levels_for_goal: LevelsForGoal
     secrets_mode: SecretsMode

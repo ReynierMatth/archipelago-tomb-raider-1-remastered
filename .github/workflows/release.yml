@@ -23,14 +23,14 @@ jobs:
       - name: Package APWorld
         run: |
           cd apworld
-          Compress-Archive -Path tr1r -DestinationPath tr1r.apworld
-          Move-Item tr1r.apworld ../publish/
+          Compress-Archive -Path tr123r -DestinationPath tr123r.apworld
+          Move-Item tr123r.apworld ../publish/
         shell: pwsh
 
       - uses: softprops/action-gh-release@v2
         with:
           files: |
             publish/TRArchipelagoClient.exe
-            publish/tr1r.apworld
+            publish/tr123r.apworld
           generate_release_notes: true
           prerelease: true

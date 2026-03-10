@@ -97,9 +97,9 @@ public class TR1DataExporter
         _resourceBase = resourceBase;
     }
 
-    public TR1ArchipelagoData Export()
+    public TRArchipelagoData Export()
     {
-        var data = new TR1ArchipelagoData();
+        var data = new TRArchipelagoData();
         var levels = TR1LevelNames.AsList;
         var reader = new TR1LevelControl();
 
@@ -120,8 +120,11 @@ public class TR1DataExporter
                 Region = region,
             };
 
-            // Read actual level file
+            // Read actual level file (prefer .apbak originals over AP-patched files)
             string phdPath = Path.Combine(_gameDataDir, levelFile);
+            string backupPath = phdPath + ".apbak";
+            if (File.Exists(backupPath))
+                phdPath = backupPath;
             if (!File.Exists(phdPath))
             {
                 Console.WriteLine($"  WARNING: {phdPath} not found, skipping");
@@ -264,7 +267,7 @@ public class TR1DataExporter
         };
     }
 
-    private void BuildItemDefinitions(TR1ArchipelagoData data)
+    private void BuildItemDefinitions(TRArchipelagoData data)
     {
         int baseId = 770000;
 
@@ -299,7 +302,7 @@ public class TR1DataExporter
         AddItemDef(data, baseId, TR1Type.SmallMed_S_P, "Small Medipack", "small_medipack", "filler");
     }
 
-    private static void AddItemDef(TR1ArchipelagoData data, int baseId, TR1Type type, string name, string category, string classification)
+    private static void AddItemDef(TRArchipelagoData data, int baseId, TR1Type type, string name, string category, string classification)
     {
         data.ItemDefinitions[type.ToString()] = new ItemDefinition
         {
@@ -310,7 +313,7 @@ public class TR1DataExporter
         };
     }
 
-    private void BuildKeyDependencies(TR1ArchipelagoData data)
+    private void BuildKeyDependencies(TRArchipelagoData data)
     {
         // For each level's key items, record which level they belong to
         foreach (var level in data.Levels)

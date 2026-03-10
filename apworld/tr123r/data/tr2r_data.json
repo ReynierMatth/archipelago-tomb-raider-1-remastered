@@ -1,0 +1,5514 @@
+{
+  "game": "Tomb Raider 2 Remastered",
+  "levels": [
+    {
+      "name": "Great Wall",
+      "file": "WALL.TR2",
+      "sequence": 1,
+      "region": "Great Wall",
+      "pickups": [
+        {
+          "entityIndex": 28,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 17536,
+          "y": -256,
+          "z": 37376,
+          "room": 42
+        },
+        {
+          "entityIndex": 29,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 17536,
+          "y": -256,
+          "z": 37376,
+          "room": 42
+        },
+        {
+          "entityIndex": 63,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 25472,
+          "y": 8192,
+          "z": 59904,
+          "room": 50
+        },
+        {
+          "entityIndex": 92,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 55808,
+          "y": 13312,
+          "z": 65408,
+          "room": 57
+        },
+        {
+          "entityIndex": 103,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 57856,
+          "y": 15360,
+          "z": 71168,
+          "room": 75
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 15,
+          "type": "Key2_S_P",
+          "alias": "GW_Key2",
+          "name": "Great Wall - Rusty Key",
+          "x": 25088,
+          "y": -3584,
+          "z": 36352,
+          "room": 32
+        },
+        {
+          "entityIndex": 17,
+          "type": "Key1_S_P",
+          "alias": "GW_Key1",
+          "name": "Great Wall - Guardhouse Key",
+          "x": 45568,
+          "y": 7040,
+          "z": 39424,
+          "room": 34
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Venice",
+      "file": "BOAT.TR2",
+      "sequence": 2,
+      "region": "Italy",
+      "pickups": [
+        {
+          "entityIndex": 7,
+          "type": "Automags_S_P",
+          "category": "weapon",
+          "x": 54784,
+          "y": 0,
+          "z": 37376,
+          "room": 16
+        },
+        {
+          "entityIndex": 12,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 52736,
+          "y": 0,
+          "z": 38400,
+          "room": 18
+        },
+        {
+          "entityIndex": 13,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 50688,
+          "y": -512,
+          "z": 40448,
+          "room": 18
+        },
+        {
+          "entityIndex": 41,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 36352,
+          "y": 3712,
+          "z": 25088,
+          "room": 56
+        },
+        {
+          "entityIndex": 42,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 36352,
+          "y": 3712,
+          "z": 25088,
+          "room": 56
+        },
+        {
+          "entityIndex": 44,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 43520,
+          "y": 0,
+          "z": 29184,
+          "room": 58
+        },
+        {
+          "entityIndex": 50,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": 2048,
+          "z": 31232,
+          "room": 60
+        },
+        {
+          "entityIndex": 51,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 29184,
+          "y": 2048,
+          "z": 31232,
+          "room": 60
+        },
+        {
+          "entityIndex": 60,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 40448,
+          "y": 0,
+          "z": 48640,
+          "room": 69
+        },
+        {
+          "entityIndex": 61,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 40448,
+          "y": 0,
+          "z": 48640,
+          "room": 69
+        },
+        {
+          "entityIndex": 62,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 40448,
+          "y": 0,
+          "z": 48640,
+          "room": 69
+        },
+        {
+          "entityIndex": 82,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 27136,
+          "y": -1792,
+          "z": 53760,
+          "room": 78
+        },
+        {
+          "entityIndex": 83,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 27136,
+          "y": -1792,
+          "z": 53760,
+          "room": 78
+        },
+        {
+          "entityIndex": 92,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 24064,
+          "y": -768,
+          "z": 64000,
+          "room": 81
+        },
+        {
+          "entityIndex": 93,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 24064,
+          "y": -768,
+          "z": 64000,
+          "room": 81
+        },
+        {
+          "entityIndex": 105,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 22016,
+          "y": -1792,
+          "z": 53760,
+          "room": 96
+        },
+        {
+          "entityIndex": 117,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 86528,
+          "y": 0,
+          "z": 61952,
+          "room": 129
+        },
+        {
+          "entityIndex": 122,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 58880,
+          "y": 256,
+          "z": 65024,
+          "room": 147
+        },
+        {
+          "entityIndex": 129,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 59904,
+          "y": -2048,
+          "z": 49664,
+          "room": 150
+        },
+        {
+          "entityIndex": 132,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 18944,
+          "y": -1536,
+          "z": 59904,
+          "room": 151
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 2,
+          "type": "Key1_S_P",
+          "alias": "Venice_Key1",
+          "name": "Venice - Boathouse Key",
+          "x": 60928,
+          "y": -3072,
+          "z": 37376,
+          "room": 7
+        },
+        {
+          "entityIndex": 80,
+          "type": "Key2_S_P",
+          "alias": "Venice_Key2",
+          "name": "Venice - Steel Key",
+          "x": 31232,
+          "y": -1792,
+          "z": 55808,
+          "room": 77
+        },
+        {
+          "entityIndex": 123,
+          "type": "Key3_S_P",
+          "alias": "Venice_Key3",
+          "name": "Venice - Iron Key",
+          "x": 65024,
+          "y": 768,
+          "z": 48640,
+          "room": 149
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Bartoli's Hideout",
+      "file": "VENICE.TR2",
+      "sequence": 3,
+      "region": "Italy",
+      "pickups": [
+        {
+          "entityIndex": 33,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 43520,
+          "y": -3840,
+          "z": 39424,
+          "room": 29
+        },
+        {
+          "entityIndex": 47,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 68096,
+          "y": 4352,
+          "z": 41472,
+          "room": 49
+        },
+        {
+          "entityIndex": 51,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 40448,
+          "y": 8704,
+          "z": 32256,
+          "room": 51
+        },
+        {
+          "entityIndex": 52,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 40448,
+          "y": 8704,
+          "z": 32256,
+          "room": 51
+        },
+        {
+          "entityIndex": 57,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 49664,
+          "y": 4608,
+          "z": 19968,
+          "room": 59
+        },
+        {
+          "entityIndex": 65,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 55808,
+          "y": 4608,
+          "z": 22016,
+          "room": 62
+        },
+        {
+          "entityIndex": 72,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 42496,
+          "y": 4352,
+          "z": 19968,
+          "room": 70
+        },
+        {
+          "entityIndex": 73,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 40448,
+          "y": 4608,
+          "z": 18944,
+          "room": 70
+        },
+        {
+          "entityIndex": 79,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 68096,
+          "y": 768,
+          "z": 23040,
+          "room": 75
+        },
+        {
+          "entityIndex": 87,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 61952,
+          "y": 4352,
+          "z": 17920,
+          "room": 86
+        },
+        {
+          "entityIndex": 90,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 58880,
+          "y": -512,
+          "z": 25088,
+          "room": 96
+        },
+        {
+          "entityIndex": 91,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 58880,
+          "y": -512,
+          "z": 25088,
+          "room": 96
+        },
+        {
+          "entityIndex": 108,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 71168,
+          "y": 512,
+          "z": 36352,
+          "room": 107
+        },
+        {
+          "entityIndex": 113,
+          "type": "Automags_S_P",
+          "category": "weapon",
+          "x": 55808,
+          "y": 4096,
+          "z": 31232,
+          "room": 108
+        },
+        {
+          "entityIndex": 114,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 55808,
+          "y": 4096,
+          "z": 31232,
+          "room": 108
+        },
+        {
+          "entityIndex": 115,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 55808,
+          "y": 4096,
+          "z": 31232,
+          "room": 108
+        },
+        {
+          "entityIndex": 119,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 67072,
+          "y": 2048,
+          "z": 42496,
+          "room": 116
+        },
+        {
+          "entityIndex": 121,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 61952,
+          "y": 4096,
+          "z": 43520,
+          "room": 118
+        },
+        {
+          "entityIndex": 126,
+          "type": "Uzi_S_P",
+          "category": "weapon",
+          "x": 70144,
+          "y": 5120,
+          "z": 22016,
+          "room": 139
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 27,
+          "type": "Key1_S_P",
+          "alias": "Bartoli_Key1",
+          "name": "Bartoli's Hideout - Library Key",
+          "x": 51712,
+          "y": 256,
+          "z": 41472,
+          "room": 23
+        },
+        {
+          "entityIndex": 85,
+          "type": "Key2_S_P",
+          "alias": "Bartoli_Key2",
+          "name": "Bartoli's Hideout - Detonator Key",
+          "x": 64000,
+          "y": 3840,
+          "z": 17920,
+          "room": 86
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Opera House",
+      "file": "OPERA.TR2",
+      "sequence": 4,
+      "region": "Italy",
+      "pickups": [
+        {
+          "entityIndex": 19,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 80384,
+          "y": -3584,
+          "z": 54784,
+          "room": 12
+        },
+        {
+          "entityIndex": 21,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 80384,
+          "y": -3584,
+          "z": 54784,
+          "room": 12
+        },
+        {
+          "entityIndex": 25,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 79360,
+          "y": -2432,
+          "z": 50688,
+          "room": 13
+        },
+        {
+          "entityIndex": 27,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 73216,
+          "y": -768,
+          "z": 51712,
+          "room": 14
+        },
+        {
+          "entityIndex": 30,
+          "type": "Automags_S_P",
+          "category": "weapon",
+          "x": 79360,
+          "y": 7936,
+          "z": 31232,
+          "room": 25
+        },
+        {
+          "entityIndex": 35,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 71168,
+          "y": 4352,
+          "z": 36352,
+          "room": 31
+        },
+        {
+          "entityIndex": 42,
+          "type": "Uzi_S_P",
+          "category": "weapon",
+          "x": 81408,
+          "y": 1536,
+          "z": 46592,
+          "room": 38
+        },
+        {
+          "entityIndex": 55,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 83456,
+          "y": 7936,
+          "z": 42496,
+          "room": 44
+        },
+        {
+          "entityIndex": 56,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 72192,
+          "y": 7936,
+          "z": 42496,
+          "room": 44
+        },
+        {
+          "entityIndex": 59,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 85504,
+          "y": 2304,
+          "z": 44544,
+          "room": 50
+        },
+        {
+          "entityIndex": 80,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 83456,
+          "y": 3584,
+          "z": 52736,
+          "room": 77
+        },
+        {
+          "entityIndex": 81,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 83456,
+          "y": 3584,
+          "z": 52736,
+          "room": 77
+        },
+        {
+          "entityIndex": 86,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 68096,
+          "y": 7168,
+          "z": 66048,
+          "room": 86
+        },
+        {
+          "entityIndex": 130,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 69120,
+          "y": 5376,
+          "z": 54784,
+          "room": 118
+        },
+        {
+          "entityIndex": 139,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 67072,
+          "y": 5888,
+          "z": 44544,
+          "room": 122
+        },
+        {
+          "entityIndex": 140,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 56832,
+          "y": 5888,
+          "z": 46592,
+          "room": 122
+        },
+        {
+          "entityIndex": 141,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 67072,
+          "y": 5888,
+          "z": 44544,
+          "room": 122
+        },
+        {
+          "entityIndex": 143,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 65024,
+          "y": 5888,
+          "z": 43520,
+          "room": 122
+        },
+        {
+          "entityIndex": 144,
+          "type": "GrenadeLauncher_S_P",
+          "category": "weapon",
+          "x": 65024,
+          "y": 5888,
+          "z": 43520,
+          "room": 122
+        },
+        {
+          "entityIndex": 145,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 65024,
+          "y": 5888,
+          "z": 43520,
+          "room": 122
+        },
+        {
+          "entityIndex": 169,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 77312,
+          "y": 6656,
+          "z": 62976,
+          "room": 161
+        },
+        {
+          "entityIndex": 186,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 77312,
+          "y": -768,
+          "z": 61952,
+          "room": 170
+        },
+        {
+          "entityIndex": 187,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 76288,
+          "y": -768,
+          "z": 61952,
+          "room": 170
+        },
+        {
+          "entityIndex": 190,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 72192,
+          "y": 6656,
+          "z": 48640,
+          "room": 174
+        },
+        {
+          "entityIndex": 192,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 72192,
+          "y": 6656,
+          "z": 60928,
+          "room": 178
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 82,
+          "type": "Puzzle2_S_P",
+          "alias": "Opera_Puzzle2",
+          "name": "Opera House - Circuit Board",
+          "x": 71168,
+          "y": 7936,
+          "z": 47616,
+          "room": 83
+        },
+        {
+          "entityIndex": 100,
+          "type": "Puzzle1_S_P",
+          "alias": "Opera_Puzzle1",
+          "name": "Opera House - Relay Box",
+          "x": 75264,
+          "y": 7424,
+          "z": 60928,
+          "room": 93
+        },
+        {
+          "entityIndex": 118,
+          "type": "Key1_S_P",
+          "alias": "Opera_Key1",
+          "name": "Opera House - Ornate Key",
+          "x": 56832,
+          "y": 10496,
+          "z": 40448,
+          "room": 107
+        },
+        {
+          "entityIndex": 172,
+          "type": "Key1_S_P",
+          "alias": "Opera_Key1_2",
+          "name": "Opera House - Ornate Key #2",
+          "x": 79360,
+          "y": 5888,
+          "z": 35328,
+          "room": 162
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Oil Rig",
+      "file": "RIG.TR2",
+      "sequence": 5,
+      "region": "Offshore",
+      "pickups": [
+        {
+          "entityIndex": 4,
+          "type": "Pistols_S_P",
+          "category": "pickup",
+          "x": 33280,
+          "y": -1280,
+          "z": 89600,
+          "room": 1
+        },
+        {
+          "entityIndex": 15,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 37376,
+          "y": -2816,
+          "z": 76288,
+          "room": 3
+        },
+        {
+          "entityIndex": 29,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 30208,
+          "y": -4096,
+          "z": 68096,
+          "room": 17
+        },
+        {
+          "entityIndex": 32,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": -4352,
+          "z": 58880,
+          "room": 19
+        },
+        {
+          "entityIndex": 33,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": -4352,
+          "z": 58880,
+          "room": 19
+        },
+        {
+          "entityIndex": 34,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 28160,
+          "y": -4352,
+          "z": 59904,
+          "room": 19
+        },
+        {
+          "entityIndex": 35,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 28160,
+          "y": -4352,
+          "z": 59904,
+          "room": 19
+        },
+        {
+          "entityIndex": 37,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 28160,
+          "y": -4096,
+          "z": 64000,
+          "room": 20
+        },
+        {
+          "entityIndex": 38,
+          "type": "Harpoon_S_P",
+          "category": "weapon",
+          "x": 27136,
+          "y": -4352,
+          "z": 72192,
+          "room": 21
+        },
+        {
+          "entityIndex": 39,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 27136,
+          "y": -4352,
+          "z": 72192,
+          "room": 21
+        },
+        {
+          "entityIndex": 42,
+          "type": "Automags_S_P",
+          "category": "weapon",
+          "x": 29184,
+          "y": -5376,
+          "z": 69120,
+          "room": 22
+        },
+        {
+          "entityIndex": 43,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 29184,
+          "y": -5376,
+          "z": 69120,
+          "room": 22
+        },
+        {
+          "entityIndex": 50,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 39424,
+          "y": -4096,
+          "z": 61952,
+          "room": 30
+        },
+        {
+          "entityIndex": 51,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 37376,
+          "y": -4096,
+          "z": 62976,
+          "room": 30
+        },
+        {
+          "entityIndex": 59,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 43520,
+          "y": -5120,
+          "z": 58880,
+          "room": 33
+        },
+        {
+          "entityIndex": 64,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 44544,
+          "y": -5120,
+          "z": 53760,
+          "room": 34
+        },
+        {
+          "entityIndex": 71,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 53760,
+          "y": -5888,
+          "z": 47616,
+          "room": 37
+        },
+        {
+          "entityIndex": 72,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 52736,
+          "y": -5888,
+          "z": 46592,
+          "room": 37
+        },
+        {
+          "entityIndex": 76,
+          "type": "Shotgun_S_P",
+          "category": "weapon",
+          "x": 26112,
+          "y": 2560,
+          "z": 45568,
+          "room": 48
+        },
+        {
+          "entityIndex": 81,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 34304,
+          "y": -5120,
+          "z": 53760,
+          "room": 51
+        },
+        {
+          "entityIndex": 103,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": 2560,
+          "z": 54784,
+          "room": 101
+        },
+        {
+          "entityIndex": 111,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 41472,
+          "y": 6144,
+          "z": 55808,
+          "room": 110
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 7,
+          "type": "Key2_S_P",
+          "alias": "Rig_Key2",
+          "name": "Oil Rig - Yellow Pass Card",
+          "x": 37376,
+          "y": -2816,
+          "z": 75264,
+          "room": 3
+        },
+        {
+          "entityIndex": 30,
+          "type": "Key3_S_P",
+          "alias": "Rig_Key3",
+          "name": "Oil Rig - Green Pass Card",
+          "x": 43520,
+          "y": 2048,
+          "z": 53760,
+          "room": 18
+        },
+        {
+          "entityIndex": 45,
+          "type": "Key1_S_P",
+          "alias": "Rig_Key1",
+          "name": "Oil Rig - Red Pass Card",
+          "x": 19968,
+          "y": -4608,
+          "z": 77312,
+          "room": 26
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Diving Area",
+      "file": "PLATFORM.TR2",
+      "sequence": 6,
+      "region": "Offshore",
+      "pickups": [
+        {
+          "entityIndex": 30,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 41472,
+          "y": -768,
+          "z": 81408,
+          "room": 17
+        },
+        {
+          "entityIndex": 31,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 41472,
+          "y": -768,
+          "z": 75264,
+          "room": 17
+        },
+        {
+          "entityIndex": 32,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 41472,
+          "y": -768,
+          "z": 75264,
+          "room": 17
+        },
+        {
+          "entityIndex": 33,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 48640,
+          "y": -768,
+          "z": 73216,
+          "room": 17
+        },
+        {
+          "entityIndex": 42,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 45568,
+          "y": -9216,
+          "z": 81408,
+          "room": 21
+        },
+        {
+          "entityIndex": 43,
+          "type": "Shotgun_S_P",
+          "category": "weapon",
+          "x": 49664,
+          "y": -9216,
+          "z": 77312,
+          "room": 21
+        },
+        {
+          "entityIndex": 44,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 41472,
+          "y": -9216,
+          "z": 80384,
+          "room": 21
+        },
+        {
+          "entityIndex": 49,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 46592,
+          "y": -9216,
+          "z": 86528,
+          "room": 23
+        },
+        {
+          "entityIndex": 52,
+          "type": "Shotgun_S_P",
+          "category": "weapon",
+          "x": 57856,
+          "y": -4096,
+          "z": 77312,
+          "room": 29
+        },
+        {
+          "entityIndex": 63,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 68096,
+          "y": -4608,
+          "z": 73216,
+          "room": 31
+        },
+        {
+          "entityIndex": 64,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 68096,
+          "y": -4608,
+          "z": 71168,
+          "room": 31
+        },
+        {
+          "entityIndex": 76,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 33280,
+          "y": 1024,
+          "z": 57856,
+          "room": 42
+        },
+        {
+          "entityIndex": 77,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 33280,
+          "y": 1024,
+          "z": 54784,
+          "room": 42
+        },
+        {
+          "entityIndex": 82,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 38400,
+          "y": 2304,
+          "z": 48640,
+          "room": 46
+        },
+        {
+          "entityIndex": 83,
+          "type": "Uzi_S_P",
+          "category": "weapon",
+          "x": 37376,
+          "y": 2560,
+          "z": 48640,
+          "room": 46
+        },
+        {
+          "entityIndex": 84,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 37376,
+          "y": 2560,
+          "z": 48640,
+          "room": 46
+        },
+        {
+          "entityIndex": 92,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 45568,
+          "y": 3072,
+          "z": 35328,
+          "room": 51
+        },
+        {
+          "entityIndex": 93,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 45568,
+          "y": 3072,
+          "z": 35328,
+          "room": 51
+        },
+        {
+          "entityIndex": 96,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 27136,
+          "y": -5120,
+          "z": 77312,
+          "room": 54
+        },
+        {
+          "entityIndex": 97,
+          "type": "Automags_S_P",
+          "category": "weapon",
+          "x": 27136,
+          "y": -5120,
+          "z": 77312,
+          "room": 54
+        },
+        {
+          "entityIndex": 98,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 29184,
+          "y": -11776,
+          "z": 76288,
+          "room": 55
+        },
+        {
+          "entityIndex": 99,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 29184,
+          "y": -11776,
+          "z": 77312,
+          "room": 55
+        },
+        {
+          "entityIndex": 100,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 29184,
+          "y": -11776,
+          "z": 77312,
+          "room": 55
+        },
+        {
+          "entityIndex": 104,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 57856,
+          "y": -2816,
+          "z": 89600,
+          "room": 65
+        },
+        {
+          "entityIndex": 105,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 54784,
+          "y": -2816,
+          "z": 86528,
+          "room": 65
+        },
+        {
+          "entityIndex": 106,
+          "type": "Harpoon_S_P",
+          "category": "weapon",
+          "x": 54784,
+          "y": -2816,
+          "z": 86528,
+          "room": 65
+        },
+        {
+          "entityIndex": 123,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 40832,
+          "y": -8192,
+          "z": 86528,
+          "room": 80
+        },
+        {
+          "entityIndex": 124,
+          "type": "M16_S_P",
+          "category": "weapon",
+          "x": 40832,
+          "y": -8192,
+          "z": 86528,
+          "room": 80
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 7,
+          "type": "Puzzle1_S_P",
+          "alias": "DA_Puzzle1",
+          "name": "Diving Area - Machine Chip",
+          "x": 47616,
+          "y": -5120,
+          "z": 76288,
+          "room": 12
+        },
+        {
+          "entityIndex": 58,
+          "type": "Key1_S_P",
+          "alias": "DA_Key1",
+          "name": "Diving Area - Red Pass Card",
+          "x": 62592,
+          "y": -3840,
+          "z": 69120,
+          "room": 30
+        },
+        {
+          "entityIndex": 94,
+          "type": "Key4_S_P",
+          "alias": "DA_Key4",
+          "name": "Diving Area - Blue Pass Card",
+          "x": 23040,
+          "y": -1408,
+          "z": 74240,
+          "room": 52
+        },
+        {
+          "entityIndex": 120,
+          "type": "Puzzle1_S_P",
+          "alias": "DA_Puzzle1_2",
+          "name": "Diving Area - Machine Chip #2",
+          "x": 36352,
+          "y": -9216,
+          "z": 86528,
+          "room": 80
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "The Fathoms",
+      "file": "UNWATER.TR2",
+      "sequence": 7,
+      "region": "Offshore",
+      "pickups": [
+        {
+          "entityIndex": 14,
+          "type": "Shotgun_S_P",
+          "category": "weapon",
+          "x": 68096,
+          "y": -5888,
+          "z": 72192,
+          "room": 20
+        },
+        {
+          "entityIndex": 55,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 79360,
+          "y": -3456,
+          "z": 41472,
+          "room": 49
+        },
+        {
+          "entityIndex": 58,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 83456,
+          "y": -3456,
+          "z": 43520,
+          "room": 49
+        },
+        {
+          "entityIndex": 59,
+          "type": "Harpoon_S_P",
+          "category": "weapon",
+          "x": 82432,
+          "y": -3584,
+          "z": 40448,
+          "room": 49
+        },
+        {
+          "entityIndex": 60,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 82432,
+          "y": -3584,
+          "z": 40448,
+          "room": 49
+        },
+        {
+          "entityIndex": 63,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 66048,
+          "y": -1280,
+          "z": 71168,
+          "room": 62
+        },
+        {
+          "entityIndex": 64,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 67072,
+          "y": -1280,
+          "z": 77312,
+          "room": 62
+        }
+      ],
+      "keyItems": [],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Maria Doria",
+      "file": "KEEL.TR2",
+      "sequence": 8,
+      "region": "Offshore",
+      "pickups": [
+        {
+          "entityIndex": 12,
+          "type": "Harpoon_S_P",
+          "category": "weapon",
+          "x": 64000,
+          "y": 0,
+          "z": 28160,
+          "room": 19
+        },
+        {
+          "entityIndex": 13,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 64000,
+          "y": 0,
+          "z": 28160,
+          "room": 19
+        },
+        {
+          "entityIndex": 24,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 55808,
+          "y": -4096,
+          "z": 28160,
+          "room": 23
+        },
+        {
+          "entityIndex": 25,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 59904,
+          "y": -4096,
+          "z": 28160,
+          "room": 23
+        },
+        {
+          "entityIndex": 27,
+          "type": "Shotgun_S_P",
+          "category": "weapon",
+          "x": 56832,
+          "y": -4096,
+          "z": 17920,
+          "room": 25
+        },
+        {
+          "entityIndex": 28,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 56832,
+          "y": -4096,
+          "z": 17920,
+          "room": 25
+        },
+        {
+          "entityIndex": 31,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 58880,
+          "y": 2816,
+          "z": 27136,
+          "room": 32
+        },
+        {
+          "entityIndex": 32,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 58880,
+          "y": 2816,
+          "z": 27136,
+          "room": 32
+        },
+        {
+          "entityIndex": 40,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 45184,
+          "y": 3328,
+          "z": 29184,
+          "room": 35
+        },
+        {
+          "entityIndex": 41,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 45184,
+          "y": 3328,
+          "z": 29184,
+          "room": 35
+        },
+        {
+          "entityIndex": 47,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 49664,
+          "y": 2816,
+          "z": 33280,
+          "room": 36
+        },
+        {
+          "entityIndex": 54,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 56832,
+          "y": 2816,
+          "z": 36352,
+          "room": 40
+        },
+        {
+          "entityIndex": 64,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 64000,
+          "y": -3072,
+          "z": 41472,
+          "room": 43
+        },
+        {
+          "entityIndex": 73,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 61952,
+          "y": 4352,
+          "z": 54784,
+          "room": 47
+        },
+        {
+          "entityIndex": 74,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 61952,
+          "y": 4352,
+          "z": 54784,
+          "room": 47
+        },
+        {
+          "entityIndex": 75,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 64000,
+          "y": 4608,
+          "z": 53760,
+          "room": 47
+        },
+        {
+          "entityIndex": 76,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 64000,
+          "y": 4608,
+          "z": 53760,
+          "room": 47
+        },
+        {
+          "entityIndex": 77,
+          "type": "Automags_S_P",
+          "category": "weapon",
+          "x": 61952,
+          "y": 4352,
+          "z": 55808,
+          "room": 47
+        },
+        {
+          "entityIndex": 78,
+          "type": "Uzi_S_P",
+          "category": "weapon",
+          "x": 65024,
+          "y": 4608,
+          "z": 53760,
+          "room": 47
+        },
+        {
+          "entityIndex": 94,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 73216,
+          "y": 5120,
+          "z": 61952,
+          "room": 55
+        },
+        {
+          "entityIndex": 95,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 70144,
+          "y": 5120,
+          "z": 70144,
+          "room": 55
+        },
+        {
+          "entityIndex": 99,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 80384,
+          "y": 3072,
+          "z": 70144,
+          "room": 56
+        },
+        {
+          "entityIndex": 151,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 48640,
+          "y": 5632,
+          "z": 86528,
+          "room": 76
+        },
+        {
+          "entityIndex": 154,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 60928,
+          "y": 6912,
+          "z": 41472,
+          "room": 79
+        },
+        {
+          "entityIndex": 170,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 46592,
+          "y": 4608,
+          "z": 23040,
+          "room": 83
+        },
+        {
+          "entityIndex": 171,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 48640,
+          "y": 4608,
+          "z": 23040,
+          "room": 83
+        },
+        {
+          "entityIndex": 172,
+          "type": "M16_S_P",
+          "category": "weapon",
+          "x": 45568,
+          "y": 4864,
+          "z": 9728,
+          "room": 84
+        },
+        {
+          "entityIndex": 173,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 45568,
+          "y": 4864,
+          "z": 9728,
+          "room": 84
+        },
+        {
+          "entityIndex": 174,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 45568,
+          "y": 4864,
+          "z": 9728,
+          "room": 84
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 55,
+          "type": "Key3_S_P",
+          "alias": "Doria_Key3",
+          "name": "Maria Doria - Cabin Key",
+          "x": 50688,
+          "y": 4864,
+          "z": 41472,
+          "room": 41
+        },
+        {
+          "entityIndex": 84,
+          "type": "Puzzle1_S_P",
+          "alias": "Doria_Puzzle1",
+          "name": "Maria Doria - Breaker",
+          "x": 57856,
+          "y": 4608,
+          "z": 67072,
+          "room": 52
+        },
+        {
+          "entityIndex": 96,
+          "type": "Puzzle1_S_P",
+          "alias": "Doria_Puzzle1_2",
+          "name": "Maria Doria - Breaker #2",
+          "x": 69120,
+          "y": 3072,
+          "z": 64000,
+          "room": 56
+        },
+        {
+          "entityIndex": 115,
+          "type": "Key2_S_P",
+          "alias": "Doria_Key2",
+          "name": "Maria Doria - Rusty Key",
+          "x": 68096,
+          "y": 3328,
+          "z": 78336,
+          "room": 66
+        },
+        {
+          "entityIndex": 149,
+          "type": "Puzzle1_S_P",
+          "alias": "Doria_Puzzle1_3",
+          "name": "Maria Doria - Breaker #3",
+          "x": 39424,
+          "y": 5632,
+          "z": 77312,
+          "room": 76
+        },
+        {
+          "entityIndex": 183,
+          "type": "Key1_S_P",
+          "alias": "Doria_Key1",
+          "name": "Maria Doria - Rest Room Key",
+          "x": 81408,
+          "y": 6400,
+          "z": 59904,
+          "room": 93
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Living Quarters",
+      "file": "LIVING.TR2",
+      "sequence": 9,
+      "region": "Offshore",
+      "pickups": [
+        {
+          "entityIndex": 4,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 78336,
+          "y": 0,
+          "z": 88576,
+          "room": 2
+        },
+        {
+          "entityIndex": 24,
+          "type": "Automags_S_P",
+          "category": "weapon",
+          "x": 64000,
+          "y": 1792,
+          "z": 71168,
+          "room": 6
+        },
+        {
+          "entityIndex": 25,
+          "type": "Harpoon_S_P",
+          "category": "weapon",
+          "x": 64000,
+          "y": 1792,
+          "z": 74240,
+          "room": 6
+        },
+        {
+          "entityIndex": 29,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 66048,
+          "y": -4096,
+          "z": 79360,
+          "room": 11
+        },
+        {
+          "entityIndex": 30,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 66048,
+          "y": -4096,
+          "z": 79360,
+          "room": 11
+        },
+        {
+          "entityIndex": 32,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 73216,
+          "y": -4352,
+          "z": 91648,
+          "room": 12
+        },
+        {
+          "entityIndex": 68,
+          "type": "Shotgun_S_P",
+          "category": "weapon",
+          "x": 50688,
+          "y": -2816,
+          "z": 41472,
+          "room": 37
+        },
+        {
+          "entityIndex": 72,
+          "type": "Uzi_S_P",
+          "category": "weapon",
+          "x": 41472,
+          "y": -4096,
+          "z": 35328,
+          "room": 38
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 58,
+          "type": "Key1_S_P",
+          "alias": "LQ_Key1",
+          "name": "Living Quarters - Theatre Key",
+          "x": 67072,
+          "y": 512,
+          "z": 40448,
+          "room": 35
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "The Deck",
+      "file": "DECK.TR2",
+      "sequence": 10,
+      "region": "Offshore",
+      "pickups": [
+        {
+          "entityIndex": 9,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 62976,
+          "y": 5888,
+          "z": 49664,
+          "room": 15
+        },
+        {
+          "entityIndex": 10,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 62976,
+          "y": 5888,
+          "z": 49664,
+          "room": 15
+        },
+        {
+          "entityIndex": 12,
+          "type": "Uzi_S_P",
+          "category": "weapon",
+          "x": 51712,
+          "y": 5888,
+          "z": 50688,
+          "room": 17
+        },
+        {
+          "entityIndex": 13,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 51712,
+          "y": 5888,
+          "z": 50688,
+          "room": 17
+        },
+        {
+          "entityIndex": 16,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 35328,
+          "y": -2048,
+          "z": 49664,
+          "room": 21
+        },
+        {
+          "entityIndex": 17,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 36352,
+          "y": -2048,
+          "z": 50688,
+          "room": 21
+        },
+        {
+          "entityIndex": 18,
+          "type": "GrenadeLauncher_S_P",
+          "category": "weapon",
+          "x": 36352,
+          "y": -2048,
+          "z": 50688,
+          "room": 21
+        },
+        {
+          "entityIndex": 34,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 50688,
+          "y": -7424,
+          "z": 60928,
+          "room": 47
+        },
+        {
+          "entityIndex": 35,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 50688,
+          "y": -7424,
+          "z": 60928,
+          "room": 47
+        },
+        {
+          "entityIndex": 37,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 29184,
+          "y": -7424,
+          "z": 60928,
+          "room": 48
+        },
+        {
+          "entityIndex": 38,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 61952,
+          "y": -256,
+          "z": 49664,
+          "room": 56
+        },
+        {
+          "entityIndex": 48,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 34304,
+          "y": -10240,
+          "z": 70144,
+          "room": 63
+        },
+        {
+          "entityIndex": 49,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 34304,
+          "y": -10240,
+          "z": 70144,
+          "room": 63
+        },
+        {
+          "entityIndex": 50,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 31232,
+          "y": -9216,
+          "z": 76288,
+          "room": 63
+        },
+        {
+          "entityIndex": 51,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 31616,
+          "y": -9216,
+          "z": 72192,
+          "room": 63
+        },
+        {
+          "entityIndex": 52,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 31616,
+          "y": -9216,
+          "z": 72192,
+          "room": 63
+        },
+        {
+          "entityIndex": 54,
+          "type": "Automags_S_P",
+          "category": "weapon",
+          "x": 40448,
+          "y": -10240,
+          "z": 75264,
+          "room": 65
+        },
+        {
+          "entityIndex": 55,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 40448,
+          "y": -10240,
+          "z": 75264,
+          "room": 65
+        },
+        {
+          "entityIndex": 71,
+          "type": "Shotgun_S_P",
+          "category": "weapon",
+          "x": 33280,
+          "y": 1792,
+          "z": 37376,
+          "room": 77
+        },
+        {
+          "entityIndex": 82,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 33280,
+          "y": 1792,
+          "z": 31232,
+          "room": 85
+        },
+        {
+          "entityIndex": 88,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 58880,
+          "y": 0,
+          "z": 59904,
+          "room": 92
+        },
+        {
+          "entityIndex": 93,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 23040,
+          "y": -11008,
+          "z": 59904,
+          "room": 97
+        },
+        {
+          "entityIndex": 101,
+          "type": "M16_S_P",
+          "category": "weapon",
+          "x": 42496,
+          "y": -10240,
+          "z": 61952,
+          "room": 110
+        },
+        {
+          "entityIndex": 102,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 42496,
+          "y": -10240,
+          "z": 61952,
+          "room": 110
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 8,
+          "type": "Key4_S_P",
+          "alias": "Deck_Key4",
+          "name": "The Deck - Cabin Key",
+          "x": 61952,
+          "y": 5376,
+          "z": 49664,
+          "room": 15
+        },
+        {
+          "entityIndex": 45,
+          "type": "Key3_S_P",
+          "alias": "Deck_Key3",
+          "name": "The Deck - Storage Key",
+          "x": 39424,
+          "y": -16512,
+          "z": 73216,
+          "room": 61
+        },
+        {
+          "entityIndex": 72,
+          "type": "Key2_S_P",
+          "alias": "Deck_Key2",
+          "name": "The Deck - Stern Key",
+          "x": 55808,
+          "y": 2816,
+          "z": 54784,
+          "room": 79
+        },
+        {
+          "entityIndex": 94,
+          "type": "Puzzle4_S_P",
+          "alias": "Deck_Puzzle4",
+          "name": "The Deck - The Seraph",
+          "x": 37376,
+          "y": 2048,
+          "z": 13824,
+          "room": 105
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Tibet",
+      "file": "SKIDOO.TR2",
+      "sequence": 11,
+      "region": "Tibet",
+      "pickups": [
+        {
+          "entityIndex": 0,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 66048,
+          "y": 6784,
+          "z": 33280,
+          "room": 1
+        },
+        {
+          "entityIndex": 7,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 73216,
+          "y": 1152,
+          "z": 40448,
+          "room": 12
+        },
+        {
+          "entityIndex": 8,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 73216,
+          "y": 1152,
+          "z": 40448,
+          "room": 12
+        },
+        {
+          "entityIndex": 9,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 67072,
+          "y": 1664,
+          "z": 38400,
+          "room": 12
+        },
+        {
+          "entityIndex": 22,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 86528,
+          "y": -896,
+          "z": 85504,
+          "room": 41
+        },
+        {
+          "entityIndex": 23,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 91648,
+          "y": -1280,
+          "z": 73216,
+          "room": 41
+        },
+        {
+          "entityIndex": 30,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 94720,
+          "y": -2688,
+          "z": 90624,
+          "room": 52
+        },
+        {
+          "entityIndex": 31,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 94720,
+          "y": -2688,
+          "z": 90624,
+          "room": 52
+        },
+        {
+          "entityIndex": 33,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 40448,
+          "y": 1408,
+          "z": 52736,
+          "room": 53
+        },
+        {
+          "entityIndex": 59,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 82432,
+          "y": 1024,
+          "z": 3584,
+          "room": 80
+        },
+        {
+          "entityIndex": 60,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 82432,
+          "y": 1024,
+          "z": 3584,
+          "room": 80
+        },
+        {
+          "entityIndex": 80,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 85504,
+          "y": 1280,
+          "z": 44544,
+          "room": 95
+        },
+        {
+          "entityIndex": 81,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 85504,
+          "y": 1280,
+          "z": 43520,
+          "room": 95
+        },
+        {
+          "entityIndex": 82,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 84480,
+          "y": 1280,
+          "z": 43520,
+          "room": 95
+        },
+        {
+          "entityIndex": 93,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 72192,
+          "y": 1024,
+          "z": 43520,
+          "room": 131
+        },
+        {
+          "entityIndex": 94,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 72192,
+          "y": 1024,
+          "z": 43520,
+          "room": 131
+        },
+        {
+          "entityIndex": 95,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 73216,
+          "y": 1024,
+          "z": 44544,
+          "room": 131
+        },
+        {
+          "entityIndex": 96,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 73216,
+          "y": 1024,
+          "z": 44544,
+          "room": 131
+        },
+        {
+          "entityIndex": 97,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 68736,
+          "y": 1024,
+          "z": 45568,
+          "room": 131
+        },
+        {
+          "entityIndex": 98,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 68736,
+          "y": 1024,
+          "z": 45568,
+          "room": 131
+        },
+        {
+          "entityIndex": 106,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 29184,
+          "y": 7936,
+          "z": 95744,
+          "room": 148
+        },
+        {
+          "entityIndex": 107,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 29184,
+          "y": 7936,
+          "z": 95744,
+          "room": 148
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 48,
+          "type": "Key2_S_P",
+          "alias": "Tibet_Key2",
+          "name": "Tibet - Hut Key",
+          "x": 12800,
+          "y": 1024,
+          "z": 57856,
+          "room": 70
+        },
+        {
+          "entityIndex": 68,
+          "type": "Key1_S_P",
+          "alias": "Tibet_Key1",
+          "name": "Tibet - Drawbridge Key",
+          "x": 1536,
+          "y": 2816,
+          "z": 87552,
+          "room": 87
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Barkhang Monastery",
+      "file": "MONASTRY.TR2",
+      "sequence": 12,
+      "region": "Tibet",
+      "pickups": [
+        {
+          "entityIndex": 26,
+          "type": "Uzi_S_P",
+          "category": "weapon",
+          "x": 78336,
+          "y": 0,
+          "z": 29184,
+          "room": 10
+        },
+        {
+          "entityIndex": 27,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 78336,
+          "y": 0,
+          "z": 29184,
+          "room": 10
+        },
+        {
+          "entityIndex": 36,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 83456,
+          "y": -256,
+          "z": 31232,
+          "room": 17
+        },
+        {
+          "entityIndex": 37,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 83456,
+          "y": -256,
+          "z": 28160,
+          "room": 17
+        },
+        {
+          "entityIndex": 40,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 50688,
+          "y": 0,
+          "z": 10752,
+          "room": 94
+        },
+        {
+          "entityIndex": 41,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 59904,
+          "y": 0,
+          "z": 18944,
+          "room": 104
+        },
+        {
+          "entityIndex": 42,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 50688,
+          "y": 0,
+          "z": 11776,
+          "room": 94
+        },
+        {
+          "entityIndex": 48,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 88576,
+          "y": 5120,
+          "z": 29184,
+          "room": 26
+        },
+        {
+          "entityIndex": 49,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 89600,
+          "y": 5120,
+          "z": 27136,
+          "room": 26
+        },
+        {
+          "entityIndex": 52,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 89600,
+          "y": 5120,
+          "z": 27136,
+          "room": 26
+        },
+        {
+          "entityIndex": 53,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 88576,
+          "y": 5120,
+          "z": 29184,
+          "room": 26
+        },
+        {
+          "entityIndex": 57,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 48640,
+          "y": 0,
+          "z": 48640,
+          "room": 37
+        },
+        {
+          "entityIndex": 58,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 49664,
+          "y": 0,
+          "z": 46592,
+          "room": 37
+        },
+        {
+          "entityIndex": 77,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 71168,
+          "y": -3072,
+          "z": 57856,
+          "room": 41
+        },
+        {
+          "entityIndex": 79,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 71168,
+          "y": -3072,
+          "z": 55808,
+          "room": 41
+        },
+        {
+          "entityIndex": 91,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 67072,
+          "y": 0,
+          "z": 25088,
+          "room": 46
+        },
+        {
+          "entityIndex": 92,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 66048,
+          "y": 0,
+          "z": 24064,
+          "room": 46
+        },
+        {
+          "entityIndex": 93,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 65024,
+          "y": 0,
+          "z": 24064,
+          "room": 46
+        },
+        {
+          "entityIndex": 97,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 39424,
+          "y": -5120,
+          "z": 34304,
+          "room": 50
+        },
+        {
+          "entityIndex": 119,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 64000,
+          "y": -5632,
+          "z": 23040,
+          "room": 107
+        },
+        {
+          "entityIndex": 120,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 61952,
+          "y": 0,
+          "z": 25088,
+          "room": 104
+        },
+        {
+          "entityIndex": 121,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 29184,
+          "y": 0,
+          "z": 33280,
+          "room": 54
+        },
+        {
+          "entityIndex": 129,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 52736,
+          "y": 0,
+          "z": 37376,
+          "room": 61
+        },
+        {
+          "entityIndex": 133,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 53760,
+          "y": -1024,
+          "z": 38400,
+          "room": 61
+        },
+        {
+          "entityIndex": 134,
+          "type": "HarpoonAmmo_S_P",
+          "category": "ammo",
+          "x": 53760,
+          "y": -1024,
+          "z": 38400,
+          "room": 61
+        },
+        {
+          "entityIndex": 157,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 56832,
+          "y": 0,
+          "z": 55808,
+          "room": 75
+        },
+        {
+          "entityIndex": 158,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 54784,
+          "y": 0,
+          "z": 55808,
+          "room": 75
+        },
+        {
+          "entityIndex": 159,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 53760,
+          "y": 0,
+          "z": 55808,
+          "room": 75
+        },
+        {
+          "entityIndex": 160,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 65024,
+          "y": -4608,
+          "z": 62976,
+          "room": 76
+        },
+        {
+          "entityIndex": 181,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 15872,
+          "y": -9856,
+          "z": 3584,
+          "room": 114
+        },
+        {
+          "entityIndex": 182,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 20992,
+          "y": -8064,
+          "z": 3584,
+          "room": 114
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 31,
+          "type": "Key3_S_P",
+          "alias": "Barkhang_Key3",
+          "name": "Barkhang Monastery - Rooftops Key",
+          "x": 80384,
+          "y": -512,
+          "z": 34304,
+          "room": 14
+        },
+        {
+          "entityIndex": 111,
+          "type": "Puzzle1_S_P",
+          "alias": "Barkhang_Puzzle1",
+          "name": "Barkhang Monastery - Wheel",
+          "x": 34304,
+          "y": -1024,
+          "z": 34304,
+          "room": 54
+        },
+        {
+          "entityIndex": 123,
+          "type": "Puzzle1_S_P",
+          "alias": "Barkhang_Puzzle1_2",
+          "name": "Barkhang Monastery - Wheel #2",
+          "x": 78336,
+          "y": -4608,
+          "z": 68096,
+          "room": 55
+        },
+        {
+          "entityIndex": 140,
+          "type": "Key1_S_P",
+          "alias": "Barkhang_Key1",
+          "name": "Barkhang Monastery - Strongroom Key",
+          "x": 61952,
+          "y": -512,
+          "z": 48640,
+          "room": 66
+        },
+        {
+          "entityIndex": 145,
+          "type": "Puzzle2_S_P",
+          "alias": "Barkhang_Puzzle2",
+          "name": "Barkhang Monastery - Gemstone",
+          "x": 64000,
+          "y": -512,
+          "z": 61952,
+          "room": 70
+        },
+        {
+          "entityIndex": 146,
+          "type": "Puzzle2_S_P",
+          "alias": "Barkhang_Puzzle2_2",
+          "name": "Barkhang Monastery - Gemstone #2",
+          "x": 62976,
+          "y": -512,
+          "z": 61952,
+          "room": 70
+        },
+        {
+          "entityIndex": 176,
+          "type": "Key4_S_P",
+          "alias": "Barkhang_Key4",
+          "name": "Barkhang Monastery - Main Hall Key",
+          "x": 57856,
+          "y": -6144,
+          "z": 28160,
+          "room": 107
+        },
+        {
+          "entityIndex": 192,
+          "type": "Puzzle1_S_P",
+          "alias": "Barkhang_Puzzle1_3",
+          "name": "Barkhang Monastery - Wheel #3",
+          "x": 66048,
+          "y": -12032,
+          "z": 70144,
+          "room": 142
+        },
+        {
+          "entityIndex": 196,
+          "type": "Puzzle1_S_P",
+          "alias": "Barkhang_Puzzle1_4",
+          "name": "Barkhang Monastery - Wheel #4",
+          "x": 6656,
+          "y": -11008,
+          "z": 13824,
+          "room": 147
+        },
+        {
+          "entityIndex": 201,
+          "type": "Puzzle1_S_P",
+          "alias": "Barkhang_Puzzle1_5",
+          "name": "Barkhang Monastery - Wheel #5",
+          "x": 38400,
+          "y": 2048,
+          "z": 48640,
+          "room": 151
+        },
+        {
+          "entityIndex": 202,
+          "type": "Key2_S_P",
+          "alias": "Barkhang_Key2",
+          "name": "Barkhang Monastery - Trapdoor Key",
+          "x": 25088,
+          "y": -256,
+          "z": 50688,
+          "room": 153
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Catacombs of the Talion",
+      "file": "CATACOMB.TR2",
+      "sequence": 13,
+      "region": "Tibet",
+      "pickups": [
+        {
+          "entityIndex": 11,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 12800,
+          "y": -4096,
+          "z": 42496,
+          "room": 5
+        },
+        {
+          "entityIndex": 16,
+          "type": "Uzi_S_P",
+          "category": "weapon",
+          "x": 17920,
+          "y": -256,
+          "z": 44544,
+          "room": 7
+        },
+        {
+          "entityIndex": 17,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 16896,
+          "y": -512,
+          "z": 44544,
+          "room": 7
+        },
+        {
+          "entityIndex": 20,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 17920,
+          "y": -256,
+          "z": 44544,
+          "room": 7
+        },
+        {
+          "entityIndex": 21,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 16896,
+          "y": -512,
+          "z": 44544,
+          "room": 7
+        },
+        {
+          "entityIndex": 28,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 55808,
+          "y": 11520,
+          "z": 46592,
+          "room": 10
+        },
+        {
+          "entityIndex": 29,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 55808,
+          "y": 11520,
+          "z": 46592,
+          "room": 10
+        },
+        {
+          "entityIndex": 30,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 55808,
+          "y": 11520,
+          "z": 46592,
+          "room": 10
+        },
+        {
+          "entityIndex": 44,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 55808,
+          "y": 11520,
+          "z": 59904,
+          "room": 14
+        },
+        {
+          "entityIndex": 45,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 55808,
+          "y": 11520,
+          "z": 59904,
+          "room": 14
+        },
+        {
+          "entityIndex": 46,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 55808,
+          "y": 11520,
+          "z": 59904,
+          "room": 14
+        },
+        {
+          "entityIndex": 47,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 37376,
+          "y": 7168,
+          "z": 39424,
+          "room": 16
+        },
+        {
+          "entityIndex": 55,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 37376,
+          "y": 8192,
+          "z": 51712,
+          "room": 18
+        },
+        {
+          "entityIndex": 56,
+          "type": "Automags_S_P",
+          "category": "weapon",
+          "x": 32256,
+          "y": 8192,
+          "z": 50688,
+          "room": 18
+        },
+        {
+          "entityIndex": 57,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 37376,
+          "y": 8192,
+          "z": 51712,
+          "room": 18
+        },
+        {
+          "entityIndex": 58,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": 8192,
+          "z": 50688,
+          "room": 18
+        },
+        {
+          "entityIndex": 85,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 44544,
+          "y": 5632,
+          "z": 60928,
+          "room": 46
+        },
+        {
+          "entityIndex": 86,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 44544,
+          "y": 5632,
+          "z": 60928,
+          "room": 46
+        },
+        {
+          "entityIndex": 104,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 40448,
+          "y": 8064,
+          "z": 54784,
+          "room": 62
+        },
+        {
+          "entityIndex": 106,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 40448,
+          "y": 8064,
+          "z": 54784,
+          "room": 62
+        },
+        {
+          "entityIndex": 113,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": 8192,
+          "z": 69120,
+          "room": 70
+        },
+        {
+          "entityIndex": 114,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 31232,
+          "y": 8192,
+          "z": 69120,
+          "room": 70
+        },
+        {
+          "entityIndex": 115,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": 8192,
+          "z": 69120,
+          "room": 70
+        },
+        {
+          "entityIndex": 116,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 37376,
+          "y": 8192,
+          "z": 69120,
+          "room": 70
+        },
+        {
+          "entityIndex": 117,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 37376,
+          "y": 8192,
+          "z": 69120,
+          "room": 70
+        },
+        {
+          "entityIndex": 136,
+          "type": "GrenadeLauncher_S_P",
+          "category": "weapon",
+          "x": 57856,
+          "y": 9216,
+          "z": 55808,
+          "room": 83
+        },
+        {
+          "entityIndex": 152,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 27136,
+          "y": 8192,
+          "z": 49664,
+          "room": 108
+        },
+        {
+          "entityIndex": 153,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 27136,
+          "y": 8192,
+          "z": 49664,
+          "room": 108
+        },
+        {
+          "entityIndex": 155,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 28160,
+          "y": 8192,
+          "z": 48640,
+          "room": 108
+        },
+        {
+          "entityIndex": 156,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 28160,
+          "y": 8192,
+          "z": 48640,
+          "room": 108
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 9,
+          "type": "Puzzle1_S_P",
+          "alias": "CoT_Puzzle1",
+          "name": "Catacombs of the Talion - Tibetan Mask",
+          "x": 27136,
+          "y": 1024,
+          "z": 44544,
+          "room": 2
+        },
+        {
+          "entityIndex": 76,
+          "type": "Quest1_S_P",
+          "alias": "CoT_Quest1",
+          "name": "Catacombs of the Talion - Gong Hammer",
+          "x": 20608,
+          "y": 9984,
+          "z": 45568,
+          "room": 37
+        },
+        {
+          "entityIndex": 112,
+          "type": "Puzzle1_S_P",
+          "alias": "CoT_Puzzle1_2",
+          "name": "Catacombs of the Talion - Tibetan Mask #2",
+          "x": 19968,
+          "y": 10496,
+          "z": 54784,
+          "room": 67
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Ice Palace",
+      "file": "ICECAVE.TR2",
+      "sequence": 14,
+      "region": "Tibet",
+      "pickups": [
+        {
+          "entityIndex": 3,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 76288,
+          "y": -1024,
+          "z": 64000,
+          "room": 5
+        },
+        {
+          "entityIndex": 22,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 28160,
+          "y": 8192,
+          "z": 61952,
+          "room": 22
+        },
+        {
+          "entityIndex": 23,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 28160,
+          "y": 8192,
+          "z": 61952,
+          "room": 22
+        },
+        {
+          "entityIndex": 56,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 59904,
+          "y": 6656,
+          "z": 62976,
+          "room": 34
+        },
+        {
+          "entityIndex": 57,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 59904,
+          "y": 6656,
+          "z": 62976,
+          "room": 34
+        },
+        {
+          "entityIndex": 67,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 67072,
+          "y": 2816,
+          "z": 72192,
+          "room": 54
+        },
+        {
+          "entityIndex": 68,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 67072,
+          "y": 2816,
+          "z": 72192,
+          "room": 54
+        },
+        {
+          "entityIndex": 71,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 31232,
+          "y": 7296,
+          "z": 25088,
+          "room": 56
+        },
+        {
+          "entityIndex": 82,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 52736,
+          "y": 5632,
+          "z": 50688,
+          "room": 59
+        },
+        {
+          "entityIndex": 86,
+          "type": "GrenadeLauncher_S_P",
+          "category": "weapon",
+          "x": 45568,
+          "y": 7936,
+          "z": 27136,
+          "room": 61
+        },
+        {
+          "entityIndex": 87,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 45568,
+          "y": 7936,
+          "z": 30208,
+          "room": 61
+        },
+        {
+          "entityIndex": 88,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 45568,
+          "y": 7936,
+          "z": 30208,
+          "room": 61
+        },
+        {
+          "entityIndex": 89,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 45568,
+          "y": 7936,
+          "z": 30208,
+          "room": 61
+        },
+        {
+          "entityIndex": 90,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 71168,
+          "y": 5632,
+          "z": 77312,
+          "room": 62
+        },
+        {
+          "entityIndex": 93,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 52736,
+          "y": 5632,
+          "z": 62976,
+          "room": 65
+        },
+        {
+          "entityIndex": 102,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 30208,
+          "y": 10496,
+          "z": 57856,
+          "room": 71
+        },
+        {
+          "entityIndex": 103,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 30208,
+          "y": 10496,
+          "z": 57856,
+          "room": 71
+        },
+        {
+          "entityIndex": 127,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 57856,
+          "y": 3072,
+          "z": 49664,
+          "room": 90
+        },
+        {
+          "entityIndex": 130,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 62976,
+          "y": 5632,
+          "z": 67072,
+          "room": 92
+        },
+        {
+          "entityIndex": 133,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 65024,
+          "y": -256,
+          "z": 62976,
+          "room": 98
+        },
+        {
+          "entityIndex": 149,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 68096,
+          "y": 11520,
+          "z": 42496,
+          "room": 143
+        },
+        {
+          "entityIndex": 150,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 68096,
+          "y": 11520,
+          "z": 42496,
+          "room": 143
+        },
+        {
+          "entityIndex": 151,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 68096,
+          "y": 11520,
+          "z": 41472,
+          "room": 143
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 36,
+          "type": "Key2_S_P",
+          "alias": "IcePalace_Key2",
+          "name": "Ice Palace - Gong Hammer",
+          "x": 31232,
+          "y": 9984,
+          "z": 48640,
+          "room": 29
+        },
+        {
+          "entityIndex": 138,
+          "type": "Puzzle1_S_P",
+          "alias": "IcePalace_Puzzle1",
+          "name": "Ice Palace - Tibetan Mask",
+          "x": 60928,
+          "y": 512,
+          "z": 51712,
+          "room": 100
+        },
+        {
+          "entityIndex": 145,
+          "type": "Quest2_S_P",
+          "alias": "IcePalace_Quest2",
+          "name": "Ice Palace - Talion",
+          "x": 57856,
+          "y": 9984,
+          "z": 30208,
+          "room": 127
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Xian Caves",
+      "file": "EMPRTOMB.TR2",
+      "sequence": 15,
+      "region": "China",
+      "pickups": [
+        {
+          "entityIndex": 0,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 16896,
+          "y": 26624,
+          "z": 38400,
+          "room": 1
+        },
+        {
+          "entityIndex": 18,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": 21888,
+          "z": 50688,
+          "room": 14
+        },
+        {
+          "entityIndex": 28,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 10752,
+          "y": 19968,
+          "z": 40448,
+          "room": 20
+        },
+        {
+          "entityIndex": 38,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 11776,
+          "y": 23296,
+          "z": 46592,
+          "room": 27
+        },
+        {
+          "entityIndex": 39,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 27136,
+          "y": 29696,
+          "z": 35328,
+          "room": 29
+        },
+        {
+          "entityIndex": 52,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 47616,
+          "y": 14336,
+          "z": 7680,
+          "room": 35
+        },
+        {
+          "entityIndex": 53,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 47616,
+          "y": 14336,
+          "z": 7680,
+          "room": 35
+        },
+        {
+          "entityIndex": 69,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 58880,
+          "y": 21760,
+          "z": 43520,
+          "room": 41
+        },
+        {
+          "entityIndex": 81,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": 17920,
+          "z": 52736,
+          "room": 49
+        },
+        {
+          "entityIndex": 93,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 77312,
+          "y": 26752,
+          "z": 43136,
+          "room": 61
+        },
+        {
+          "entityIndex": 94,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 77312,
+          "y": 26752,
+          "z": 43136,
+          "room": 61
+        },
+        {
+          "entityIndex": 103,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 78336,
+          "y": 23552,
+          "z": 42496,
+          "room": 65
+        },
+        {
+          "entityIndex": 133,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 75264,
+          "y": 32256,
+          "z": 56192,
+          "room": 81
+        },
+        {
+          "entityIndex": 137,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 24064,
+          "y": 12288,
+          "z": 61952,
+          "room": 88
+        },
+        {
+          "entityIndex": 157,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 43520,
+          "y": 18688,
+          "z": 37376,
+          "room": 93
+        },
+        {
+          "entityIndex": 160,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 26496,
+          "y": 12288,
+          "z": 51712,
+          "room": 98
+        },
+        {
+          "entityIndex": 161,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 26112,
+          "y": 12288,
+          "z": 52096,
+          "room": 98
+        },
+        {
+          "entityIndex": 162,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 26112,
+          "y": 12288,
+          "z": 52096,
+          "room": 98
+        },
+        {
+          "entityIndex": 181,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 95744,
+          "y": 30848,
+          "z": 40448,
+          "room": 111
+        },
+        {
+          "entityIndex": 196,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 46592,
+          "y": 14848,
+          "z": 10752,
+          "room": 121
+        },
+        {
+          "entityIndex": 202,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 77312,
+          "y": 26368,
+          "z": 52736,
+          "room": 132
+        },
+        {
+          "entityIndex": 203,
+          "type": "GrenadeLauncher_S_P",
+          "category": "weapon",
+          "x": 77312,
+          "y": 26368,
+          "z": 52736,
+          "room": 132
+        },
+        {
+          "entityIndex": 213,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 4608,
+          "y": 17408,
+          "z": 18944,
+          "room": 152
+        },
+        {
+          "entityIndex": 217,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 4608,
+          "y": 19456,
+          "z": 11776,
+          "room": 156
+        },
+        {
+          "entityIndex": 239,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 78336,
+          "y": 24832,
+          "z": 42496,
+          "room": 192
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 88,
+          "type": "Key2_S_P",
+          "alias": "Xian_Key2",
+          "name": "Xian Caves - Gold Key",
+          "x": 30208,
+          "y": 29696,
+          "z": 35328,
+          "room": 57
+        },
+        {
+          "entityIndex": 95,
+          "type": "Puzzle1_S_P",
+          "alias": "Xian_Puzzle1",
+          "name": "Xian Caves - The Dragon Seal",
+          "x": 48640,
+          "y": 17664,
+          "z": 15872,
+          "room": 62
+        },
+        {
+          "entityIndex": 205,
+          "type": "Key4_S_P",
+          "alias": "Xian_Key4",
+          "name": "Xian Caves - Main Chamber Key",
+          "x": 28160,
+          "y": -12288,
+          "z": 69120,
+          "room": 135
+        },
+        {
+          "entityIndex": 212,
+          "type": "Key3_S_P",
+          "alias": "Xian_Key3",
+          "name": "Xian Caves - Silver Key",
+          "x": 17920,
+          "y": 14080,
+          "z": 26112,
+          "room": 151
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Dragon's Lair",
+      "file": "FLOATING.TR2",
+      "sequence": 16,
+      "region": "China",
+      "pickups": [
+        {
+          "entityIndex": 4,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 71168,
+          "y": -5632,
+          "z": 65024,
+          "room": 2
+        },
+        {
+          "entityIndex": 5,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 71168,
+          "y": -5632,
+          "z": 65024,
+          "room": 2
+        },
+        {
+          "entityIndex": 6,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 74240,
+          "y": -5632,
+          "z": 65024,
+          "room": 2
+        },
+        {
+          "entityIndex": 7,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 74240,
+          "y": -5632,
+          "z": 65024,
+          "room": 2
+        },
+        {
+          "entityIndex": 19,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 51328,
+          "y": -7168,
+          "z": 59904,
+          "room": 21
+        },
+        {
+          "entityIndex": 20,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 51328,
+          "y": -7168,
+          "z": 54784,
+          "room": 21
+        },
+        {
+          "entityIndex": 21,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 48640,
+          "y": -7168,
+          "z": 60928,
+          "room": 24
+        },
+        {
+          "entityIndex": 22,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 48640,
+          "y": -7168,
+          "z": 60928,
+          "room": 24
+        },
+        {
+          "entityIndex": 26,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 32256,
+          "y": 3328,
+          "z": 94720,
+          "room": 26
+        },
+        {
+          "entityIndex": 27,
+          "type": "AutoAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": 3328,
+          "z": 94720,
+          "room": 26
+        },
+        {
+          "entityIndex": 45,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 39424,
+          "y": -3072,
+          "z": 49664,
+          "room": 63
+        },
+        {
+          "entityIndex": 55,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 33280,
+          "y": -3840,
+          "z": 69120,
+          "room": 75
+        },
+        {
+          "entityIndex": 56,
+          "type": "M16Ammo_S_P",
+          "category": "ammo",
+          "x": 33280,
+          "y": -3840,
+          "z": 69120,
+          "room": 75
+        },
+        {
+          "entityIndex": 78,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 19968,
+          "y": -9728,
+          "z": 74240,
+          "room": 90
+        },
+        {
+          "entityIndex": 84,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 79360,
+          "y": -7456,
+          "z": 53376,
+          "room": 99
+        },
+        {
+          "entityIndex": 96,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 27136,
+          "y": 4224,
+          "z": 68096,
+          "room": 118
+        },
+        {
+          "entityIndex": 105,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 26112,
+          "y": 2304,
+          "z": 96768,
+          "room": 129
+        },
+        {
+          "entityIndex": 106,
+          "type": "Grenades_S_P",
+          "category": "ammo",
+          "x": 26112,
+          "y": 2304,
+          "z": 96768,
+          "room": 129
+        },
+        {
+          "entityIndex": 112,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 38400,
+          "y": 4608,
+          "z": 83456,
+          "room": 145
+        },
+        {
+          "entityIndex": 113,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 38400,
+          "y": 4608,
+          "z": 83456,
+          "room": 145
+        },
+        {
+          "entityIndex": 117,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 26112,
+          "y": 4608,
+          "z": 82432,
+          "room": 146
+        },
+        {
+          "entityIndex": 118,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 26112,
+          "y": 4608,
+          "z": 82432,
+          "room": 146
+        },
+        {
+          "entityIndex": 123,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 30208,
+          "y": 4608,
+          "z": 77312,
+          "room": 148
+        },
+        {
+          "entityIndex": 124,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 34304,
+          "y": 4608,
+          "z": 77312,
+          "room": 148
+        },
+        {
+          "entityIndex": 125,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 30208,
+          "y": 4608,
+          "z": 77312,
+          "room": 148
+        },
+        {
+          "entityIndex": 126,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 34304,
+          "y": 4608,
+          "z": 77312,
+          "room": 148
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 1,
+          "type": "Puzzle1_S_P",
+          "alias": "Floater_Puzzle1",
+          "name": "Dragon's Lair - Mystic Plaque",
+          "x": 74240,
+          "y": -3584,
+          "z": 56832,
+          "room": 1
+        },
+        {
+          "entityIndex": 3,
+          "type": "Puzzle2_S_P",
+          "alias": "Floater_Puzzle2",
+          "name": "Dragon's Lair - Mystic Plaque",
+          "x": 73216,
+          "y": -5888,
+          "z": 65024,
+          "room": 2
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "House of the Spirit",
+      "file": "XIAN.TR2",
+      "sequence": 17,
+      "region": "China",
+      "pickups": [
+        {
+          "entityIndex": 0,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 74240,
+          "y": -9472,
+          "z": 77312,
+          "room": 0
+        },
+        {
+          "entityIndex": 1,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 72192,
+          "y": -9472,
+          "z": 77312,
+          "room": 0
+        },
+        {
+          "entityIndex": 2,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 72192,
+          "y": -9472,
+          "z": 77312,
+          "room": 0
+        },
+        {
+          "entityIndex": 13,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 65024,
+          "y": -8960,
+          "z": 72192,
+          "room": 1
+        },
+        {
+          "entityIndex": 14,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 54784,
+          "y": -8960,
+          "z": 69120,
+          "room": 1
+        },
+        {
+          "entityIndex": 15,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 57856,
+          "y": -8960,
+          "z": 72192,
+          "room": 1
+        },
+        {
+          "entityIndex": 16,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 57856,
+          "y": -8960,
+          "z": 72192,
+          "room": 1
+        },
+        {
+          "entityIndex": 17,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 57856,
+          "y": -8960,
+          "z": 59904,
+          "room": 1
+        },
+        {
+          "entityIndex": 18,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 57856,
+          "y": -8960,
+          "z": 59904,
+          "room": 1
+        },
+        {
+          "entityIndex": 19,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 65024,
+          "y": -8960,
+          "z": 59904,
+          "room": 1
+        },
+        {
+          "entityIndex": 20,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 65024,
+          "y": -8960,
+          "z": 59904,
+          "room": 1
+        },
+        {
+          "entityIndex": 29,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 56832,
+          "y": -4864,
+          "z": 36352,
+          "room": 5
+        },
+        {
+          "entityIndex": 30,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 56832,
+          "y": -4864,
+          "z": 36352,
+          "room": 5
+        },
+        {
+          "entityIndex": 31,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 57856,
+          "y": -4864,
+          "z": 39424,
+          "room": 5
+        },
+        {
+          "entityIndex": 32,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 49664,
+          "y": -4864,
+          "z": 34304,
+          "room": 13
+        },
+        {
+          "entityIndex": 33,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 49664,
+          "y": -4864,
+          "z": 34304,
+          "room": 13
+        },
+        {
+          "entityIndex": 34,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 45568,
+          "y": -4864,
+          "z": 35328,
+          "room": 13
+        },
+        {
+          "entityIndex": 35,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 55808,
+          "y": -4864,
+          "z": 45568,
+          "room": 14
+        },
+        {
+          "entityIndex": 36,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 55808,
+          "y": -4864,
+          "z": 45568,
+          "room": 14
+        },
+        {
+          "entityIndex": 37,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 58880,
+          "y": -4864,
+          "z": 41472,
+          "room": 14
+        },
+        {
+          "entityIndex": 38,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 46592,
+          "y": -4864,
+          "z": 44544,
+          "room": 15
+        },
+        {
+          "entityIndex": 39,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 46592,
+          "y": -4864,
+          "z": 44544,
+          "room": 15
+        },
+        {
+          "entityIndex": 40,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 51712,
+          "y": -4864,
+          "z": 43520,
+          "room": 15
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 6,
+          "type": "Puzzle1_S_P",
+          "alias": "Lair_Puzzle1",
+          "name": "House of the Spirit - Mystic Plaque",
+          "x": 54784,
+          "y": -8960,
+          "z": 62976,
+          "room": 1
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Home Sweet Home",
+      "file": "HOUSE.TR2",
+      "sequence": 18,
+      "region": "Home",
+      "pickups": [
+        {
+          "entityIndex": 2,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 56832,
+          "y": 2560,
+          "z": 57472,
+          "room": 1
+        },
+        {
+          "entityIndex": 3,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 56832,
+          "y": 2560,
+          "z": 57856,
+          "room": 1
+        },
+        {
+          "entityIndex": 22,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 28160,
+          "y": 0,
+          "z": 62976,
+          "room": 27
+        },
+        {
+          "entityIndex": 56,
+          "type": "Shotgun_S_P",
+          "category": "weapon",
+          "x": 30208,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 57,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 58,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 59,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 60,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 61,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 66048,
+          "room": 57
+        },
+        {
+          "entityIndex": 62,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 66048,
+          "room": 57
+        },
+        {
+          "entityIndex": 63,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 30208,
+          "y": -256,
+          "z": 65664,
+          "room": 57
+        },
+        {
+          "entityIndex": 64,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 30592,
+          "y": -256,
+          "z": 66048,
+          "room": 57
+        },
+        {
+          "entityIndex": 65,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 32256,
+          "y": -256,
+          "z": 66432,
+          "room": 57
+        },
+        {
+          "entityIndex": 66,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 30208,
+          "y": -256,
+          "z": 66432,
+          "room": 57
+        },
+        {
+          "entityIndex": 67,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 68,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 69,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 70,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 66048,
+          "room": 57
+        },
+        {
+          "entityIndex": 71,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 72,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 30208,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 73,
+          "type": "Flares_S_P",
+          "category": "pickup",
+          "x": 29824,
+          "y": -256,
+          "z": 66048,
+          "room": 57
+        },
+        {
+          "entityIndex": 74,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 75,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 76,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 77,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 78,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 30208,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 79,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 30208,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 80,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 30208,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 81,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 82,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 66048,
+          "room": 57
+        },
+        {
+          "entityIndex": 83,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 66048,
+          "room": 57
+        },
+        {
+          "entityIndex": 84,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 66048,
+          "room": 57
+        },
+        {
+          "entityIndex": 85,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 30208,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 86,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 30208,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 87,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 88,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 89,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 90,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 91,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 66048,
+          "room": 57
+        },
+        {
+          "entityIndex": 92,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 66048,
+          "room": 57
+        },
+        {
+          "entityIndex": 93,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 30208,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 94,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 95,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        },
+        {
+          "entityIndex": 96,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -256,
+          "z": 66048,
+          "room": 57
+        },
+        {
+          "entityIndex": 97,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 30208,
+          "y": -256,
+          "z": 67072,
+          "room": 57
+        }
+      ],
+      "keyItems": [],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    }
+  ],
+  "levelSequence": [
+    "WALL.TR2",
+    "BOAT.TR2",
+    "VENICE.TR2",
+    "OPERA.TR2",
+    "RIG.TR2",
+    "PLATFORM.TR2",
+    "UNWATER.TR2",
+    "KEEL.TR2",
+    "LIVING.TR2",
+    "DECK.TR2",
+    "SKIDOO.TR2",
+    "MONASTRY.TR2",
+    "CATACOMB.TR2",
+    "ICECAVE.TR2",
+    "EMPRTOMB.TR2",
+    "FLOATING.TR2",
+    "XIAN.TR2",
+    "HOUSE.TR2"
+  ],
+  "keyDependencies": {
+    "gW_Key2": {
+      "level": "WALL.TR2",
+      "baseType": "Key2_S_P",
+      "unlocksRooms": []
+    },
+    "gW_Key1": {
+      "level": "WALL.TR2",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "venice_Key1": {
+      "level": "BOAT.TR2",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "venice_Key2": {
+      "level": "BOAT.TR2",
+      "baseType": "Key2_S_P",
+      "unlocksRooms": []
+    },
+    "venice_Key3": {
+      "level": "BOAT.TR2",
+      "baseType": "Key3_S_P",
+      "unlocksRooms": []
+    },
+    "bartoli_Key1": {
+      "level": "VENICE.TR2",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "bartoli_Key2": {
+      "level": "VENICE.TR2",
+      "baseType": "Key2_S_P",
+      "unlocksRooms": []
+    },
+    "opera_Puzzle2": {
+      "level": "OPERA.TR2",
+      "baseType": "Puzzle2_S_P",
+      "unlocksRooms": []
+    },
+    "opera_Puzzle1": {
+      "level": "OPERA.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "opera_Key1": {
+      "level": "OPERA.TR2",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "opera_Key1_2": {
+      "level": "OPERA.TR2",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "rig_Key2": {
+      "level": "RIG.TR2",
+      "baseType": "Key2_S_P",
+      "unlocksRooms": []
+    },
+    "rig_Key3": {
+      "level": "RIG.TR2",
+      "baseType": "Key3_S_P",
+      "unlocksRooms": []
+    },
+    "rig_Key1": {
+      "level": "RIG.TR2",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "dA_Puzzle1": {
+      "level": "PLATFORM.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "dA_Key1": {
+      "level": "PLATFORM.TR2",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "dA_Key4": {
+      "level": "PLATFORM.TR2",
+      "baseType": "Key4_S_P",
+      "unlocksRooms": []
+    },
+    "dA_Puzzle1_2": {
+      "level": "PLATFORM.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "doria_Key3": {
+      "level": "KEEL.TR2",
+      "baseType": "Key3_S_P",
+      "unlocksRooms": []
+    },
+    "doria_Puzzle1": {
+      "level": "KEEL.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "doria_Puzzle1_2": {
+      "level": "KEEL.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "doria_Key2": {
+      "level": "KEEL.TR2",
+      "baseType": "Key2_S_P",
+      "unlocksRooms": []
+    },
+    "doria_Puzzle1_3": {
+      "level": "KEEL.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "doria_Key1": {
+      "level": "KEEL.TR2",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "lQ_Key1": {
+      "level": "LIVING.TR2",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "deck_Key4": {
+      "level": "DECK.TR2",
+      "baseType": "Key4_S_P",
+      "unlocksRooms": []
+    },
+    "deck_Key3": {
+      "level": "DECK.TR2",
+      "baseType": "Key3_S_P",
+      "unlocksRooms": []
+    },
+    "deck_Key2": {
+      "level": "DECK.TR2",
+      "baseType": "Key2_S_P",
+      "unlocksRooms": []
+    },
+    "deck_Puzzle4": {
+      "level": "DECK.TR2",
+      "baseType": "Puzzle4_S_P",
+      "unlocksRooms": []
+    },
+    "tibet_Key2": {
+      "level": "SKIDOO.TR2",
+      "baseType": "Key2_S_P",
+      "unlocksRooms": []
+    },
+    "tibet_Key1": {
+      "level": "SKIDOO.TR2",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "barkhang_Key3": {
+      "level": "MONASTRY.TR2",
+      "baseType": "Key3_S_P",
+      "unlocksRooms": []
+    },
+    "barkhang_Puzzle1": {
+      "level": "MONASTRY.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "barkhang_Puzzle1_2": {
+      "level": "MONASTRY.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "barkhang_Key1": {
+      "level": "MONASTRY.TR2",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "barkhang_Puzzle2": {
+      "level": "MONASTRY.TR2",
+      "baseType": "Puzzle2_S_P",
+      "unlocksRooms": []
+    },
+    "barkhang_Puzzle2_2": {
+      "level": "MONASTRY.TR2",
+      "baseType": "Puzzle2_S_P",
+      "unlocksRooms": []
+    },
+    "barkhang_Key4": {
+      "level": "MONASTRY.TR2",
+      "baseType": "Key4_S_P",
+      "unlocksRooms": []
+    },
+    "barkhang_Puzzle1_3": {
+      "level": "MONASTRY.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "barkhang_Puzzle1_4": {
+      "level": "MONASTRY.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "barkhang_Puzzle1_5": {
+      "level": "MONASTRY.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "barkhang_Key2": {
+      "level": "MONASTRY.TR2",
+      "baseType": "Key2_S_P",
+      "unlocksRooms": []
+    },
+    "coT_Puzzle1": {
+      "level": "CATACOMB.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "coT_Quest1": {
+      "level": "CATACOMB.TR2",
+      "baseType": "Quest1_S_P",
+      "unlocksRooms": []
+    },
+    "coT_Puzzle1_2": {
+      "level": "CATACOMB.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "icePalace_Key2": {
+      "level": "ICECAVE.TR2",
+      "baseType": "Key2_S_P",
+      "unlocksRooms": []
+    },
+    "icePalace_Puzzle1": {
+      "level": "ICECAVE.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "icePalace_Quest2": {
+      "level": "ICECAVE.TR2",
+      "baseType": "Quest2_S_P",
+      "unlocksRooms": []
+    },
+    "xian_Key2": {
+      "level": "EMPRTOMB.TR2",
+      "baseType": "Key2_S_P",
+      "unlocksRooms": []
+    },
+    "xian_Puzzle1": {
+      "level": "EMPRTOMB.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "xian_Key4": {
+      "level": "EMPRTOMB.TR2",
+      "baseType": "Key4_S_P",
+      "unlocksRooms": []
+    },
+    "xian_Key3": {
+      "level": "EMPRTOMB.TR2",
+      "baseType": "Key3_S_P",
+      "unlocksRooms": []
+    },
+    "floater_Puzzle1": {
+      "level": "FLOATING.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "floater_Puzzle2": {
+      "level": "FLOATING.TR2",
+      "baseType": "Puzzle2_S_P",
+      "unlocksRooms": []
+    },
+    "lair_Puzzle1": {
+      "level": "XIAN.TR2",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    }
+  },
+  "itemDefinitions": {
+    "gW_K2_RustyKey": {
+      "id": 880250,
+      "name": "GW Rusty Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "gW_K1_GuardhouseKey": {
+      "id": 880291,
+      "name": "GW Guardhouse Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "venice_K1_BoathouseKey": {
+      "id": 881210,
+      "name": "Venice Boathouse Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "venice_K2_SteelKey": {
+      "id": 881353,
+      "name": "Venice Steel Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "venice_K3_IronKey": {
+      "id": 881502,
+      "name": "Venice Iron Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "bartoli_K1_LibraryKey": {
+      "id": 882241,
+      "name": "Bartoli Library Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "bartoli_K2_DetonatorKey": {
+      "id": 882385,
+      "name": "Bartoli Detonator Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "opera_P2_CircuitBoard": {
+      "id": 883377,
+      "name": "Opera Circuit Board",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "opera_P1_RelayBox": {
+      "id": 883395,
+      "name": "Opera Relay Box",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "opera_K1_OrnateKeyFans": {
+      "id": 883449,
+      "name": "Opera Ornate Key (Fans)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "opera_K1_OrnateKeyStart": {
+      "id": 883544,
+      "name": "Opera Ornate Key (Start)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "rig_K2_YellowPassCard": {
+      "id": 884193,
+      "name": "Rig Yellow Pass Card",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "rig_K1_RedPassCard": {
+      "id": 884238,
+      "name": "Rig Red Pass Card",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "rig_K3_GreenPassCard": {
+      "id": 884240,
+      "name": "Rig Green Pass Card",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "dA_P1_MachineChipMiddleRoom": {
+      "id": 885206,
+      "name": "DA Machine Chip (Middle Room)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "dA_K1_RedPassCard": {
+      "id": 885250,
+      "name": "DA Red Pass Card",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "dA_P1_MachineChipChopper": {
+      "id": 885299,
+      "name": "DA Machine Chip (Chopper)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "dA_K4_BluePassCard": {
+      "id": 885301,
+      "name": "DA Blue Pass Card",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "wreck_P1_RestroomBreaker": {
+      "id": 887298,
+      "name": "Doria Breaker (Restroom)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "wreck_P1_StaircaseBreaker": {
+      "id": 887304,
+      "name": "Doria Breaker (Staircase)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "wreck_K3_CabinKey": {
+      "id": 887324,
+      "name": "Doria Cabin Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "wreck_K2_RustyKey": {
+      "id": 887343,
+      "name": "Doria Rusty Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "wreck_P1_ShardRoomBreaker": {
+      "id": 887349,
+      "name": "Doria Breaker (Shard Room)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "wreck_K1_RestRoomKey": {
+      "id": 887407,
+      "name": "Doria Rest Room Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "lQ_K1_TheatreKey": {
+      "id": 888300,
+      "name": "LQ Theatre Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "deck_K4_CabinKey": {
+      "id": 889262,
+      "name": "Deck Cabin Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "deck_K2_SternKey": {
+      "id": 889368,
+      "name": "Deck Stern Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "deck_K3_StorageKey": {
+      "id": 889385,
+      "name": "Deck Storage Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "deck_P4_TheSeraph": {
+      "id": 889400,
+      "name": "Deck Seraph",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "tibet_K2_HutKey": {
+      "id": 890348,
+      "name": "Tibet Hut Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "tibet_K1_DrawbridgeKey": {
+      "id": 890379,
+      "name": "Tibet Drawbridge Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "barkhang_K3_RooftopsKey": {
+      "id": 891225,
+      "name": "Barkhang Rooftops Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "barkhang_P4_TheSeraph": {
+      "id": 891273,
+      "name": "Barkhang Seraph",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "barkhang_P1_BurnerRoomWheel": {
+      "id": 891306,
+      "name": "Barkhang Wheel (Burner Room)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "barkhang_K1_StrongroomKey": {
+      "id": 891328,
+      "name": "Barkhang Strongroom Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "barkhang_P1_RooftopWheel": {
+      "id": 891330,
+      "name": "Barkhang Wheel (Rooftop)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "barkhang_P2_WestGemstone": {
+      "id": 891332,
+      "name": "Barkhang Gemstone (West)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "barkhang_P2_EastGemstone": {
+      "id": 891338,
+      "name": "Barkhang Gemstone (East)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "barkhang_P1_LadderTowerWheel": {
+      "id": 891415,
+      "name": "Barkhang Wheel (Ladder Tower)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "barkhang_P1_OutsideWheel": {
+      "id": 891431,
+      "name": "Barkhang Wheel (Outside)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "barkhang_K4_MainHallKey": {
+      "id": 891464,
+      "name": "Barkhang Main Hall Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "barkhang_P1_PoolWheel": {
+      "id": 891485,
+      "name": "Barkhang Wheel (Pool)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "barkhang_K2_TrapdoorKey": {
+      "id": 891501,
+      "name": "Barkhang Trapdoor Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "coT_P1_TibetanMaskStart": {
+      "id": 892222,
+      "name": "CoT Tibetan Mask (Start)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "coT_Q1_GongHammer": {
+      "id": 892342,
+      "name": "CoT Gong Hammer",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "coT_P1_TibetanMaskUnderwater": {
+      "id": 892357,
+      "name": "CoT Tibetan Mask (Underwater)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "chicken_K2_GongHammer": {
+      "id": 893315,
+      "name": "Ice Palace Gong Hammer",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "chicken_P1_TibetanMask": {
+      "id": 893379,
+      "name": "Ice Palace Tibetan Mask",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "chicken_Q2_Talion": {
+      "id": 893503,
+      "name": "Ice Palace Talion",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "xian_P1_TheDragonSeal": {
+      "id": 894387,
+      "name": "Xian Dragon Seal",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "xian_K2_GoldKey": {
+      "id": 894427,
+      "name": "Xian Gold Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "xian_K4_MainChamberKey": {
+      "id": 894436,
+      "name": "Xian Main Chamber Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "xian_K3_SilverKey": {
+      "id": 894582,
+      "name": "Xian Silver Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "floater_P2_MysticPlaqueEast": {
+      "id": 895160,
+      "name": "Floater Mystic Plaque (East)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "floater_P1_MysticPlaqueWest": {
+      "id": 895232,
+      "name": "Floater Mystic Plaque (West)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "floater_P1_MysticPlaqueAltEnd": {
+      "id": 895443,
+      "name": "Floater Mystic Plaque (Alt End)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "lair_P1_MysticPlaque": {
+      "id": 896145,
+      "name": "Lair Mystic Plaque",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "coldWar_K1_GuardRoom": {
+      "id": 898163,
+      "name": "ColdWar Guard Room Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "coldWar_K2_ShaftB": {
+      "id": 898270,
+      "name": "ColdWar Shaft B Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "foolsGold_P1_CircuitBoard": {
+      "id": 899211,
+      "name": "FoolsGold Circuit Board",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "foolsGold_K1_End": {
+      "id": 899225,
+      "name": "FoolsGold Key (End)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "foolsGold_K4_CardKey2": {
+      "id": 899234,
+      "name": "FoolsGold Card Key 2",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "foolsGold_K1_Skidoo": {
+      "id": 899466,
+      "name": "FoolsGold Key (Skidoo)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "furnace_P3_GoldNugget": {
+      "id": 900242,
+      "name": "Furnace Gold Nugget",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "furnace_P1_Mask": {
+      "id": 900243,
+      "name": "Furnace Mask",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "vegas_K1_Winston": {
+      "id": 902256,
+      "name": "Vegas Key (Winston)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "vegas_K1_Pool": {
+      "id": 902324,
+      "name": "Vegas Key (Pool)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "vegas_P3_CircuitBoard": {
+      "id": 902361,
+      "name": "Vegas Circuit Board",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "vegas_P1_ElevatorJunction": {
+      "id": 902362,
+      "name": "Vegas Elevator Junction",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "shotgun_S_P": {
+      "id": 870136,
+      "name": "Shotgun",
+      "category": "weapon",
+      "apClassification": "useful"
+    },
+    "automags_S_P": {
+      "id": 870137,
+      "name": "Automags",
+      "category": "weapon",
+      "apClassification": "useful"
+    },
+    "uzi_S_P": {
+      "id": 870138,
+      "name": "Uzis",
+      "category": "weapon",
+      "apClassification": "useful"
+    },
+    "harpoon_S_P": {
+      "id": 870139,
+      "name": "Harpoon Gun",
+      "category": "weapon",
+      "apClassification": "useful"
+    },
+    "m16_S_P": {
+      "id": 870140,
+      "name": "M16",
+      "category": "weapon",
+      "apClassification": "useful"
+    },
+    "grenadeLauncher_S_P": {
+      "id": 870141,
+      "name": "Grenade Launcher",
+      "category": "weapon",
+      "apClassification": "useful"
+    },
+    "shotgunAmmo_S_P": {
+      "id": 870143,
+      "name": "Shotgun Shells",
+      "category": "ammo",
+      "apClassification": "filler"
+    },
+    "autoAmmo_S_P": {
+      "id": 870144,
+      "name": "Auto Clips",
+      "category": "ammo",
+      "apClassification": "filler"
+    },
+    "uziAmmo_S_P": {
+      "id": 870145,
+      "name": "Uzi Clips",
+      "category": "ammo",
+      "apClassification": "filler"
+    },
+    "harpoonAmmo_S_P": {
+      "id": 870146,
+      "name": "Harpoons",
+      "category": "ammo",
+      "apClassification": "filler"
+    },
+    "m16Ammo_S_P": {
+      "id": 870147,
+      "name": "M16 Clips",
+      "category": "ammo",
+      "apClassification": "filler"
+    },
+    "grenades_S_P": {
+      "id": 870148,
+      "name": "Grenades",
+      "category": "ammo",
+      "apClassification": "filler"
+    },
+    "largeMed_S_P": {
+      "id": 870150,
+      "name": "Large Medipack",
+      "category": "large_medipack",
+      "apClassification": "useful"
+    },
+    "smallMed_S_P": {
+      "id": 870149,
+      "name": "Small Medipack",
+      "category": "small_medipack",
+      "apClassification": "filler"
+    },
+    "flares_S_P": {
+      "id": 870151,
+      "name": "Flares",
+      "category": "pickup",
+      "apClassification": "filler"
+    }
+  }
+}
