@@ -2,11 +2,15 @@
 
 [Archipelago](https://archipelago.gg/) multiworld randomizer integration for **Tomb Raider I Remastered** (Patch 4.1).
 
-> **Status**: Work in progress
+> **Status**: Beta
 
-## What is this?
+## Quick Start
 
-This project turns Tomb Raider 1 Remastered into an Archipelago game. All pickups (medipacks, ammo, weapons, key items) are shuffled into the multiworld item pool. When you pick up an item in TR1, it may be sent to another player's game, and you receive items from other players in real-time.
+1. Download `TRArchipelagoClient.exe` and `tr1r.apworld` from the [latest release](../../releases/latest)
+2. Install the APWorld: copy `tr1r.apworld` into your Archipelago `lib/worlds/` folder
+3. Generate a multiworld with TR1 Remastered as one of the games
+4. Launch Tomb Raider I-III Remastered
+5. Run `TRArchipelagoClient.exe` and connect to your Archipelago server
 
 ### Features
 
@@ -18,37 +22,47 @@ This project turns Tomb Raider 1 Remastered into an Archipelago game. All pickup
 - **Multiple goal types**: Final Boss, All Secrets, N Levels completed
 - **Configurable secrets mode**: excluded, useful, or progression-required
 
-## Architecture
+### Requirements
+
+- Tomb Raider I-III Remastered (Patch 4.1) — Windows only
+- [Archipelago](https://archipelago.gg/) server
+
+## Building from Source
+
+### Client
+
+Requires .NET 8.0 SDK.
 
 ```
-apworld/tr1r/       Python APWorld for the Archipelago server
+dotnet publish client/TRArchipelagoClient/TRArchipelagoClient.csproj -c Release -o publish
+```
+
+### APWorld
+
+Zip the `apworld/tr1r/` folder as `tr1r.apworld` and place it in Archipelago's `lib/worlds/`.
+
+## Project Structure
+
+```
+apworld/tr1r/       Python APWorld (items, locations, regions, rules, options)
 client/              C# client that bridges the game and AP server
-data-exporter/       C# tool that extracts item/location data from TR1 level files
+tools/               Data exporter — extracts game data into tr1r_data.json
+docs/                Technical documentation (memory map, RE notes)
 ```
-
-### APWorld (`apworld/tr1r/`)
-
-Standard Archipelago world definition. Defines items, locations, regions, rules, and options. Installed into the Archipelago server.
 
 ### Client (`client/TRArchipelagoClient/`)
 
 Connects to the Archipelago server and communicates with the running game in real-time by reading/writing process memory (`tomb1.dll`). Handles:
 
 - **Level patching**: replaces all pickups with sentinel items before gameplay
-- **Pickup detection**: polls entity flags at 100ms intervals to detect when items are collected
-- **Inventory injection**: writes directly to the game's inventory ring structures to give items
+- **Pickup detection**: polls entity flags at 100ms intervals
+- **Inventory injection**: writes directly to the game's inventory ring structures
 - **Secret tracking**: monitors the secrets bitmask in the WorldStateBackup buffer
-- **Save/load handling**: detects save number changes to resync state after reloads
+- **Save/load reconciliation**: detects save number changes to resync state after reloads
 
-### Data Exporter (`data-exporter/`)
+### Data Exporter (`tools/TRDataExporter/`)
 
-Extracts pickup locations, key item mappings, secret data, and route information from TR1 level files using [TRLevelControl](https://github.com/LostArtefacts/TR-Rando). Outputs `tr1r_data.json` consumed by the APWorld.
-
-## Requirements
-
-- Tomb Raider I-III Remastered (Patch 4.1)
-- [Archipelago](https://archipelago.gg/) server
-- .NET 8.0 Runtime (for the client)
+Offline tool that extracts pickup locations, key item mappings, and secret data from TR1 level files using [TRLevelControl](https://github.com/LostArtefacts/TR-Rando). Outputs `tr1r_data.json` consumed by the APWorld. Only needs to be re-run if game data changes.
 
 ## License
 

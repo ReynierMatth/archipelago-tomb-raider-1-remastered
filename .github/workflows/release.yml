@@ -17,10 +17,20 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - run: dotnet publish client/TRArchipelagoClient/TRArchipelagoClient.csproj -c Release -o publish
+      - name: Build client
+        run: dotnet publish client/TRArchipelagoClient/TRArchipelagoClient.csproj -c Release -o publish
+
+      - name: Package APWorld
+        run: |
+          cd apworld
+          Compress-Archive -Path tr1r -DestinationPath tr1r.apworld
+          Move-Item tr1r.apworld ../publish/
+        shell: pwsh
 
       - uses: softprops/action-gh-release@v2
         with:
-          files: publish/TRArchipelagoClient.exe
+          files: |
+            publish/TRArchipelagoClient.exe
+            publish/tr1r.apworld
           generate_release_notes: true
           prerelease: true

@@ -32,6 +32,12 @@ Thumbs.db
 *.apworld
 tr1r_data.json
 
+# Dev artifacts
+apworld/output/
+apworld/test_yamls/
+scan_results.txt
+MEMORY.md
+
 # Backup files
 *.bak
 *.orig
