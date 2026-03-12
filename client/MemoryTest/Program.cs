@@ -1,8 +1,8 @@
 using TRArchipelagoClient.GameInterface;
 
-Console.Title = "TR1R Memory Test";
-Console.WriteLine("=== TR1 Remastered - Memory Reader Test ===");
-Console.WriteLine("Launch tomb123.exe and start playing TR1.\n");
+Console.Title = "TRR Memory Test";
+Console.WriteLine("=== TR Remastered - Memory Reader Test ===");
+Console.WriteLine("Launch tomb123.exe and start playing.\n");
 
 using var memory = new ProcessMemory();
 
@@ -16,50 +16,60 @@ while (!memory.TryAttach())
 Console.WriteLine($"\nAttached! PID found.");
 Console.WriteLine($"  tomb123.exe base: 0x{memory.ExeBase:X}");
 
-// Wait for tomb1.dll
-Console.Write("Waiting for tomb1.dll...");
-while (memory.Tomb1Base == IntPtr.Zero)
-{
-    memory.RefreshTomb1Base();
-    if (memory.Tomb1Base == IntPtr.Zero)
-    {
-        Console.Write(".");
-        Thread.Sleep(1000);
-    }
-}
-IntPtr t1 = memory.Tomb1Base;
-Console.WriteLine($"\n  tomb1.dll base: 0x{t1:X}");
-
 Console.WriteLine("\nChoose mode:");
+Console.WriteLine("  --- TR1 (tomb1.dll) ---");
 Console.WriteLine("  1 = Live monitoring (HP, pos, level, entities)");
 Console.WriteLine("  2 = Inventory scanner (find live ammo/weapon offsets)");
 Console.WriteLine("  3 = Entity flag watcher (test pickup detection)");
 Console.WriteLine("  4 = Entity struct dumper (find real struct layout)");
 Console.WriteLine("  5 = Inventory ring tester (add items to inventory)");
 Console.WriteLine("  6 = Keys ring explorer (discover key item offsets)");
+Console.WriteLine("  --- Multi-Game ---");
+Console.WriteLine("  7 = Inventory item table scanner (TR1/TR2/TR3)");
 Console.Write("\nMode: ");
 string mode = Console.ReadLine()?.Trim() ?? "1";
 
-switch (mode)
+if (mode == "7")
 {
-    case "2":
-        RunInventoryScanner(memory, t1);
-        break;
-    case "3":
-        RunEntityWatcher(memory, t1);
-        break;
-    case "4":
-        RunEntityDumper(memory, t1);
-        break;
-    case "5":
-        RunInventoryRingTester(memory, t1);
-        break;
-    case "6":
-        RunKeysRingExplorer(memory, t1);
-        break;
-    default:
-        RunLiveMonitor(memory, t1);
-        break;
+    RunMultiGameInventoryScanner(memory);
+}
+else
+{
+    // Modes 1-6: wait for tomb1.dll
+    Console.Write("Waiting for tomb1.dll...");
+    while (memory.Tomb1Base == IntPtr.Zero)
+    {
+        memory.RefreshTomb1Base();
+        if (memory.Tomb1Base == IntPtr.Zero)
+        {
+            Console.Write(".");
+            Thread.Sleep(1000);
+        }
+    }
+    IntPtr t1 = memory.Tomb1Base;
+    Console.WriteLine($"\n  tomb1.dll base: 0x{t1:X}");
+
+    switch (mode)
+    {
+        case "2":
+            RunInventoryScanner(memory, t1);
+            break;
+        case "3":
+            RunEntityWatcher(memory, t1);
+            break;
+        case "4":
+            RunEntityDumper(memory, t1);
+            break;
+        case "5":
+            RunInventoryRingTester(memory, t1);
+            break;
+        case "6":
+            RunKeysRingExplorer(memory, t1);
+            break;
+        default:
+            RunLiveMonitor(memory, t1);
+            break;
+    }
 }
 
 // ====================================================================
@@ -1367,4 +1377,449 @@ static void InjectKeyItem(ProcessMemory memory, IntPtr t1, IntPtr pistolsPtr)
 
     // Show updated state
     ShowKeysRingState(memory, t1, pistolsPtr);
+}
+
+// ====================================================================
+// MODE 7: Multi-Game Inventory Item Table Scanner
+// Detects which game DLL is loaded (tomb1/2/3), reads the Main Ring,
+// uses the first item (Statistiques/Compass) as anchor, and scans the
+// INVENTORY_ITEM table at 0xCD0 stride to identify all items by object_id.
+// ====================================================================
+static void RunMultiGameInventoryScanner(ProcessMemory memory)
+{
+    Console.WriteLine("\n=== MULTI-GAME INVENTORY ITEM TABLE SCANNER ===");
+    Console.WriteLine("Detects active game DLL and scans all INVENTORY_ITEM structs.\n");
+
+    while (memory.IsAttached)
+    {
+        // Detect which game is ACTIVE by checking IsInGameScene > 0
+        // All 3 DLLs are loaded simultaneously; only one has IsInGameScene > 0.
+        // Fallback: manual selection if auto-detection picks wrong game.
+        memory.RefreshModuleBases();
+
+        string gameName;
+        IntPtr dllBase;
+        int mainRingCountOffset, mainRingItemsOffset, mainRingQtysOffset;
+        int invItemStride, invItemObjIdOffset;
+
+        bool isT1Active = memory.Tomb1Base != IntPtr.Zero
+            && memory.ReadInt32(memory.Tomb1Base + TR1RMemoryMap.IsInGameScene) > 0;
+        bool isT2Active = memory.Tomb2Base != IntPtr.Zero
+            && memory.ReadInt32(memory.Tomb2Base + TR2RMemoryMap.IsInGameScene) > 0;
+        bool isT3Active = memory.Tomb3Base != IntPtr.Zero
+            && memory.ReadInt32(memory.Tomb3Base + TR3RMemoryMap.IsInGameScene) > 0;
+
+        int detected = isT2Active ? 2 : isT1Active ? 1 : isT3Active ? 3 : 0;
+
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.WriteLine($"  [Auto-detect: T1={isT1Active}, T2={isT2Active}, T3={isT3Active}]");
+        Console.ResetColor();
+
+        if (detected == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("  No active game detected. Manual selection:");
+            Console.ResetColor();
+        }
+        else
+        {
+            Console.WriteLine($"  Auto-detected: TR{detected}. Press ENTER to confirm, or type 1/2/3 to override:");
+        }
+        Console.Write("  Game [" + (detected == 0 ? "?" : detected.ToString()) + "]: ");
+        string? gameInput = Console.ReadLine()?.Trim();
+        int gameChoice = string.IsNullOrEmpty(gameInput) ? detected : int.TryParse(gameInput, out int g) ? g : detected;
+
+        if (gameChoice == 1 && memory.Tomb1Base != IntPtr.Zero)
+        {
+            gameName = "TR1 (tomb1.dll)";
+            dllBase = memory.Tomb1Base;
+            mainRingCountOffset = TR1RMemoryMap.MainRingCount;
+            mainRingItemsOffset = TR1RMemoryMap.MainRingItems;
+            mainRingQtysOffset = TR1RMemoryMap.MainRingQtys;
+            invItemStride = TR1RMemoryMap.InventoryItemStride;
+            invItemObjIdOffset = TR1RMemoryMap.InvItem_ObjectId;
+        }
+        else if (gameChoice == 2 && memory.Tomb2Base != IntPtr.Zero)
+        {
+            gameName = "TR2 (tomb2.dll)";
+            dllBase = memory.Tomb2Base;
+            mainRingCountOffset = TR2RMemoryMap.MainRingCount;
+            mainRingItemsOffset = TR2RMemoryMap.MainRingItems;
+            mainRingQtysOffset = TR2RMemoryMap.MainRingQtys;
+            invItemStride = TR2RMemoryMap.InventoryItemStride;
+            invItemObjIdOffset = TR2RMemoryMap.InvItem_ObjectId;
+        }
+        else if (gameChoice == 3 && memory.Tomb3Base != IntPtr.Zero)
+        {
+            gameName = "TR3 (tomb3.dll)";
+            dllBase = memory.Tomb3Base;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("  TR3 Main Ring offsets are not yet mapped.");
+            Console.ResetColor();
+            Console.Write("\nPress ENTER to re-scan...");
+            Console.ReadLine();
+            continue;
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("  Invalid selection or DLL not loaded.");
+            Console.ResetColor();
+            continue;
+        }
+
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine($"  Detected: {gameName}");
+        Console.WriteLine($"  DLL base: 0x{dllBase:X}");
+        Console.ResetColor();
+
+        // Read ring state
+        short ringCount = memory.ReadInt16(dllBase + mainRingCountOffset);
+        Console.WriteLine($"  Main Ring count: {ringCount}");
+
+        if (ringCount <= 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("  Ring is empty. Get into a level first.");
+            Console.ResetColor();
+            Console.Write("\nPress ENTER to re-scan...");
+            Console.ReadLine();
+            continue;
+        }
+
+        // Display current ring contents
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine($"\n  --- Current Main Ring ({ringCount} items) ---");
+        Console.ResetColor();
+
+        IntPtr anchorPtr = IntPtr.Zero; // first item in ring = Statistiques/Compass
+        var ringPointers = new IntPtr[ringCount];
+
+        for (int i = 0; i < ringCount; i++)
+        {
+            IntPtr itemPtr = memory.ReadPointer(dllBase + mainRingItemsOffset + i * 8);
+            short qty = memory.ReadInt16(dllBase + mainRingQtysOffset + i * 2);
+            short objectId = (itemPtr != IntPtr.Zero) ? memory.ReadInt16(itemPtr + invItemObjIdOffset) : (short)-1;
+
+            ringPointers[i] = itemPtr;
+            if (i == 0) anchorPtr = itemPtr;
+
+            string relInfo = "";
+            if (anchorPtr != IntPtr.Zero && i > 0)
+            {
+                long diff = itemPtr.ToInt64() - anchorPtr.ToInt64();
+                if (diff % invItemStride == 0)
+                    relInfo = $"  N={diff / invItemStride}";
+                else
+                    relInfo = $"  offset=0x{diff:X} (NOT stride-aligned!)";
+            }
+            else if (i == 0)
+            {
+                relInfo = "  <-- ANCHOR (ring[0])";
+            }
+
+            Console.Write($"  [{i,2}] ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($"0x{itemPtr:X}");
+            Console.ResetColor();
+            Console.Write($"  objId=0x{objectId:X4}  qty={qty,3}");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine(relInfo);
+            Console.ResetColor();
+        }
+
+        if (anchorPtr == IntPtr.Zero)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("  Cannot read anchor pointer (ring[0] is null).");
+            Console.ResetColor();
+            Console.Write("\nPress ENTER to re-scan...");
+            Console.ReadLine();
+            continue;
+        }
+
+        // Menu
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\n  --- Actions ---");
+        Console.ResetColor();
+        Console.WriteLine("  1 = Full table scan (scan INVENTORY_ITEM table around anchor)");
+        Console.WriteLine("  2 = Inject item by N offset (anchor + N * stride)");
+        Console.WriteLine("  3 = Change qty of existing ring item");
+        Console.WriteLine("  4 = Live ring monitor (watch for changes)");
+        Console.WriteLine("  0 = Refresh / re-read");
+        Console.WriteLine("  q = Quit");
+        Console.Write("\n  Choice: ");
+        string? input = Console.ReadLine()?.Trim();
+
+        if (string.IsNullOrEmpty(input) || input == "0") continue;
+        if (input.ToLower() == "q") break;
+
+        switch (input)
+        {
+            case "1":
+                ScanItemTable(memory, anchorPtr, invItemStride, invItemObjIdOffset);
+                break;
+            case "2":
+                InjectByOffset(memory, dllBase, anchorPtr, invItemStride, invItemObjIdOffset,
+                    mainRingCountOffset, mainRingItemsOffset, mainRingQtysOffset);
+                break;
+            case "3":
+                ChangeRingQty(memory, dllBase, ringCount, mainRingItemsOffset, mainRingQtysOffset,
+                    invItemStride, invItemObjIdOffset, anchorPtr);
+                break;
+            case "4":
+                LiveRingMonitor(memory, dllBase, mainRingCountOffset, mainRingItemsOffset,
+                    mainRingQtysOffset, invItemStride, invItemObjIdOffset);
+                break;
+        }
+    }
+}
+
+/// <summary>
+/// Scans the INVENTORY_ITEM static table in DLL memory.
+/// Uses the anchor pointer (ring[0], typically Statistiques/Compass) as reference.
+/// Reads object_id at each stride position to build the full item table.
+/// </summary>
+static void ScanItemTable(ProcessMemory memory, IntPtr anchorPtr, int stride, int objIdOffset)
+{
+    Console.Write("\n  Scan range (negative to positive N)? Default: -30 to +30\n");
+    Console.Write("  Min N [-30]: ");
+    string? minInput = Console.ReadLine()?.Trim();
+    int scanMin = string.IsNullOrEmpty(minInput) ? -30 : int.Parse(minInput);
+
+    Console.Write("  Max N [+30]: ");
+    string? maxInput = Console.ReadLine()?.Trim();
+    int scanMax = string.IsNullOrEmpty(maxInput) ? 30 : int.Parse(maxInput);
+
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine($"\n  Scanning INVENTORY_ITEM table from anchor (0x{anchorPtr:X})...");
+    Console.WriteLine($"  Stride: 0x{stride:X} ({stride} bytes), range N={scanMin}..{scanMax}");
+    Console.ResetColor();
+
+    Console.ForegroundColor = ConsoleColor.DarkGray;
+    Console.WriteLine($"\n  {"N",5} | {"Address",18} | {"ObjId",8} | {"Dec",5}");
+    Console.WriteLine($"  {new string('-', 5)}-+-{new string('-', 18)}-+-{new string('-', 8)}-+-{new string('-', 5)}");
+    Console.ResetColor();
+
+    int validCount = 0;
+    for (int n = scanMin; n <= scanMax; n++)
+    {
+        IntPtr itemAddr = anchorPtr + n * stride;
+        short objectId;
+
+        try
+        {
+            byte[] test = memory.ReadBytes(itemAddr, 2);
+            objectId = memory.ReadInt16(itemAddr + objIdOffset);
+        }
+        catch
+        {
+            continue;
+        }
+
+        // Show all entries, highlight interesting ones
+        bool isZero = objectId == 0;
+        bool isNegative = objectId < 0;
+        bool isHighValue = objectId > 1000;
+
+        if (n == 0)
+            Console.ForegroundColor = ConsoleColor.Cyan;
+        else if (isZero)
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+        else if (isNegative || isHighValue)
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+        else
+            Console.ForegroundColor = ConsoleColor.Green;
+
+        string marker = n == 0 ? " <-- ANCHOR" : "";
+        Console.WriteLine($"  {n,5} | 0x{itemAddr:X} | 0x{objectId:X4}   | {objectId,5}{marker}");
+        Console.ResetColor();
+
+        if (!isZero && !isNegative && objectId < 1000)
+            validCount++;
+    }
+
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine($"\n  Found {validCount} entries with plausible object_ids (1-999).");
+    Console.WriteLine("  Use option 2 to inject items by their N offset.");
+    Console.ResetColor();
+}
+
+/// <summary>
+/// Injects an item into the Main Ring by specifying its N offset from anchor.
+/// target_ptr = anchor_ptr + N * stride
+/// </summary>
+static void InjectByOffset(ProcessMemory memory, IntPtr dllBase, IntPtr anchorPtr,
+    int stride, int objIdOffset, int countOffset, int itemsOffset, int qtysOffset)
+{
+    Console.Write("\n  Enter N offset (from anchor): ");
+    if (!int.TryParse(Console.ReadLine()?.Trim(), out int n))
+    {
+        Console.WriteLine("  Invalid number.");
+        return;
+    }
+
+    IntPtr targetPtr = anchorPtr + n * stride;
+    short objectId = memory.ReadInt16(targetPtr + objIdOffset);
+
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine($"  Target: N={n}, ptr=0x{targetPtr:X}, objId=0x{objectId:X4} ({objectId})");
+    Console.ResetColor();
+
+    // Check if already in ring
+    short ringCount = memory.ReadInt16(dllBase + countOffset);
+    for (int i = 0; i < ringCount; i++)
+    {
+        IntPtr existingPtr = memory.ReadPointer(dllBase + itemsOffset + i * 8);
+        if (existingPtr == targetPtr)
+        {
+            // Increment qty
+            IntPtr qtyAddr = dllBase + qtysOffset + i * 2;
+            short currentQty = memory.ReadInt16(qtyAddr);
+            short newQty = (short)(currentQty + 1);
+            memory.Write(qtyAddr, newQty);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"  >>> Already in ring at [{i}], qty: {currentQty} -> {newQty}");
+            Console.ResetColor();
+            return;
+        }
+    }
+
+    if (ringCount >= 24)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("  Ring is full (24 items)!");
+        Console.ResetColor();
+        return;
+    }
+
+    Console.Write("  Qty [1]: ");
+    string? qtyInput = Console.ReadLine()?.Trim();
+    short qty = string.IsNullOrEmpty(qtyInput) ? (short)1 : short.Parse(qtyInput);
+
+    // Write pointer, qty, increment count
+    memory.Write(dllBase + itemsOffset + ringCount * 8, targetPtr.ToInt64());
+    memory.Write(dllBase + qtysOffset + ringCount * 2, qty);
+    memory.Write(dllBase + countOffset, (short)(ringCount + 1));
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"  >>> Injected at ring index {ringCount}, qty={qty}");
+    Console.WriteLine($"  >>> Ring count: {ringCount} -> {ringCount + 1}");
+    Console.ResetColor();
+}
+
+/// <summary>
+/// Changes the quantity of an existing item in the ring.
+/// </summary>
+static void ChangeRingQty(ProcessMemory memory, IntPtr dllBase, short ringCount,
+    int itemsOffset, int qtysOffset, int stride, int objIdOffset, IntPtr anchorPtr)
+{
+    Console.Write($"\n  Ring index to modify [0-{ringCount - 1}]: ");
+    if (!int.TryParse(Console.ReadLine()?.Trim(), out int idx) || idx < 0 || idx >= ringCount)
+    {
+        Console.WriteLine("  Invalid index.");
+        return;
+    }
+
+    IntPtr itemPtr = memory.ReadPointer(dllBase + itemsOffset + idx * 8);
+    short objectId = memory.ReadInt16(itemPtr + objIdOffset);
+    short currentQty = memory.ReadInt16(dllBase + qtysOffset + idx * 2);
+
+    long diff = itemPtr.ToInt64() - anchorPtr.ToInt64();
+    int n = (diff % stride == 0) ? (int)(diff / stride) : 99999;
+
+    Console.WriteLine($"  Item [{idx}]: objId=0x{objectId:X4}, N={n}, current qty={currentQty}");
+    Console.Write("  New qty: ");
+    if (!short.TryParse(Console.ReadLine()?.Trim(), out short newQty))
+    {
+        Console.WriteLine("  Invalid.");
+        return;
+    }
+
+    memory.Write(dllBase + qtysOffset + idx * 2, newQty);
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"  >>> Qty: {currentQty} -> {newQty}");
+    Console.ResetColor();
+}
+
+/// <summary>
+/// Continuously monitors the Main Ring for changes (count, items, qtys).
+/// Press any key to stop.
+/// </summary>
+static void LiveRingMonitor(ProcessMemory memory, IntPtr dllBase, int countOffset,
+    int itemsOffset, int qtysOffset, int stride, int objIdOffset)
+{
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("\n  Live monitoring Main Ring... Press any key to stop.\n");
+    Console.ResetColor();
+
+    short prevCount = memory.ReadInt16(dllBase + countOffset);
+    var prevItems = new long[24];
+    var prevQtys = new short[24];
+    for (int i = 0; i < prevCount; i++)
+    {
+        prevItems[i] = memory.ReadInt64(dllBase + itemsOffset + i * 8);
+        prevQtys[i] = memory.ReadInt16(dllBase + qtysOffset + i * 2);
+    }
+
+    IntPtr anchor = (prevCount > 0) ? new IntPtr(prevItems[0]) : IntPtr.Zero;
+
+    while (memory.IsAttached && !Console.KeyAvailable)
+    {
+        short count = memory.ReadInt16(dllBase + countOffset);
+
+        if (count != prevCount)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"  [{DateTime.Now:HH:mm:ss}] Ring count: {prevCount} -> {count}");
+            Console.ResetColor();
+
+            // Show new item if count increased
+            if (count > prevCount && count <= 24)
+            {
+                for (int i = prevCount; i < count; i++)
+                {
+                    IntPtr ptr = memory.ReadPointer(dllBase + itemsOffset + i * 8);
+                    short qty = memory.ReadInt16(dllBase + qtysOffset + i * 2);
+                    short objId = (ptr != IntPtr.Zero) ? memory.ReadInt16(ptr + objIdOffset) : (short)-1;
+
+                    string nInfo = "";
+                    if (anchor != IntPtr.Zero)
+                    {
+                        long diff = ptr.ToInt64() - anchor.ToInt64();
+                        if (diff % stride == 0) nInfo = $"N={diff / stride}";
+                    }
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"    NEW [{i}] 0x{ptr:X}  objId=0x{objId:X4}  qty={qty}  {nInfo}");
+                    Console.ResetColor();
+                }
+            }
+
+            prevCount = count;
+        }
+
+        // Check qty changes
+        for (int i = 0; i < Math.Min((int)count, 24); i++)
+        {
+            short qty = memory.ReadInt16(dllBase + qtysOffset + i * 2);
+            if (i < prevQtys.Length && qty != prevQtys[i])
+            {
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine($"  [{DateTime.Now:HH:mm:ss}] Ring[{i}] qty: {prevQtys[i]} -> {qty}");
+                Console.ResetColor();
+            }
+            prevQtys[i] = qty;
+        }
+
+        // Update items snapshot
+        for (int i = 0; i < Math.Min((int)count, 24); i++)
+            prevItems[i] = memory.ReadInt64(dllBase + itemsOffset + i * 8);
+
+        Thread.Sleep(100);
+    }
+
+    if (Console.KeyAvailable) Console.ReadKey(true);
+    Console.WriteLine("  Stopped monitoring.");
 }

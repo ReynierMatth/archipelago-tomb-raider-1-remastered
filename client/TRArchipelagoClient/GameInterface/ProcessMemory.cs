@@ -31,6 +31,8 @@ public class ProcessMemory : IDisposable
     private Process? _gameProcess;
     private IntPtr _exeBaseAddress;
     private IntPtr _tomb1DllBase;
+    private IntPtr _tomb2DllBase;
+    private IntPtr _tomb3DllBase;
 
     public bool IsAttached => _processHandle != IntPtr.Zero && _gameProcess is { HasExited: false };
 
@@ -39,6 +41,12 @@ public class ProcessMemory : IDisposable
 
     /// <summary>Base address of tomb1.dll module. Zero if not loaded.</summary>
     public IntPtr Tomb1Base => _tomb1DllBase;
+
+    /// <summary>Base address of tomb2.dll module. Zero if not loaded.</summary>
+    public IntPtr Tomb2Base => _tomb2DllBase;
+
+    /// <summary>Base address of tomb3.dll module. Zero if not loaded.</summary>
+    public IntPtr Tomb3Base => _tomb3DllBase;
 
     /// <summary>
     /// Tries to find and attach to the tomb123.exe process.
@@ -61,9 +69,31 @@ public class ProcessMemory : IDisposable
             return false;
 
         _exeBaseAddress = _gameProcess.MainModule?.BaseAddress ?? IntPtr.Zero;
-        _tomb1DllBase = FindModuleBase(TR1RMemoryMap.TR1ModuleName);
+        _tomb1DllBase = FindModuleBase("tomb1.dll");
+        _tomb2DllBase = FindModuleBase("tomb2.dll");
+        _tomb3DllBase = FindModuleBase("tomb3.dll");
 
         return true;
+    }
+
+    /// <summary>
+    /// Refreshes all DLL base addresses (call if a DLL was loaded after attach).
+    /// </summary>
+    public void RefreshModuleBases()
+    {
+        if (!IsAttached) return;
+
+        try
+        {
+            _gameProcess!.Refresh();
+            _tomb1DllBase = FindModuleBase("tomb1.dll");
+            _tomb2DllBase = FindModuleBase("tomb2.dll");
+            _tomb3DllBase = FindModuleBase("tomb3.dll");
+        }
+        catch
+        {
+            // Process may have exited
+        }
     }
 
     /// <summary>
@@ -71,18 +101,8 @@ public class ProcessMemory : IDisposable
     /// </summary>
     public bool RefreshTomb1Base()
     {
-        if (!IsAttached) return false;
-
-        try
-        {
-            _gameProcess!.Refresh();
-            _tomb1DllBase = FindModuleBase(TR1RMemoryMap.TR1ModuleName);
-            return _tomb1DllBase != IntPtr.Zero;
-        }
-        catch
-        {
-            return false;
-        }
+        RefreshModuleBases();
+        return _tomb1DllBase != IntPtr.Zero;
     }
 
     /// <summary>

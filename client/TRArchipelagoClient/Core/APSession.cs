@@ -9,14 +9,20 @@ using Newtonsoft.Json.Linq;
 namespace TRArchipelagoClient.Core;
 
 /// <summary>
-/// Wraps the Archipelago.MultiClient.Net session for TR1R.
+/// Wraps the Archipelago.MultiClient.Net session.
 /// Handles connection, item receiving, and location sending.
 /// </summary>
 public class APSession
 {
     private ArchipelagoSession? _session;
+    private readonly GameConfig _config;
     private readonly ConcurrentQueue<ItemInfo> _receivedItems = new();
     private readonly ConcurrentDictionary<long, byte> _checkedLocations = new();
+
+    public APSession(GameConfig config)
+    {
+        _config = config;
+    }
 
     public SlotData? SlotData { get; private set; }
     public bool IsConnected => _session?.Socket?.Connected ?? false;
@@ -48,10 +54,10 @@ public class APSession
         SlotName = slotName;
 
         var result = await _session.LoginAsync(
-            "Tomb Raider 1 Remastered",
+            _config.ApGameName,
             slotName,
             ItemsHandlingFlags.AllItems,
-            tags: new[] { "TR1R", "DeathLink" },
+            tags: _config.ApTags,
             password: password,
             requestSlotData: true
         );

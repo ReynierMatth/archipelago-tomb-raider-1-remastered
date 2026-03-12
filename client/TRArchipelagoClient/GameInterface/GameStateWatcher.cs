@@ -24,6 +24,8 @@ public class GameStateWatcher : IDisposable
 
     private readonly APSession _session;
     private readonly ProcessMemory _memory;
+    private readonly ItemMapper _itemMapper;
+    private readonly LocationMapper _locationMapper;
     private readonly InventoryManager _inventory;
     private readonly InventoryScanner _scanner;
     private readonly SaveStateStore _stateStore;
@@ -56,11 +58,11 @@ public class GameStateWatcher : IDisposable
     private readonly Dictionary<int, short> _entityFlags = new();
 
     // Items waiting for ring injection (deferred until Pistols pointer is found)
-    private readonly Queue<(long ItemId, ItemMapper.ItemCategory Category)> _pendingItems = new();
+    private readonly Queue<(long ItemId, ItemCategory Category)> _pendingItems = new();
 
     // Complete history of all received ring items (weapons, ammo, medipacks).
     // Used to replay items when the player starts a new game from the main menu.
-    private readonly List<(long ItemId, ItemMapper.ItemCategory Category)> _allReceivedRingItems = new();
+    private readonly List<(long ItemId, ItemCategory Category)> _allReceivedRingItems = new();
 
     // Cooldown after level transition: wait for the game engine to finish
     // reinitializing entities/inventory before monitoring.
@@ -76,12 +78,16 @@ public class GameStateWatcher : IDisposable
     public GameStateWatcher(
         APSession session,
         ProcessMemory memory,
+        ItemMapper itemMapper,
+        LocationMapper locationMapper,
         Dictionary<int, Dictionary<int, long>> levelEntityLocations,
         SaveStateStore stateStore)
     {
         _session = session;
         _memory = memory;
-        _inventory = new InventoryManager(memory);
+        _itemMapper = itemMapper;
+        _locationMapper = locationMapper;
+        _inventory = new InventoryManager(memory, itemMapper, locationMapper);
         _scanner = new InventoryScanner(memory);
         _inventory.Scanner = _scanner;
         _levelEntityLocations = levelEntityLocations;
@@ -338,7 +344,7 @@ public class GameStateWatcher : IDisposable
         var checkedSecrets = new HashSet<long>();
         foreach (long locId in _session.GetCheckedLocations())
         {
-            var locType = LocationMapper.GetLocationType(locId);
+            var locType = _locationMapper.GetLocationType(locId);
             if (locType == LocationMapper.LocationType.Pickup)
                 checkedEntities.Add(locId);
             else if (locType == LocationMapper.LocationType.Secret)
@@ -654,7 +660,7 @@ public class GameStateWatcher : IDisposable
             {
                 if ((newBits & (1 << s)) != 0 && mapperIdx >= 0)
                 {
-                    long secretLocId = LocationMapper.GetSecretLocationId(mapperIdx, s);
+                    long secretLocId = _locationMapper.GetSecretLocationId(mapperIdx, s);
                     _session.SendLocationCheck(secretLocId);
 
                     string levelName = TR1RMemoryMap.LevelNames.GetValueOrDefault(_lastLevelId, "Unknown");
@@ -678,7 +684,7 @@ public class GameStateWatcher : IDisposable
             int mapperIdx = TR1RMemoryMap.ToLocationMapperIndex(levelId);
             if (mapperIdx >= 0 && !_completedLevels.Contains(levelId))
             {
-                long locId = LocationMapper.GetLevelCompleteId(mapperIdx);
+                long locId = _locationMapper.GetLevelCompleteId(mapperIdx);
                 _session.SendLocationCheck(locId);
                 _completedLevels.Add(levelId);
 
@@ -755,16 +761,16 @@ public class GameStateWatcher : IDisposable
             ConsoleUI.ItemReceived(itemName, playerName);
             _itemsReceivedIndex++;
 
-            var category = ItemMapper.GetCategory(item.ItemId);
+            var category = _itemMapper.GetCategory(item.ItemId);
 
-            if (category == ItemMapper.ItemCategory.KeyItem)
+            if (category == ItemCategory.KeyItem)
             {
                 // Store key items so EnsureKeyItemsInRing can inject them later.
                 // GiveKeyItem only needs memory for immediate injection (same level);
                 // cross-level items are just stored in _receivedKeyItems.
                 _inventory.GiveKeyItem(item.ItemId, levelId);
             }
-            else if (category != ItemMapper.ItemCategory.Trap)
+            else if (category != ItemCategory.Trap)
             {
                 _allReceivedRingItems.Add((item.ItemId, category));
             }
@@ -792,15 +798,15 @@ public class GameStateWatcher : IDisposable
             ConsoleUI.ItemReceived(itemName, playerName);
             _itemsReceivedIndex++;
 
-            var category = ItemMapper.GetCategory(item.ItemId);
+            var category = _itemMapper.GetCategory(item.ItemId);
 
             // Traps and key items don't need the ring — process immediately
-            if (category == ItemMapper.ItemCategory.Trap)
+            if (category == ItemCategory.Trap)
             {
                 _inventory.ApplyTrap(item.ItemId);
                 continue;
             }
-            if (category == ItemMapper.ItemCategory.KeyItem)
+            if (category == ItemCategory.KeyItem)
             {
                 _inventory.GiveKeyItem(item.ItemId, levelId);
                 continue;
@@ -821,13 +827,13 @@ public class GameStateWatcher : IDisposable
             var (itemId, category) = _pendingItems.Dequeue();
             switch (category)
             {
-                case ItemMapper.ItemCategory.Weapon:
+                case ItemCategory.Weapon:
                     _inventory.GiveWeapon(itemId);
                     break;
-                case ItemMapper.ItemCategory.Ammo:
+                case ItemCategory.Ammo:
                     _inventory.GiveAmmo(itemId);
                     break;
-                case ItemMapper.ItemCategory.Medipack:
+                case ItemCategory.Medipack:
                     _inventory.GiveMedipack(itemId);
                     break;
             }

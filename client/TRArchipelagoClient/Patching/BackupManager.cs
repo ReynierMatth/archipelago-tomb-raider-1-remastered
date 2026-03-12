@@ -1,3 +1,5 @@
+using TRArchipelagoClient.Core;
+
 namespace TRArchipelagoClient.Patching;
 
 /// <summary>
@@ -9,22 +11,12 @@ public class BackupManager
     private const string BackupSuffix = ".apbak";
 
     private readonly string _gameDir;
+    private readonly GameConfig _config;
 
-    // TR1 level file extensions to backup
-    private static readonly string[] LevelExtensions = { ".PHD", ".PDP", ".MAP" };
-
-    // TR1 level files
-    private static readonly string[] LevelFiles =
-    {
-        "LEVEL1", "LEVEL2", "LEVEL3A", "LEVEL3B",
-        "LEVEL4", "LEVEL5", "LEVEL6", "LEVEL7A", "LEVEL7B",
-        "LEVEL8A", "LEVEL8B", "LEVEL8C",
-        "LEVEL10A", "LEVEL10B", "LEVEL10C",
-    };
-
-    public BackupManager(string gameDir)
+    public BackupManager(string gameDir, GameConfig config)
     {
         _gameDir = gameDir;
+        _config = config;
     }
 
     /// <summary>
@@ -40,9 +32,9 @@ public class BackupManager
         }
 
         int count = 0;
-        foreach (string levelBase in LevelFiles)
+        foreach (string levelBase in _config.LevelBaseNames)
         {
-            foreach (string ext in LevelExtensions)
+            foreach (string ext in _config.LevelExtensions)
             {
                 string original = Path.Combine(dataDir, levelBase + ext);
                 string backup = original + BackupSuffix;
@@ -67,9 +59,9 @@ public class BackupManager
         if (dataDir == null) return;
 
         int count = 0;
-        foreach (string levelBase in LevelFiles)
+        foreach (string levelBase in _config.LevelBaseNames)
         {
-            foreach (string ext in LevelExtensions)
+            foreach (string ext in _config.LevelExtensions)
             {
                 string original = Path.Combine(dataDir, levelBase + ext);
                 string backup = original + BackupSuffix;
@@ -94,8 +86,8 @@ public class BackupManager
         string dataDir = FindDataDir();
         if (dataDir == null) return false;
 
-        return LevelFiles.Any(levelBase =>
-            LevelExtensions.Any(ext =>
+        return _config.LevelBaseNames.Any(levelBase =>
+            _config.LevelExtensions.Any(ext =>
                 File.Exists(Path.Combine(dataDir, levelBase + ext + BackupSuffix))));
     }
 
@@ -112,24 +104,22 @@ public class BackupManager
 
     /// <summary>
     /// Find the data directory containing level files.
-    /// TR1-3 Remastered stores levels in a subdirectory structure.
+    /// Uses config DataSubDir and SentinelFile for detection.
     /// </summary>
     private string FindDataDir()
     {
-        // Common paths for TR1 Remastered level data
         string[] possiblePaths =
         {
-            Path.Combine(_gameDir, "1", "DATA"),       // TR1-3 Remastered Steam layout
-            Path.Combine(_gameDir, "1"),
-            Path.Combine(_gameDir, "data", "1"),
-            Path.Combine(_gameDir, "TR1"),
-            _gameDir,                                  // Flat structure
+            Path.Combine(_gameDir, _config.DataSubDir, "DATA"),
+            Path.Combine(_gameDir, _config.DataSubDir),
+            Path.Combine(_gameDir, "data", _config.DataSubDir),
+            _gameDir,
         };
 
         foreach (string path in possiblePaths)
         {
             if (Directory.Exists(path) &&
-                File.Exists(Path.Combine(path, "LEVEL1.PHD")))
+                File.Exists(Path.Combine(path, _config.SentinelFile)))
             {
                 return path;
             }

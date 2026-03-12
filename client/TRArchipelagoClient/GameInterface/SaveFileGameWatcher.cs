@@ -26,6 +26,8 @@ public class SaveFileGameWatcher : IDisposable
     private const int DebounceMs = 500;
 
     private readonly APSession _session;
+    private readonly ItemMapper _itemMapper;
+    private readonly LocationMapper _locationMapper;
     private readonly SaveFileReader _reader;
     private readonly SaveFileInventoryWriter _writer;
     private FileSystemWatcher? _fileWatcher;
@@ -44,9 +46,11 @@ public class SaveFileGameWatcher : IDisposable
     // Cancellation for the async wait loop
     private CancellationTokenSource? _cts;
 
-    public SaveFileGameWatcher(APSession session, string saveFilePath)
+    public SaveFileGameWatcher(APSession session, ItemMapper itemMapper, LocationMapper locationMapper, string saveFilePath)
     {
         _session = session;
+        _itemMapper = itemMapper;
+        _locationMapper = locationMapper;
         _reader = new SaveFileReader(saveFilePath);
         _writer = new SaveFileInventoryWriter(saveFilePath);
     }
@@ -186,7 +190,7 @@ public class SaveFileGameWatcher : IDisposable
             int mapperIdx = _lastLevelIndex - 1;
             if (mapperIdx >= 0)
             {
-                long locId = LocationMapper.GetLevelCompleteId(mapperIdx);
+                long locId = _locationMapper.GetLevelCompleteId(mapperIdx);
                 _session.SendLocationCheck(locId);
                 _completedLevels.Add(_lastLevelIndex);
 
@@ -225,7 +229,7 @@ public class SaveFileGameWatcher : IDisposable
             {
                 if (mapperIdx >= 0)
                 {
-                    long secretLocId = LocationMapper.GetSecretLocationId(mapperIdx, s);
+                    long secretLocId = _locationMapper.GetSecretLocationId(mapperIdx, s);
                     _session.SendLocationCheck(secretLocId);
                 }
 
@@ -259,7 +263,7 @@ public class SaveFileGameWatcher : IDisposable
             string itemName = _session.GetItemName(item.ItemId);
             string playerName = _session.GetPlayerName(item.Player);
 
-            var category = ItemMapper.GetCategory(item.ItemId);
+            var category = _itemMapper.GetCategory(item.ItemId);
             PendingItem? pending = MapToPendingItem(item.ItemId, category, itemName);
 
             if (pending != null)
@@ -288,28 +292,28 @@ public class SaveFileGameWatcher : IDisposable
         }
     }
 
-    private static PendingItem? MapToPendingItem(long apItemId, ItemMapper.ItemCategory category, string displayName)
+    private PendingItem? MapToPendingItem(long apItemId, ItemCategory category, string displayName)
     {
         return category switch
         {
-            ItemMapper.ItemCategory.Weapon => new PendingItem
+            ItemCategory.Weapon => new PendingItem
             {
                 Type = PendingItemType.Weapon,
                 Amount = GetWeaponFlag(apItemId),
                 DisplayName = displayName,
             },
-            ItemMapper.ItemCategory.Ammo => MapAmmoItem(apItemId, displayName),
-            ItemMapper.ItemCategory.Medipack => MapMedipackItem(apItemId, displayName),
-            ItemMapper.ItemCategory.Trap => MapTrapItem(apItemId, displayName),
+            ItemCategory.Ammo => MapAmmoItem(apItemId, displayName),
+            ItemCategory.Medipack => MapMedipackItem(apItemId, displayName),
+            ItemCategory.Trap => MapTrapItem(apItemId, displayName),
             // Key items via save file need special handling (not yet implemented)
-            ItemMapper.ItemCategory.KeyItem => null,
+            ItemCategory.KeyItem => null,
             _ => null,
         };
     }
 
-    private static int GetWeaponFlag(long apItemId)
+    private int GetWeaponFlag(long apItemId)
     {
-        var type = ItemMapper.GetTR1Type(apItemId);
+        var type = _itemMapper.GetTR1Type(apItemId);
         return type switch
         {
             TR1Type.Shotgun_S_P => TR1RMemoryMap.Weapon_Shotgun,
@@ -319,9 +323,9 @@ public class SaveFileGameWatcher : IDisposable
         };
     }
 
-    private static PendingItem? MapAmmoItem(long apItemId, string displayName)
+    private PendingItem? MapAmmoItem(long apItemId, string displayName)
     {
-        var type = ItemMapper.GetTR1Type(apItemId);
+        var type = _itemMapper.GetTR1Type(apItemId);
         return type switch
         {
             TR1Type.ShotgunAmmo_S_P => new PendingItem { Type = PendingItemType.ShotgunAmmo, Amount = 2, DisplayName = displayName },
@@ -331,9 +335,9 @@ public class SaveFileGameWatcher : IDisposable
         };
     }
 
-    private static PendingItem? MapMedipackItem(long apItemId, string displayName)
+    private PendingItem? MapMedipackItem(long apItemId, string displayName)
     {
-        var type = ItemMapper.GetTR1Type(apItemId);
+        var type = _itemMapper.GetTR1Type(apItemId);
         return type switch
         {
             TR1Type.SmallMed_S_P => new PendingItem { Type = PendingItemType.SmallMedipack, Amount = 1, DisplayName = displayName },
@@ -342,7 +346,7 @@ public class SaveFileGameWatcher : IDisposable
         };
     }
 
-    private static PendingItem? MapTrapItem(long apItemId, string displayName)
+    private PendingItem? MapTrapItem(long apItemId, string displayName)
     {
         int trapType = (int)(apItemId - 769_000);
         return trapType switch

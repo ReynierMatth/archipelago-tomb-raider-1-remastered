@@ -8,5 +8,7 @@
   <ItemGroup>
     <Compile Include="..\TRArchipelagoClient\GameInterface\ProcessMemory.cs" Link="ProcessMemory.cs" />
     <Compile Include="..\TRArchipelagoClient\GameInterface\TR1RMemoryMap.cs" Link="TR1RMemoryMap.cs" />
+    <Compile Include="..\TRArchipelagoClient\GameInterface\TR2RMemoryMap.cs" Link="TR2RMemoryMap.cs" />
+    <Compile Include="..\TRArchipelagoClient\GameInterface\TR3RMemoryMap.cs" Link="TR3RMemoryMap.cs" />
   </ItemGroup>
 </Project>

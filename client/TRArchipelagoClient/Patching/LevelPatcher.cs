@@ -6,34 +6,35 @@ using TRLevelControl.Model;
 namespace TRArchipelagoClient.Patching;
 
 /// <summary>
-/// Patches TR1 level files for Archipelago multiworld.
-/// Replaces randomizable pickups with SmallMed_S_P (universal sentinel)
+/// Patches TR level files for Archipelago multiworld.
+/// Replaces randomizable pickups with a sentinel entity type
 /// and records entity-to-AP-location mappings.
 /// </summary>
 public class LevelPatcher
 {
     private readonly string _gameDir;
-    private readonly APSession _session;
+    private readonly GameConfig _config;
+    private readonly LocationMapper _locationMapper;
     private readonly BackupManager _backupManager;
 
     // Mapping of (levelFile, entityIndex) -> AP location ID
     private readonly Dictionary<string, Dictionary<int, long>> _locationMappings = new();
 
-    // Items that are AP locations (pickups + key items)
+    // Items that are AP locations (pickups + key items) — TR1 specific for now
     private static readonly HashSet<TR1Type> _trackableTypes = new(
         TR1TypeUtilities.GetStandardPickupTypes()
             .Concat(TR1TypeUtilities.GetKeyItemTypes())
     );
 
     // Sentinel type: SmallMed_S_P exists in every level (has mesh data).
-    // Player picks up a "small medipack" visually, but the real AP item is determined by the server.
     private const TR1Type SentinelType = TR1Type.SmallMed_S_P;
 
-    public LevelPatcher(string gameDir, APSession session)
+    public LevelPatcher(string gameDir, GameConfig config, LocationMapper locationMapper)
     {
         _gameDir = gameDir;
-        _session = session;
-        _backupManager = new BackupManager(gameDir);
+        _config = config;
+        _locationMapper = locationMapper;
+        _backupManager = new BackupManager(gameDir, config);
     }
 
     public BackupManager BackupManager => _backupManager;
@@ -45,9 +46,9 @@ public class LevelPatcher
     {
         _backupManager.BackupAll();
 
-        var levels = TR1LevelNames.AsList;
+        var levels = _config.LevelFiles;
 
-        for (int levelIdx = 0; levelIdx < levels.Count; levelIdx++)
+        for (int levelIdx = 0; levelIdx < levels.Length; levelIdx++)
         {
             string levelFile = levels[levelIdx];
             string levelPath = _backupManager.GetLevelPath(levelFile);
@@ -64,7 +65,7 @@ public class LevelPatcher
 
     /// <summary>
     /// Scan and patch a single level file.
-    /// Replaces all pickup/key item entities with SmallMed_S_P sentinel.
+    /// Replaces all pickup/key item entities with sentinel type.
     /// </summary>
     private void PatchLevel(string levelFile, string levelPath, int levelIndex)
     {
@@ -92,12 +93,12 @@ public class LevelPatcher
                 continue;
 
             // Calculate the AP location ID for this entity
-            long locationId = LocationMapper.GetPickupLocationId(levelIndex, i);
+            long locationId = _locationMapper.GetPickupLocationId(levelIndex, i);
 
             // Record the mapping
             entityMapping[i] = locationId;
 
-            // Replace with sentinel — SmallMed_S_P mesh exists in all levels
+            // Replace with sentinel
             entity.TypeID = SentinelType;
             patchedCount++;
         }
@@ -140,17 +141,16 @@ public class LevelPatcher
     }
 
     /// <summary>
-    /// Get all entity-to-location mappings indexed by LocationMapper level index (0-based).
+    /// Get all entity-to-location mappings indexed by level index (0-based).
     /// Used by GameStateWatcher for real-time entity pickup detection.
     /// </summary>
     public Dictionary<int, Dictionary<int, long>> GetAllMappingsByLevelIndex()
     {
         var result = new Dictionary<int, Dictionary<int, long>>();
-        var levels = TR1LevelNames.AsList;
 
-        for (int i = 0; i < levels.Count; i++)
+        for (int i = 0; i < _config.LevelFiles.Length; i++)
         {
-            if (_locationMappings.TryGetValue(levels[i], out var mapping) && mapping.Count > 0)
+            if (_locationMappings.TryGetValue(_config.LevelFiles[i], out var mapping) && mapping.Count > 0)
                 result[i] = mapping;
         }
 

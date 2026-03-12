@@ -22,6 +22,8 @@ namespace TRArchipelagoClient.GameInterface;
 public class InventoryManager
 {
     private readonly ProcessMemory _memory;
+    private readonly ItemMapper _itemMapper;
+    private readonly LocationMapper _locationMapper;
 
     // Received key items per level — kept permanently for idempotent re-injection
     // after death/reload. InjectToRingRaw handles duplicates safely.
@@ -53,9 +55,11 @@ public class InventoryManager
     /// <summary>Set by GameStateWatcher once the scanner finds the live inventory address.</summary>
     public InventoryScanner? Scanner { get; set; }
 
-    public InventoryManager(ProcessMemory memory)
+    public InventoryManager(ProcessMemory memory, ItemMapper itemMapper, LocationMapper locationMapper)
     {
         _memory = memory;
+        _itemMapper = itemMapper;
+        _locationMapper = locationMapper;
     }
 
     /// <summary>
@@ -79,7 +83,7 @@ public class InventoryManager
     /// </summary>
     public void GiveWeapon(long apItemId)
     {
-        var type = ItemMapper.GetTR1Type(apItemId);
+        var type = _itemMapper.GetTR1Type(apItemId);
         if (type == null) return;
 
         int relIdx = type.Value switch
@@ -157,7 +161,7 @@ public class InventoryManager
     /// </summary>
     public void GiveAmmo(long apItemId)
     {
-        var type = ItemMapper.GetTR1Type(apItemId);
+        var type = _itemMapper.GetTR1Type(apItemId);
         if (type == null) return;
 
         // Map ammo type to its weapon relIdx and ammo relIdx
@@ -210,7 +214,7 @@ public class InventoryManager
     /// </summary>
     public void GiveMedipack(long apItemId)
     {
-        var type = ItemMapper.GetTR1Type(apItemId);
+        var type = _itemMapper.GetTR1Type(apItemId);
         if (type == null) return;
 
         int relIdx = type.Value switch
@@ -241,10 +245,10 @@ public class InventoryManager
     /// </summary>
     public void GiveKeyItem(long apItemId, int currentRuntimeLevelId)
     {
-        string? targetLevelFile = ItemMapper.GetKeyItemLevel(apItemId);
+        string? targetLevelFile = _itemMapper.GetKeyItemLevel(apItemId);
         if (targetLevelFile == null) return;
 
-        int targetMapperIdx = LocationMapper.GetLevelIndex(targetLevelFile);
+        int targetMapperIdx = _locationMapper.GetLevelIndex(targetLevelFile);
         int currentMapperIdx = TR1RMemoryMap.ToLocationMapperIndex(currentRuntimeLevelId);
 
         // Always store for idempotent re-injection (death/reload/reconnect)

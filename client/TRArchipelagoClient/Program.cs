@@ -80,7 +80,10 @@ class Program
 
         ConsoleUI.Info($"Connecting to {server} as {slotName}...");
 
-        var session = new APSession();
+        var config = TR1GameConfig.Create();
+        var itemMapper = new ItemMapper(config);
+        var locationMapper = new LocationMapper(config);
+        var session = new APSession(config);
         var memory = new ProcessMemory();
         var cts = new CancellationTokenSource();
         LevelPatcher? patcher = null;
@@ -105,7 +108,7 @@ class Program
             ConsoleUI.Success($"Connected! Game: {session.SlotData?.Game ?? "unknown"}");
 
             ConsoleUI.Info("Backing up and patching level files...");
-            patcher = new LevelPatcher(gameDir, session);
+            patcher = new LevelPatcher(gameDir, config, locationMapper);
             patcher.PatchAll();
 
             ConsoleUI.Success("Level files patched (pickups replaced with sentinels).");
@@ -114,7 +117,7 @@ class Program
             ConsoleUI.Info($"Tracking {entityLocations.Values.Sum(m => m.Count)} pickup locations across {entityLocations.Count} levels.");
 
             var stateStore = new SaveStateStore(session.SlotName, session.Seed);
-            var watcher = new GameStateWatcher(session, memory, entityLocations, stateStore);
+            var watcher = new GameStateWatcher(session, memory, itemMapper, locationMapper, entityLocations, stateStore);
 
             ConsoleUI.Info("Waiting for game to launch...");
             ConsoleUI.Info("Start tomb123.exe and begin playing TR1!\n");
