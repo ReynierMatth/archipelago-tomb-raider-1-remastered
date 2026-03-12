@@ -28,9 +28,6 @@ venv/
 Thumbs.db
 .DS_Store
 
-# Build outputs
-*.apworld
-tr1r_data.json
 
 # Dev artifacts
 apworld/output/

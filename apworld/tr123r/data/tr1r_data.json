@@ -1,0 +1,4773 @@
+{
+  "game": "Tomb Raider Remastered",
+  "levels": [
+    {
+      "name": "Caves",
+      "file": "LEVEL1.PHD",
+      "sequence": 1,
+      "region": "Peru",
+      "pickups": [
+        {
+          "entityIndex": 29,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 16896,
+          "y": 6656,
+          "z": 60928,
+          "room": 17,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 34,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 4608,
+          "y": 3840,
+          "z": 79360,
+          "room": 23,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 47,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 7680,
+          "y": 8960,
+          "z": 84480,
+          "room": 27,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 48,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 65024,
+          "y": -3072,
+          "z": 52736,
+          "room": 28,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 54,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 49664,
+          "y": 4608,
+          "z": 74240,
+          "room": 33,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 58,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 90624,
+          "y": 1024,
+          "z": 38400,
+          "room": 36,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 59,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 16896,
+          "y": 7936,
+          "z": 97792,
+          "room": 37,
+          "requiredKeyItems": []
+        }
+      ],
+      "keyItems": [],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "City of Vilcabamba",
+      "file": "LEVEL2.PHD",
+      "sequence": 2,
+      "region": "Peru",
+      "pickups": [
+        {
+          "entityIndex": 4,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 64000,
+          "y": -1280,
+          "z": 20992,
+          "room": 1,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 7,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 55424,
+          "y": 0,
+          "z": 44544,
+          "room": 5,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 29,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 69120,
+          "y": -1024,
+          "z": 20992,
+          "room": 21,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 33,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 78336,
+          "y": -1536,
+          "z": 28160,
+          "room": 33,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 39,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 59904,
+          "y": -1024,
+          "z": 29184,
+          "room": 35,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 48,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 28160,
+          "y": -3072,
+          "z": 25728,
+          "room": 42,
+          "requiredKeyItems": [
+            "City of Vilcabamba - Silver Key"
+          ]
+        },
+        {
+          "entityIndex": 52,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 28160,
+          "y": -5632,
+          "z": 27136,
+          "room": 54,
+          "requiredKeyItems": [
+            "City of Vilcabamba - Silver Key"
+          ]
+        },
+        {
+          "entityIndex": 54,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 31232,
+          "y": -7936,
+          "z": 23040,
+          "room": 58,
+          "requiredKeyItems": [
+            "City of Vilcabamba - Silver Key"
+          ]
+        },
+        {
+          "entityIndex": 87,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 68096,
+          "y": 3584,
+          "z": 46592,
+          "room": 88,
+          "requiredKeyItems": [
+            "City of Vilcabamba - Silver Key"
+          ]
+        },
+        {
+          "entityIndex": 88,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 69120,
+          "y": 3328,
+          "z": 45568,
+          "room": 88,
+          "requiredKeyItems": [
+            "City of Vilcabamba - Silver Key"
+          ]
+        },
+        {
+          "entityIndex": 89,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 12800,
+          "y": 0,
+          "z": 13824,
+          "room": 89,
+          "requiredKeyItems": [
+            "City of Vilcabamba - Silver Key"
+          ]
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 19,
+          "type": "Puzzle1_S_P",
+          "alias": "Vilcabamba_Puzzle1",
+          "name": "City of Vilcabamba - Gold Idol",
+          "x": 58880,
+          "y": 256,
+          "z": 22016,
+          "room": 14
+        },
+        {
+          "entityIndex": 20,
+          "type": "Key1_S_P",
+          "alias": "Vilcabamba_Key1",
+          "name": "City of Vilcabamba - Silver Key",
+          "x": 64000,
+          "y": 512,
+          "z": 22016,
+          "room": 14
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Lost Valley",
+      "file": "LEVEL3A.PHD",
+      "sequence": 3,
+      "region": "Peru",
+      "pickups": [
+        {
+          "entityIndex": 12,
+          "type": "Shotgun_S_P",
+          "category": "weapon",
+          "x": 39808,
+          "y": -256,
+          "z": 86528,
+          "room": 5,
+          "requiredKeyItems": [
+            "Lost Valley - Machine Cog",
+            "Lost Valley - Machine Cog #2",
+            "Lost Valley - Machine Cog #3"
+          ]
+        },
+        {
+          "entityIndex": 14,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 40448,
+          "y": -1024,
+          "z": 98816,
+          "room": 9,
+          "requiredKeyItems": [
+            "Lost Valley - Machine Cog",
+            "Lost Valley - Machine Cog #2",
+            "Lost Valley - Machine Cog #3"
+          ]
+        },
+        {
+          "entityIndex": 18,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 45568,
+          "y": -2048,
+          "z": 73216,
+          "room": 14,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 19,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 41472,
+          "y": -2048,
+          "z": 77312,
+          "room": 14,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 20,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 45568,
+          "y": -2048,
+          "z": 77312,
+          "room": 14,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 28,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 35968,
+          "y": 0,
+          "z": 45568,
+          "room": 27,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 31,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 35328,
+          "y": 1664,
+          "z": 4608,
+          "room": 31,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 58,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 67072,
+          "y": -2176,
+          "z": 10752,
+          "room": 65,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 59,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 67072,
+          "y": -1920,
+          "z": 9728,
+          "room": 65,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 60,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 66048,
+          "y": -2560,
+          "z": 11776,
+          "room": 66,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 61,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 67072,
+          "y": -2176,
+          "z": 12800,
+          "room": 66,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 62,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 38400,
+          "y": -512,
+          "z": 1152,
+          "room": 89,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 63,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 37376,
+          "y": -512,
+          "z": 1536,
+          "room": 89,
+          "requiredKeyItems": []
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 33,
+          "type": "Puzzle1_S_P",
+          "alias": "Valley_Puzzle1",
+          "name": "Lost Valley - Machine Cog",
+          "x": 27136,
+          "y": -3584,
+          "z": 1536,
+          "room": 40
+        },
+        {
+          "entityIndex": 40,
+          "type": "Puzzle1_S_P",
+          "alias": "Valley_Puzzle1_2",
+          "name": "Lost Valley - Machine Cog #2",
+          "x": 81408,
+          "y": 7936,
+          "z": 9728,
+          "room": 48
+        },
+        {
+          "entityIndex": 53,
+          "type": "Puzzle1_S_P",
+          "alias": "Valley_Puzzle1_3",
+          "name": "Lost Valley - Machine Cog #3",
+          "x": 34304,
+          "y": -512,
+          "z": 19968,
+          "room": 58
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        },
+        {
+          "index": 3,
+          "rewardEntities": []
+        },
+        {
+          "index": 4,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Tomb of Qualopec",
+      "file": "LEVEL3B.PHD",
+      "sequence": 4,
+      "region": "Peru",
+      "pickups": [
+        {
+          "entityIndex": 19,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 64000,
+          "y": 6400,
+          "z": 78336,
+          "room": 4,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 27,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 30208,
+          "y": 4096,
+          "z": 55808,
+          "room": 6,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 28,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 30208,
+          "y": 4096,
+          "z": 57856,
+          "room": 6,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 29,
+          "type": "Shotgun_S_P",
+          "category": "weapon",
+          "x": 64384,
+          "y": 4608,
+          "z": 78336,
+          "room": 7,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 31,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 41472,
+          "y": 128,
+          "z": 35328,
+          "room": 14,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 61,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 60288,
+          "y": 8448,
+          "z": 48640,
+          "room": 34,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 64,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 54400,
+          "y": 4096,
+          "z": 46592,
+          "room": 35,
+          "requiredKeyItems": []
+        }
+      ],
+      "keyItems": [],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "St. Francis' Folly",
+      "file": "LEVEL4.PHD",
+      "sequence": 5,
+      "region": "Greece",
+      "pickups": [
+        {
+          "entityIndex": 5,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 34304,
+          "y": -3840,
+          "z": 40448,
+          "room": 1,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 10,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 35328,
+          "y": 20224,
+          "z": 39424,
+          "room": 3,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 16,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 40448,
+          "y": 8448,
+          "z": 35328,
+          "room": 10,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 17,
+          "type": "Shotgun_S_P",
+          "category": "weapon",
+          "x": 42496,
+          "y": 8448,
+          "z": 33280,
+          "room": 10,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 21,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 61952,
+          "y": 14848,
+          "z": 37376,
+          "room": 16,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 22,
+          "type": "Shotgun_S_P",
+          "category": "weapon",
+          "x": 40448,
+          "y": 10752,
+          "z": 35328,
+          "room": 17,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 53,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 39424,
+          "y": 16384,
+          "z": 45568,
+          "room": 21,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 58,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 35328,
+          "y": 18432,
+          "z": 45184,
+          "room": 23,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 72,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 16896,
+          "y": 17152,
+          "z": 45568,
+          "room": 39,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 73,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 17920,
+          "y": 17152,
+          "z": 46592,
+          "room": 39,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 94,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 49664,
+          "y": 17152,
+          "z": 48640,
+          "room": 47,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 98,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 31232,
+          "y": -8448,
+          "z": 33280,
+          "room": 52,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 99,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 30208,
+          "y": -8448,
+          "z": 33280,
+          "room": 52,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 105,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 44544,
+          "y": 23552,
+          "z": 49664,
+          "room": 60,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 106,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 42496,
+          "y": 23552,
+          "z": 49664,
+          "room": 60,
+          "requiredKeyItems": []
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 65,
+          "type": "Key1_S_P",
+          "alias": "Folly_Key1",
+          "name": "St. Francis' Folly - Neptune Key",
+          "x": 38400,
+          "y": 29952,
+          "z": 57856,
+          "room": 33
+        },
+        {
+          "entityIndex": 71,
+          "type": "Key3_S_P",
+          "alias": "Folly_Key3",
+          "name": "St. Francis' Folly - Damocles Key",
+          "x": 17920,
+          "y": 18944,
+          "z": 45568,
+          "room": 38
+        },
+        {
+          "entityIndex": 89,
+          "type": "Key4_S_P",
+          "alias": "Folly_Key4",
+          "name": "St. Francis' Folly - Thor Key",
+          "x": 65024,
+          "y": 14592,
+          "z": 42496,
+          "room": 44
+        },
+        {
+          "entityIndex": 92,
+          "type": "Key2_S_P",
+          "alias": "Folly_Key2",
+          "name": "St. Francis' Folly - Atlas Key",
+          "x": 50688,
+          "y": 13056,
+          "z": 47616,
+          "room": 47
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        },
+        {
+          "index": 3,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Colosseum",
+      "file": "LEVEL5.PHD",
+      "sequence": 6,
+      "region": "Greece",
+      "pickups": [
+        {
+          "entityIndex": 6,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 67072,
+          "y": -2560,
+          "z": 51328,
+          "room": 10,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 7,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 29568,
+          "y": -3840,
+          "z": 43520,
+          "room": 14,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 16,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 45568,
+          "y": -5760,
+          "z": 62976,
+          "room": 19,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 18,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 31232,
+          "y": 1280,
+          "z": 52736,
+          "room": 22,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 43,
+          "type": "Magnums_S_P",
+          "category": "weapon",
+          "x": 57856,
+          "y": -8448,
+          "z": 15872,
+          "room": 51,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 44,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 58880,
+          "y": -8448,
+          "z": 15488,
+          "room": 51,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 45,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 58240,
+          "y": -8448,
+          "z": 16896,
+          "room": 51,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 46,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 58880,
+          "y": -8448,
+          "z": 15488,
+          "room": 51,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 52,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 29184,
+          "y": -6144,
+          "z": 20992,
+          "room": 56,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 53,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 22016,
+          "y": -2304,
+          "z": 46592,
+          "room": 57,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 60,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 79360,
+          "y": -2560,
+          "z": 49664,
+          "room": 62,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 84,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 62976,
+          "y": 0,
+          "z": 55808,
+          "room": 87,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 85,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 61952,
+          "y": -4096,
+          "z": 51712,
+          "room": 88,
+          "requiredKeyItems": []
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 50,
+          "type": "Key1_S_P",
+          "alias": "Colosseum_Key1",
+          "name": "Colosseum - Rusty Key",
+          "x": 33280,
+          "y": -5888,
+          "z": 17920,
+          "room": 54
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Palace Midas",
+      "file": "LEVEL6.PHD",
+      "sequence": 7,
+      "region": "Greece",
+      "pickups": [
+        {
+          "entityIndex": 6,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 60928,
+          "y": 0,
+          "z": 59520,
+          "room": 2,
+          "requiredKeyItems": [
+            "Palace Midas - Lead Bar",
+            "Palace Midas - Lead Bar #2",
+            "Palace Midas - Lead Bar #3"
+          ]
+        },
+        {
+          "entityIndex": 7,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 58880,
+          "y": 0,
+          "z": 59520,
+          "room": 2,
+          "requiredKeyItems": [
+            "Palace Midas - Lead Bar",
+            "Palace Midas - Lead Bar #2",
+            "Palace Midas - Lead Bar #3"
+          ]
+        },
+        {
+          "entityIndex": 8,
+          "type": "Magnums_S_P",
+          "category": "weapon",
+          "x": 59904,
+          "y": -512,
+          "z": 60928,
+          "room": 2,
+          "requiredKeyItems": [
+            "Palace Midas - Lead Bar",
+            "Palace Midas - Lead Bar #2",
+            "Palace Midas - Lead Bar #3"
+          ]
+        },
+        {
+          "entityIndex": 16,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 84480,
+          "y": -4096,
+          "z": 38400,
+          "room": 6,
+          "requiredKeyItems": [
+            "Palace Midas - Lead Bar #2",
+            "Palace Midas - Lead Bar #3"
+          ]
+        },
+        {
+          "entityIndex": 78,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 28160,
+          "y": -2048,
+          "z": 66048,
+          "room": 30,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 80,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 32256,
+          "y": -6400,
+          "z": 63616,
+          "room": 31,
+          "requiredKeyItems": [
+            "Palace Midas - Lead Bar #2",
+            "Palace Midas - Lead Bar #3"
+          ]
+        },
+        {
+          "entityIndex": 87,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 16896,
+          "y": -9472,
+          "z": 39424,
+          "room": 36,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 90,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 29568,
+          "y": -7424,
+          "z": 47616,
+          "room": 38,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 91,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 29184,
+          "y": -7424,
+          "z": 47616,
+          "room": 38,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 93,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 24064,
+          "y": -7424,
+          "z": 32896,
+          "room": 40,
+          "requiredKeyItems": [
+            "Palace Midas - Lead Bar",
+            "Palace Midas - Lead Bar #2",
+            "Palace Midas - Lead Bar #3"
+          ]
+        },
+        {
+          "entityIndex": 101,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 50688,
+          "y": -2048,
+          "z": 63616,
+          "room": 44,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 102,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 51072,
+          "y": -2048,
+          "z": 64000,
+          "room": 44,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 107,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 43904,
+          "y": -6400,
+          "z": 56832,
+          "room": 45,
+          "requiredKeyItems": [
+            "Palace Midas - Lead Bar #2",
+            "Palace Midas - Lead Bar #3"
+          ]
+        },
+        {
+          "entityIndex": 114,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -7552,
+          "z": 55808,
+          "room": 53,
+          "requiredKeyItems": [
+            "Palace Midas - Lead Bar #2",
+            "Palace Midas - Lead Bar #3"
+          ]
+        },
+        {
+          "entityIndex": 115,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": -7552,
+          "z": 55808,
+          "room": 53,
+          "requiredKeyItems": [
+            "Palace Midas - Lead Bar #2",
+            "Palace Midas - Lead Bar #3"
+          ]
+        },
+        {
+          "entityIndex": 116,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 32256,
+          "y": -7552,
+          "z": 55808,
+          "room": 53,
+          "requiredKeyItems": [
+            "Palace Midas - Lead Bar #2",
+            "Palace Midas - Lead Bar #3"
+          ]
+        },
+        {
+          "entityIndex": 119,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 53760,
+          "y": -11392,
+          "z": 67072,
+          "room": 59,
+          "requiredKeyItems": [
+            "Palace Midas - Lead Bar #2",
+            "Palace Midas - Lead Bar #3"
+          ]
+        },
+        {
+          "entityIndex": 120,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 53760,
+          "y": -11392,
+          "z": 67072,
+          "room": 59,
+          "requiredKeyItems": [
+            "Palace Midas - Lead Bar #2",
+            "Palace Midas - Lead Bar #3"
+          ]
+        },
+        {
+          "entityIndex": 124,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 54144,
+          "y": -15104,
+          "z": 62976,
+          "room": 60,
+          "requiredKeyItems": [
+            "Palace Midas - Lead Bar #2",
+            "Palace Midas - Lead Bar #3"
+          ]
+        },
+        {
+          "entityIndex": 131,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 66688,
+          "y": -1792,
+          "z": 51712,
+          "room": 70,
+          "requiredKeyItems": [
+            "Palace Midas - Lead Bar",
+            "Palace Midas - Lead Bar #2",
+            "Palace Midas - Lead Bar #3"
+          ]
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 22,
+          "type": "LeadBar_S_P",
+          "alias": "Midas_LeadBar",
+          "name": "Palace Midas - Lead Bar",
+          "x": 82432,
+          "y": -7808,
+          "z": 41472,
+          "room": 7
+        },
+        {
+          "entityIndex": 40,
+          "type": "LeadBar_S_P",
+          "alias": "Midas_LeadBar_2",
+          "name": "Palace Midas - Lead Bar #2",
+          "x": 24064,
+          "y": -4608,
+          "z": 71168,
+          "room": 23
+        },
+        {
+          "entityIndex": 66,
+          "type": "LeadBar_S_P",
+          "alias": "Midas_LeadBar_3",
+          "name": "Palace Midas - Lead Bar #3",
+          "x": 32256,
+          "y": -6912,
+          "z": 28160,
+          "room": 28
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "The Cistern",
+      "file": "LEVEL7A.PHD",
+      "sequence": 8,
+      "region": "Greece",
+      "pickups": [
+        {
+          "entityIndex": 2,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 26112,
+          "y": -10240,
+          "z": 54784,
+          "room": 3,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 3,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 24064,
+          "y": -10240,
+          "z": 54784,
+          "room": 3,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 4,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 27136,
+          "y": -10240,
+          "z": 61952,
+          "room": 3,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 32,
+          "type": "Magnums_S_P",
+          "category": "weapon",
+          "x": 64000,
+          "y": -6912,
+          "z": 59904,
+          "room": 25,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key",
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 33,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 57856,
+          "y": -6656,
+          "z": 61952,
+          "room": 25,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key",
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 40,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 62336,
+          "y": -1280,
+          "z": 59904,
+          "room": 34,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key",
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 54,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 47616,
+          "y": -3584,
+          "z": 43520,
+          "room": 48,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key",
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 55,
+          "type": "Shotgun_S_P",
+          "category": "weapon",
+          "x": 42496,
+          "y": -3584,
+          "z": 42880,
+          "room": 48,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key",
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 56,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 42496,
+          "y": -3584,
+          "z": 44544,
+          "room": 48,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key",
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 66,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 54784,
+          "y": 0,
+          "z": 50048,
+          "room": 56,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key",
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 80,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 41472,
+          "y": -5120,
+          "z": 28160,
+          "room": 61,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key",
+            "The Cistern - Silver Key",
+            "The Cistern - Silver Key #2",
+            "The Cistern - Gold Key",
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 81,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 46592,
+          "y": -9216,
+          "z": 26112,
+          "room": 64,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key",
+            "The Cistern - Silver Key",
+            "The Cistern - Silver Key #2",
+            "The Cistern - Gold Key",
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 82,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 45568,
+          "y": -9216,
+          "z": 25728,
+          "room": 64,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key",
+            "The Cistern - Silver Key",
+            "The Cistern - Silver Key #2",
+            "The Cistern - Gold Key",
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 83,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 39424,
+          "y": -9216,
+          "z": 25088,
+          "room": 65,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key",
+            "The Cistern - Silver Key",
+            "The Cistern - Silver Key #2",
+            "The Cistern - Gold Key",
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 92,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 41472,
+          "y": -7424,
+          "z": 46592,
+          "room": 82,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key",
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 93,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 41472,
+          "y": -7424,
+          "z": 45568,
+          "room": 82,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key",
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 94,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 41472,
+          "y": -7424,
+          "z": 44544,
+          "room": 82,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key",
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 95,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 47616,
+          "y": 2816,
+          "z": 57856,
+          "room": 83,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 97,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 21632,
+          "y": -14848,
+          "z": 64000,
+          "room": 86,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 98,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 26112,
+          "y": -15360,
+          "z": 64000,
+          "room": 86,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 99,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 22016,
+          "y": -14848,
+          "z": 64000,
+          "room": 86,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 102,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 34304,
+          "y": -3584,
+          "z": 65024,
+          "room": 100,
+          "requiredKeyItems": [
+            "The Cistern - Rusty Key",
+            "The Cistern - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 110,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 48640,
+          "y": -5632,
+          "z": 67072,
+          "room": 135,
+          "requiredKeyItems": []
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 24,
+          "type": "Key3_S_P",
+          "alias": "Cistern_Key3",
+          "name": "The Cistern - Rusty Key",
+          "x": 26112,
+          "y": -8192,
+          "z": 64000,
+          "room": 20
+        },
+        {
+          "entityIndex": 46,
+          "type": "Key2_S_P",
+          "alias": "Cistern_Key2",
+          "name": "The Cistern - Silver Key",
+          "x": 48640,
+          "y": -1024,
+          "z": 40448,
+          "room": 40
+        },
+        {
+          "entityIndex": 61,
+          "type": "Key2_S_P",
+          "alias": "Cistern_Key2_2",
+          "name": "The Cistern - Silver Key #2",
+          "x": 43520,
+          "y": 0,
+          "z": 47616,
+          "room": 49
+        },
+        {
+          "entityIndex": 67,
+          "type": "Key1_S_P",
+          "alias": "Cistern_Key1",
+          "name": "The Cistern - Gold Key",
+          "x": 53760,
+          "y": 0,
+          "z": 52736,
+          "room": 56
+        },
+        {
+          "entityIndex": 100,
+          "type": "Key3_S_P",
+          "alias": "Cistern_Key3_2",
+          "name": "The Cistern - Rusty Key #2",
+          "x": 40448,
+          "y": -5632,
+          "z": 66048,
+          "room": 91
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Tomb of Tihocan",
+      "file": "LEVEL7B.PHD",
+      "sequence": 9,
+      "region": "Greece",
+      "pickups": [
+        {
+          "entityIndex": 0,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 46592,
+          "y": -2560,
+          "z": 69120,
+          "room": 9,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 1,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 46592,
+          "y": -2560,
+          "z": 69120,
+          "room": 9,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 7,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 23040,
+          "y": 1024,
+          "z": 58880,
+          "room": 12,
+          "requiredKeyItems": [
+            "Tomb of Tihocan - Gold Key",
+            "Tomb of Tihocan - Rusty Key",
+            "Tomb of Tihocan - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 8,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 23040,
+          "y": 1024,
+          "z": 58496,
+          "room": 12,
+          "requiredKeyItems": [
+            "Tomb of Tihocan - Gold Key",
+            "Tomb of Tihocan - Rusty Key",
+            "Tomb of Tihocan - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 9,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 44544,
+          "y": -5376,
+          "z": 78720,
+          "room": 14,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 10,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 52736,
+          "y": -7936,
+          "z": 79360,
+          "room": 15,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 21,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 42496,
+          "y": -256,
+          "z": 13824,
+          "room": 29,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 26,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 40448,
+          "y": -512,
+          "z": 75264,
+          "room": 35,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 27,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 42496,
+          "y": -256,
+          "z": 73216,
+          "room": 35,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 28,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 41472,
+          "y": -256,
+          "z": 72192,
+          "room": 35,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 47,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 32896,
+          "y": -4352,
+          "z": 57856,
+          "room": 74,
+          "requiredKeyItems": [
+            "Tomb of Tihocan - Gold Key"
+          ]
+        },
+        {
+          "entityIndex": 49,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 40064,
+          "y": -3840,
+          "z": 69120,
+          "room": 75,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 59,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 38400,
+          "y": -3584,
+          "z": 58496,
+          "room": 78,
+          "requiredKeyItems": [
+            "Tomb of Tihocan - Gold Key"
+          ]
+        },
+        {
+          "entityIndex": 63,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 28544,
+          "y": -6144,
+          "z": 61952,
+          "room": 79,
+          "requiredKeyItems": [
+            "Tomb of Tihocan - Gold Key"
+          ]
+        },
+        {
+          "entityIndex": 68,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 34304,
+          "y": -4352,
+          "z": 73216,
+          "room": 81,
+          "requiredKeyItems": [
+            "Tomb of Tihocan - Gold Key"
+          ]
+        },
+        {
+          "entityIndex": 70,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 36352,
+          "y": -4096,
+          "z": 71168,
+          "room": 82,
+          "requiredKeyItems": [
+            "Tomb of Tihocan - Gold Key"
+          ]
+        },
+        {
+          "entityIndex": 71,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 37376,
+          "y": -4352,
+          "z": 73216,
+          "room": 82,
+          "requiredKeyItems": [
+            "Tomb of Tihocan - Gold Key"
+          ]
+        },
+        {
+          "entityIndex": 84,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 36352,
+          "y": 1280,
+          "z": 92672,
+          "room": 111,
+          "requiredKeyItems": [
+            "Tomb of Tihocan - Gold Key",
+            "Tomb of Tihocan - Rusty Key",
+            "Tomb of Tihocan - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 85,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 28160,
+          "y": 1280,
+          "z": 92672,
+          "room": 111,
+          "requiredKeyItems": [
+            "Tomb of Tihocan - Gold Key",
+            "Tomb of Tihocan - Rusty Key",
+            "Tomb of Tihocan - Rusty Key #2"
+          ]
+        },
+        {
+          "entityIndex": 86,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 36352,
+          "y": 1024,
+          "z": 84480,
+          "room": 111,
+          "requiredKeyItems": [
+            "Tomb of Tihocan - Gold Key",
+            "Tomb of Tihocan - Rusty Key",
+            "Tomb of Tihocan - Rusty Key #2"
+          ]
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 11,
+          "type": "Key1_S_P",
+          "alias": "Tihocan_Key1",
+          "name": "Tomb of Tihocan - Gold Key",
+          "x": 51712,
+          "y": -7936,
+          "z": 80384,
+          "room": 15
+        },
+        {
+          "entityIndex": 62,
+          "type": "Key3_S_P",
+          "alias": "Tihocan_Key3",
+          "name": "Tomb of Tihocan - Rusty Key",
+          "x": 38400,
+          "y": -4096,
+          "z": 56832,
+          "room": 78
+        },
+        {
+          "entityIndex": 65,
+          "type": "Key3_S_P",
+          "alias": "Tihocan_Key3_2",
+          "name": "Tomb of Tihocan - Rusty Key #2",
+          "x": 27136,
+          "y": -6144,
+          "z": 61952,
+          "room": 79
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "City of Khamoon",
+      "file": "LEVEL8A.PHD",
+      "sequence": 10,
+      "region": "Egypt",
+      "pickups": [
+        {
+          "entityIndex": 3,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": 1792,
+          "z": 28160,
+          "room": 4,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 4,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 35328,
+          "y": 1536,
+          "z": 31232,
+          "room": 4,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 6,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 24064,
+          "y": -2560,
+          "z": 19968,
+          "room": 6,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 7,
+          "type": "Magnums_S_P",
+          "category": "weapon",
+          "x": 28160,
+          "y": -2560,
+          "z": 19968,
+          "room": 6,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 10,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 21632,
+          "y": 3328,
+          "z": 15872,
+          "room": 11,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 11,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 22016,
+          "y": 3328,
+          "z": 15872,
+          "room": 11,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 21,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 35328,
+          "y": -3328,
+          "z": 30208,
+          "room": 13,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 23,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": -4224,
+          "z": 37376,
+          "room": 14,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 26,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 53760,
+          "y": 2304,
+          "z": 27136,
+          "room": 16,
+          "requiredKeyItems": [
+            "City of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 37,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 38400,
+          "y": 0,
+          "z": 34304,
+          "room": 32,
+          "requiredKeyItems": [
+            "City of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 47,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 61952,
+          "y": -1792,
+          "z": 22016,
+          "room": 40,
+          "requiredKeyItems": [
+            "City of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 48,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 60928,
+          "y": -1792,
+          "z": 22016,
+          "room": 40,
+          "requiredKeyItems": [
+            "City of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 50,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 57472,
+          "y": -4096,
+          "z": 30208,
+          "room": 41,
+          "requiredKeyItems": [
+            "City of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 51,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 48640,
+          "y": -3840,
+          "z": 29184,
+          "room": 41,
+          "requiredKeyItems": [
+            "City of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 52,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 53760,
+          "y": -3840,
+          "z": 25088,
+          "room": 41,
+          "requiredKeyItems": [
+            "City of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 64,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 53760,
+          "y": -8320,
+          "z": 30208,
+          "room": 44,
+          "requiredKeyItems": [
+            "City of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 68,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 61952,
+          "y": 7424,
+          "z": 37376,
+          "room": 46,
+          "requiredKeyItems": [
+            "City of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 71,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 32256,
+          "y": -1408,
+          "z": 46592,
+          "room": 48,
+          "requiredKeyItems": [
+            "City of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 77,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 33280,
+          "y": -4352,
+          "z": 48640,
+          "room": 51,
+          "requiredKeyItems": [
+            "City of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 83,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 51712,
+          "y": 3584,
+          "z": 29184,
+          "room": 54,
+          "requiredKeyItems": [
+            "City of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 84,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 57856,
+          "y": 3584,
+          "z": 29184,
+          "room": 54,
+          "requiredKeyItems": [
+            "City of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 92,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 47616,
+          "y": 7424,
+          "z": 37376,
+          "room": 59,
+          "requiredKeyItems": [
+            "City of Khamoon - Sapphire Key"
+          ]
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 22,
+          "type": "Key1_S_P",
+          "alias": "Khamoon_Key1",
+          "name": "City of Khamoon - Sapphire Key",
+          "x": 30208,
+          "y": -4352,
+          "z": 36352,
+          "room": 14
+        },
+        {
+          "entityIndex": 38,
+          "type": "Key1_S_P",
+          "alias": "Khamoon_Key1_2",
+          "name": "City of Khamoon - Sapphire Key #2",
+          "x": 44544,
+          "y": -3072,
+          "z": 37376,
+          "room": 33
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Obelisk of Khamoon",
+      "file": "LEVEL8B.PHD",
+      "sequence": 11,
+      "region": "Egypt",
+      "pickups": [
+        {
+          "entityIndex": 10,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 35328,
+          "y": 0,
+          "z": 26112,
+          "room": 11,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Eye of Horus",
+            "Obelisk of Khamoon - Scarab",
+            "Obelisk of Khamoon - Seal of Anubis",
+            "Obelisk of Khamoon - Ankh",
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 14,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 45568,
+          "y": -3584,
+          "z": 54784,
+          "room": 16,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 30,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 41472,
+          "y": -3072,
+          "z": 55808,
+          "room": 31,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 36,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 50688,
+          "y": 256,
+          "z": 55808,
+          "room": 36,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 46,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 44928,
+          "y": -11264,
+          "z": 54784,
+          "room": 41,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 49,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 46592,
+          "y": -6400,
+          "z": 60928,
+          "room": 42,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 50,
+          "type": "Magnums_S_P",
+          "category": "weapon",
+          "x": 48640,
+          "y": -6400,
+          "z": 60928,
+          "room": 42,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 51,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 47616,
+          "y": -6144,
+          "z": 60928,
+          "room": 42,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 52,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 49664,
+          "y": -7680,
+          "z": 56832,
+          "room": 42,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 53,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 49664,
+          "y": -7680,
+          "z": 56832,
+          "room": 42,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 54,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 51712,
+          "y": -5120,
+          "z": 52736,
+          "room": 42,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 55,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 51712,
+          "y": -5120,
+          "z": 52736,
+          "room": 42,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 56,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 51712,
+          "y": -5120,
+          "z": 52736,
+          "room": 42,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 59,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 33280,
+          "y": 256,
+          "z": 53760,
+          "room": 48,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 62,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 46592,
+          "y": -1280,
+          "z": 65024,
+          "room": 50,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 67,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 48640,
+          "y": 2560,
+          "z": 54784,
+          "room": 56,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 71,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 37376,
+          "y": -3072,
+          "z": 39424,
+          "room": 59,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Eye of Horus",
+            "Obelisk of Khamoon - Scarab",
+            "Obelisk of Khamoon - Seal of Anubis",
+            "Obelisk of Khamoon - Ankh",
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 72,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 36352,
+          "y": -3072,
+          "z": 39040,
+          "room": 59,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Eye of Horus",
+            "Obelisk of Khamoon - Scarab",
+            "Obelisk of Khamoon - Seal of Anubis",
+            "Obelisk of Khamoon - Ankh",
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 77,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 38400,
+          "y": 1024,
+          "z": 40448,
+          "room": 62,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Eye of Horus",
+            "Obelisk of Khamoon - Scarab",
+            "Obelisk of Khamoon - Seal of Anubis",
+            "Obelisk of Khamoon - Ankh",
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 78,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 34304,
+          "y": 1024,
+          "z": 40832,
+          "room": 62,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Eye of Horus",
+            "Obelisk of Khamoon - Scarab",
+            "Obelisk of Khamoon - Seal of Anubis",
+            "Obelisk of Khamoon - Ankh",
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 79,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 36352,
+          "y": 1024,
+          "z": 45568,
+          "room": 62,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Eye of Horus",
+            "Obelisk of Khamoon - Scarab",
+            "Obelisk of Khamoon - Seal of Anubis",
+            "Obelisk of Khamoon - Ankh",
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 80,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 50688,
+          "y": 7680,
+          "z": 50688,
+          "room": 63,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Eye of Horus",
+            "Obelisk of Khamoon - Scarab",
+            "Obelisk of Khamoon - Seal of Anubis",
+            "Obelisk of Khamoon - Ankh",
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 81,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 48640,
+          "y": 7680,
+          "z": 44544,
+          "room": 63,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Eye of Horus",
+            "Obelisk of Khamoon - Scarab",
+            "Obelisk of Khamoon - Seal of Anubis",
+            "Obelisk of Khamoon - Ankh",
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 82,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 50688,
+          "y": 7680,
+          "z": 44544,
+          "room": 63,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Eye of Horus",
+            "Obelisk of Khamoon - Scarab",
+            "Obelisk of Khamoon - Seal of Anubis",
+            "Obelisk of Khamoon - Ankh",
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 83,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 36352,
+          "y": -2048,
+          "z": 27136,
+          "room": 67,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Eye of Horus",
+            "Obelisk of Khamoon - Scarab",
+            "Obelisk of Khamoon - Seal of Anubis",
+            "Obelisk of Khamoon - Ankh",
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 86,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 71168,
+          "y": -768,
+          "z": 56832,
+          "room": 68,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 90,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 61952,
+          "y": 3840,
+          "z": 76288,
+          "room": 70,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 91,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 57856,
+          "y": 3840,
+          "z": 70144,
+          "room": 70,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 95,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 69120,
+          "y": 1792,
+          "z": 66048,
+          "room": 74,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 97,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 62336,
+          "y": -2048,
+          "z": 60928,
+          "room": 76,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 98,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 45568,
+          "y": -5632,
+          "z": 50688,
+          "room": 79,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 99,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 56448,
+          "y": -5888,
+          "z": 46592,
+          "room": 80,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        },
+        {
+          "entityIndex": 100,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 56832,
+          "y": -5888,
+          "z": 45568,
+          "room": 80,
+          "requiredKeyItems": [
+            "Obelisk of Khamoon - Sapphire Key"
+          ]
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 15,
+          "type": "Puzzle1_S_P",
+          "alias": "Obelisk_Puzzle1",
+          "name": "Obelisk of Khamoon - Eye of Horus",
+          "x": 50304,
+          "y": -3072,
+          "z": 56832,
+          "room": 16
+        },
+        {
+          "entityIndex": 16,
+          "type": "Puzzle2_S_P",
+          "alias": "Obelisk_Puzzle2",
+          "name": "Obelisk of Khamoon - Scarab",
+          "x": 49664,
+          "y": -3072,
+          "z": 56192,
+          "room": 16
+        },
+        {
+          "entityIndex": 17,
+          "type": "Puzzle3_S_P",
+          "alias": "Obelisk_Puzzle3",
+          "name": "Obelisk of Khamoon - Seal of Anubis",
+          "x": 49024,
+          "y": -3072,
+          "z": 56832,
+          "room": 16
+        },
+        {
+          "entityIndex": 18,
+          "type": "Puzzle4_S_P",
+          "alias": "Obelisk_Puzzle4",
+          "name": "Obelisk of Khamoon - Ankh",
+          "x": 49664,
+          "y": -3072,
+          "z": 57472,
+          "room": 16
+        },
+        {
+          "entityIndex": 88,
+          "type": "Key1_S_P",
+          "alias": "Obelisk_Key1",
+          "name": "Obelisk of Khamoon - Sapphire Key",
+          "x": 56832,
+          "y": 3072,
+          "z": 75264,
+          "room": 70
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Sanctuary of the Scion",
+      "file": "LEVEL8C.PHD",
+      "sequence": 12,
+      "region": "Egypt",
+      "pickups": [
+        {
+          "entityIndex": 3,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 45568,
+          "y": -768,
+          "z": 50688,
+          "room": 0,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 4,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 38400,
+          "y": -1152,
+          "z": 41472,
+          "room": 0,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 8,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 43520,
+          "y": -4352,
+          "z": 47616,
+          "room": 2,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 10,
+          "type": "Uzis_S_P",
+          "category": "weapon",
+          "x": 45184,
+          "y": -8704,
+          "z": 54784,
+          "room": 3,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 12,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 45184,
+          "y": -8704,
+          "z": 54784,
+          "room": 3,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 18,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 32256,
+          "y": 17920,
+          "z": 44544,
+          "room": 5,
+          "requiredKeyItems": [
+            "Sanctuary of the Scion - Ankh",
+            "Sanctuary of the Scion - Gold Key",
+            "Sanctuary of the Scion - Ankh #2"
+          ]
+        },
+        {
+          "entityIndex": 19,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 31232,
+          "y": 17664,
+          "z": 48640,
+          "room": 5,
+          "requiredKeyItems": [
+            "Sanctuary of the Scion - Ankh",
+            "Sanctuary of the Scion - Gold Key",
+            "Sanctuary of the Scion - Ankh #2"
+          ]
+        },
+        {
+          "entityIndex": 20,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 54784,
+          "y": -5120,
+          "z": 56832,
+          "room": 8,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 22,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 57856,
+          "y": -9216,
+          "z": 48640,
+          "room": 9,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 25,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 47616,
+          "y": -8832,
+          "z": 59904,
+          "room": 11,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 26,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 52736,
+          "y": -8704,
+          "z": 58880,
+          "room": 11,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 28,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 34304,
+          "y": -8704,
+          "z": 49664,
+          "room": 12,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 33,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 43520,
+          "y": -8448,
+          "z": 36352,
+          "room": 15,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 36,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 52736,
+          "y": -8448,
+          "z": 33280,
+          "room": 15,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 40,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 25088,
+          "y": -13056,
+          "z": 53760,
+          "room": 16,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 44,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 28160,
+          "y": 8476,
+          "z": 51990,
+          "room": 22,
+          "requiredKeyItems": [
+            "Sanctuary of the Scion - Ankh",
+            "Sanctuary of the Scion - Gold Key",
+            "Sanctuary of the Scion - Ankh #2"
+          ]
+        },
+        {
+          "entityIndex": 45,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 28160,
+          "y": 14336,
+          "z": 44544,
+          "room": 28,
+          "requiredKeyItems": [
+            "Sanctuary of the Scion - Ankh",
+            "Sanctuary of the Scion - Gold Key",
+            "Sanctuary of the Scion - Ankh #2"
+          ]
+        },
+        {
+          "entityIndex": 46,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 24064,
+          "y": 5120,
+          "z": 46592,
+          "room": 32,
+          "requiredKeyItems": [
+            "Sanctuary of the Scion - Ankh",
+            "Sanctuary of the Scion - Gold Key",
+            "Sanctuary of the Scion - Ankh #2"
+          ]
+        },
+        {
+          "entityIndex": 47,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 34304,
+          "y": 1536,
+          "z": 33280,
+          "room": 34,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 52,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 31232,
+          "y": -1792,
+          "z": 32256,
+          "room": 40,
+          "requiredKeyItems": [
+            "Sanctuary of the Scion - Gold Key"
+          ]
+        },
+        {
+          "entityIndex": 61,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 14848,
+          "y": 512,
+          "z": 43520,
+          "room": 56,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 62,
+          "type": "Magnums_S_P",
+          "category": "weapon",
+          "x": 14848,
+          "y": 512,
+          "z": 53760,
+          "room": 56,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 66,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 19968,
+          "y": 768,
+          "z": 52736,
+          "room": 57,
+          "requiredKeyItems": [
+            "Sanctuary of the Scion - Ankh",
+            "Sanctuary of the Scion - Gold Key",
+            "Sanctuary of the Scion - Ankh #2",
+            "Sanctuary of the Scion - Scarab"
+          ]
+        },
+        {
+          "entityIndex": 67,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 19968,
+          "y": 768,
+          "z": 52736,
+          "room": 57,
+          "requiredKeyItems": [
+            "Sanctuary of the Scion - Ankh",
+            "Sanctuary of the Scion - Gold Key",
+            "Sanctuary of the Scion - Ankh #2",
+            "Sanctuary of the Scion - Scarab"
+          ]
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 38,
+          "type": "Puzzle1_S_P",
+          "alias": "Sanctuary_Puzzle1",
+          "name": "Sanctuary of the Scion - Ankh",
+          "x": 23040,
+          "y": -13824,
+          "z": 55808,
+          "room": 16
+        },
+        {
+          "entityIndex": 41,
+          "type": "Key1_S_P",
+          "alias": "Sanctuary_Key1",
+          "name": "Sanctuary of the Scion - Gold Key",
+          "x": 27136,
+          "y": 3840,
+          "z": 38400,
+          "room": 19
+        },
+        {
+          "entityIndex": 50,
+          "type": "Puzzle1_S_P",
+          "alias": "Sanctuary_Puzzle1_2",
+          "name": "Sanctuary of the Scion - Ankh #2",
+          "x": 28160,
+          "y": -2560,
+          "z": 31232,
+          "room": 40
+        },
+        {
+          "entityIndex": 54,
+          "type": "Puzzle2_S_P",
+          "alias": "Sanctuary_Puzzle2",
+          "name": "Sanctuary of the Scion - Scarab",
+          "x": 19968,
+          "y": 512,
+          "z": 44544,
+          "room": 44
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Natla's Mines",
+      "file": "LEVEL10A.PHD",
+      "sequence": 13,
+      "region": "Atlantis",
+      "pickups": [
+        {
+          "entityIndex": 8,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 40448,
+          "y": -5632,
+          "z": 22016,
+          "room": 11,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 14,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 57856,
+          "y": -6144,
+          "z": 44544,
+          "room": 14,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 20,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 66688,
+          "y": 1408,
+          "z": 57856,
+          "room": 24,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 25,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 53760,
+          "y": -4352,
+          "z": 57856,
+          "room": 27,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 29,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 68096,
+          "y": -8448,
+          "z": 34304,
+          "room": 30,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 51,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 78336,
+          "y": 3840,
+          "z": 86528,
+          "room": 58,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 52,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 61952,
+          "y": 4992,
+          "z": 83456,
+          "room": 58,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 53,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 61952,
+          "y": 5376,
+          "z": 74240,
+          "room": 58,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 67,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 50304,
+          "y": -9984,
+          "z": 91648,
+          "room": 68,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 68,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 50688,
+          "y": -9984,
+          "z": 91264,
+          "room": 68,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 80,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 76288,
+          "y": -6912,
+          "z": 52736,
+          "room": 89,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 82,
+          "type": "Pistols_S_P",
+          "category": "weapon",
+          "x": 69120,
+          "y": -7168,
+          "z": 29824,
+          "room": 94,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 85,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 69120,
+          "y": -7168,
+          "z": 29184,
+          "room": 94,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 87,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 83840,
+          "y": 4352,
+          "z": 54784,
+          "room": 99,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 88,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 83456,
+          "y": 4352,
+          "z": 54400,
+          "room": 99,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 89,
+          "type": "Shotgun_S_P",
+          "category": "weapon",
+          "x": 83456,
+          "y": 4352,
+          "z": 54784,
+          "room": 99,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 90,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 78336,
+          "y": 2304,
+          "z": 54784,
+          "room": 100,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 91,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 78336,
+          "y": 2304,
+          "z": 53760,
+          "room": 100,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 94,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 59904,
+          "y": -12032,
+          "z": 36352,
+          "room": 103,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 95,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 60928,
+          "y": -12032,
+          "z": 35328,
+          "room": 103,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 98,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 56832,
+          "y": 8960,
+          "z": 80384,
+          "room": 104,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 99,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 56832,
+          "y": 8960,
+          "z": 79360,
+          "room": 104,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        },
+        {
+          "entityIndex": 100,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 55808,
+          "y": 8960,
+          "z": 79360,
+          "room": 104,
+          "requiredKeyItems": [
+            "Natla's Mines - Fuse",
+            "Natla's Mines - Fuse #2",
+            "Natla's Mines - Fuse #3"
+          ]
+        }
+      ],
+      "keyItems": [
+        {
+          "entityIndex": 16,
+          "type": "Puzzle1_S_P",
+          "alias": "Mines_Puzzle1",
+          "name": "Natla's Mines - Fuse",
+          "x": 61952,
+          "y": -3072,
+          "z": 51712,
+          "room": 17
+        },
+        {
+          "entityIndex": 36,
+          "type": "Puzzle1_S_P",
+          "alias": "Mines_Puzzle1_2",
+          "name": "Natla's Mines - Fuse #2",
+          "x": 100864,
+          "y": -6656,
+          "z": 26112,
+          "room": 37
+        },
+        {
+          "entityIndex": 42,
+          "type": "Puzzle1_S_P",
+          "alias": "Mines_Puzzle1_3",
+          "name": "Natla's Mines - Fuse #3",
+          "x": 78336,
+          "y": -6656,
+          "z": 43520,
+          "room": 45
+        },
+        {
+          "entityIndex": 71,
+          "type": "Puzzle2_S_P",
+          "alias": "Mines_Puzzle2",
+          "name": "Natla's Mines - Pyramid Key",
+          "x": 49664,
+          "y": -9984,
+          "z": 90624,
+          "room": 68
+        }
+      ],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "Atlantis",
+      "file": "LEVEL10B.PHD",
+      "sequence": 14,
+      "region": "Atlantis",
+      "pickups": [
+        {
+          "entityIndex": 2,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 54784,
+          "y": 5120,
+          "z": 44544,
+          "room": 1,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 3,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 54784,
+          "y": 5120,
+          "z": 48640,
+          "room": 1,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 5,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 54784,
+          "y": 5120,
+          "z": 44544,
+          "room": 1,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 6,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 54784,
+          "y": 5120,
+          "z": 48640,
+          "room": 1,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 10,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 61952,
+          "y": -10240,
+          "z": 43520,
+          "room": 4,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 11,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 61952,
+          "y": -10240,
+          "z": 43520,
+          "room": 4,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 19,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 59904,
+          "y": 7680,
+          "z": 27136,
+          "room": 7,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 20,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 64000,
+          "y": 7680,
+          "z": 36352,
+          "room": 7,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 29,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 59904,
+          "y": 10240,
+          "z": 36352,
+          "room": 9,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 37,
+          "type": "Uzis_S_P",
+          "category": "weapon",
+          "x": 57856,
+          "y": 10240,
+          "z": 16896,
+          "room": 12,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 40,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 70144,
+          "y": 8448,
+          "z": 43520,
+          "room": 13,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 41,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 70144,
+          "y": 8448,
+          "z": 43520,
+          "room": 13,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 54,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 58880,
+          "y": 9600,
+          "z": 61952,
+          "room": 20,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 57,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 61952,
+          "y": 8320,
+          "z": 65024,
+          "room": 26,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 58,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 61952,
+          "y": 8320,
+          "z": 65024,
+          "room": 26,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 63,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 47616,
+          "y": 9344,
+          "z": 47616,
+          "room": 29,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 67,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 51712,
+          "y": 0,
+          "z": 36352,
+          "room": 34,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 68,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 51712,
+          "y": 0,
+          "z": 36352,
+          "room": 34,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 78,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 65024,
+          "y": 1024,
+          "z": 53376,
+          "room": 38,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 79,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 65024,
+          "y": 1024,
+          "z": 53760,
+          "room": 38,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 80,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 62976,
+          "y": 1024,
+          "z": 53760,
+          "room": 38,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 81,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 62976,
+          "y": 1024,
+          "z": 53760,
+          "room": 38,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 90,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 60928,
+          "y": 1152,
+          "z": 60928,
+          "room": 40,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 91,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 57856,
+          "y": 1024,
+          "z": 66048,
+          "room": 40,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 92,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 57856,
+          "y": 1024,
+          "z": 66048,
+          "room": 40,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 93,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 57856,
+          "y": 1024,
+          "z": 66048,
+          "room": 40,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 94,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 54784,
+          "y": 0,
+          "z": 54784,
+          "room": 40,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 96,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 65024,
+          "y": -10240,
+          "z": 47616,
+          "room": 46,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 111,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 51712,
+          "y": -18688,
+          "z": 45568,
+          "room": 50,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 112,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 51712,
+          "y": -18688,
+          "z": 45568,
+          "room": 50,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 116,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 50688,
+          "y": -18688,
+          "z": 49664,
+          "room": 52,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 117,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 41472,
+          "y": -18688,
+          "z": 45568,
+          "room": 53,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 123,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 40448,
+          "y": -16896,
+          "z": 54784,
+          "room": 55,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 138,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 45568,
+          "y": -14592,
+          "z": 58880,
+          "room": 73,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 139,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 49664,
+          "y": -14592,
+          "z": 58880,
+          "room": 73,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 140,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 49664,
+          "y": -14592,
+          "z": 58880,
+          "room": 73,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 141,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 45568,
+          "y": -14592,
+          "z": 58880,
+          "room": 73,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 146,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 47616,
+          "y": 6144,
+          "z": 47616,
+          "room": 76,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 161,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 46592,
+          "y": 2816,
+          "z": 39040,
+          "room": 81,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 163,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 46592,
+          "y": 2816,
+          "z": 39040,
+          "room": 81,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 167,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 56832,
+          "y": -5120,
+          "z": 53760,
+          "room": 86,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 168,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 56832,
+          "y": -5120,
+          "z": 52736,
+          "room": 86,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 181,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 62592,
+          "y": -8448,
+          "z": 35328,
+          "room": 94,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 182,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 62976,
+          "y": -8448,
+          "z": 35328,
+          "room": 94,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 183,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 51072,
+          "y": 5376,
+          "z": 50688,
+          "room": 97,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 184,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 50688,
+          "y": 5376,
+          "z": 50688,
+          "room": 97,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 185,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 50688,
+          "y": 5376,
+          "z": 50304,
+          "room": 97,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 186,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 59520,
+          "y": 11520,
+          "z": 37376,
+          "room": 98,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 187,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 59904,
+          "y": 11520,
+          "z": 36992,
+          "room": 98,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 188,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 59904,
+          "y": 11520,
+          "z": 37376,
+          "room": 98,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 189,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 52736,
+          "y": -8960,
+          "z": 31232,
+          "room": 100,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 190,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 51712,
+          "y": -8960,
+          "z": 32256,
+          "room": 100,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 191,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 52736,
+          "y": -8960,
+          "z": 32256,
+          "room": 100,
+          "requiredKeyItems": []
+        }
+      ],
+      "keyItems": [],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    },
+    {
+      "name": "The Great Pyramid",
+      "file": "LEVEL10C.PHD",
+      "sequence": 15,
+      "region": "Atlantis",
+      "pickups": [
+        {
+          "entityIndex": 21,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 38400,
+          "y": -512,
+          "z": 39424,
+          "room": 19,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 37,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 46592,
+          "y": -12544,
+          "z": 24064,
+          "room": 21,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 49,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 29184,
+          "y": -9472,
+          "z": 35328,
+          "room": 23,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 50,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 28800,
+          "y": -9472,
+          "z": 34304,
+          "room": 23,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 51,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 29184,
+          "y": -9472,
+          "z": 35328,
+          "room": 23,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 52,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 28160,
+          "y": -9472,
+          "z": 34688,
+          "room": 23,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 64,
+          "type": "SmallMed_S_P",
+          "category": "small_medipack",
+          "x": 30208,
+          "y": -3840,
+          "z": 44544,
+          "room": 25,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 80,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 66048,
+          "y": 12544,
+          "z": 50688,
+          "room": 32,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 81,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 64000,
+          "y": 9472,
+          "z": 60928,
+          "room": 33,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 83,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 64000,
+          "y": 9472,
+          "z": 60928,
+          "room": 33,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 84,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 65024,
+          "y": 9472,
+          "z": 60928,
+          "room": 33,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 85,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 65024,
+          "y": 9472,
+          "z": 60928,
+          "room": 33,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 88,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 58880,
+          "y": -15616,
+          "z": 14848,
+          "room": 36,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 89,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 58880,
+          "y": -15616,
+          "z": 14848,
+          "room": 36,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 90,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 58880,
+          "y": -15616,
+          "z": 8704,
+          "room": 36,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 91,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 58880,
+          "y": -15616,
+          "z": 8704,
+          "room": 36,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 92,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 65024,
+          "y": -15616,
+          "z": 8704,
+          "room": 36,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 93,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 65024,
+          "y": -15616,
+          "z": 14848,
+          "room": 36,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 95,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 70144,
+          "y": 9344,
+          "z": 75264,
+          "room": 43,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 96,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 70144,
+          "y": 9344,
+          "z": 75264,
+          "room": 43,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 97,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 70144,
+          "y": 8704,
+          "z": 78336,
+          "room": 43,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 98,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 70144,
+          "y": 8704,
+          "z": 78336,
+          "room": 43,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 99,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 70144,
+          "y": 9344,
+          "z": 75264,
+          "room": 43,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 100,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 70144,
+          "y": 8704,
+          "z": 78336,
+          "room": 43,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 119,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 43520,
+          "y": -768,
+          "z": 34304,
+          "room": 57,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 122,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 64640,
+          "y": -13312,
+          "z": 18944,
+          "room": 63,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 123,
+          "type": "ShotgunAmmo_S_P",
+          "category": "ammo",
+          "x": 65024,
+          "y": -13312,
+          "z": 18560,
+          "room": 63,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 124,
+          "type": "MagnumAmmo_S_P",
+          "category": "ammo",
+          "x": 65024,
+          "y": -13312,
+          "z": 18944,
+          "room": 63,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 126,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 70144,
+          "y": 0,
+          "z": 52736,
+          "room": 64,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 127,
+          "type": "UziAmmo_S_P",
+          "category": "ammo",
+          "x": 71168,
+          "y": 0,
+          "z": 53120,
+          "room": 64,
+          "requiredKeyItems": []
+        },
+        {
+          "entityIndex": 128,
+          "type": "LargeMed_S_P",
+          "category": "large_medipack",
+          "x": 71168,
+          "y": 0,
+          "z": 51712,
+          "room": 64,
+          "requiredKeyItems": []
+        }
+      ],
+      "keyItems": [],
+      "secrets": [
+        {
+          "index": 0,
+          "rewardEntities": []
+        },
+        {
+          "index": 1,
+          "rewardEntities": []
+        },
+        {
+          "index": 2,
+          "rewardEntities": []
+        }
+      ],
+      "routes": []
+    }
+  ],
+  "levelSequence": [
+    "LEVEL1.PHD",
+    "LEVEL2.PHD",
+    "LEVEL3A.PHD",
+    "LEVEL3B.PHD",
+    "LEVEL4.PHD",
+    "LEVEL5.PHD",
+    "LEVEL6.PHD",
+    "LEVEL7A.PHD",
+    "LEVEL7B.PHD",
+    "LEVEL8A.PHD",
+    "LEVEL8B.PHD",
+    "LEVEL8C.PHD",
+    "LEVEL10A.PHD",
+    "LEVEL10B.PHD",
+    "LEVEL10C.PHD"
+  ],
+  "keyDependencies": {
+    "vilcabamba_Puzzle1": {
+      "level": "LEVEL2.PHD",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "vilcabamba_Key1": {
+      "level": "LEVEL2.PHD",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "valley_Puzzle1": {
+      "level": "LEVEL3A.PHD",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "valley_Puzzle1_2": {
+      "level": "LEVEL3A.PHD",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "valley_Puzzle1_3": {
+      "level": "LEVEL3A.PHD",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "folly_Key1": {
+      "level": "LEVEL4.PHD",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "folly_Key3": {
+      "level": "LEVEL4.PHD",
+      "baseType": "Key3_S_P",
+      "unlocksRooms": []
+    },
+    "folly_Key4": {
+      "level": "LEVEL4.PHD",
+      "baseType": "Key4_S_P",
+      "unlocksRooms": []
+    },
+    "folly_Key2": {
+      "level": "LEVEL4.PHD",
+      "baseType": "Key2_S_P",
+      "unlocksRooms": []
+    },
+    "colosseum_Key1": {
+      "level": "LEVEL5.PHD",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "midas_LeadBar": {
+      "level": "LEVEL6.PHD",
+      "baseType": "LeadBar_S_P",
+      "unlocksRooms": []
+    },
+    "midas_LeadBar_2": {
+      "level": "LEVEL6.PHD",
+      "baseType": "LeadBar_S_P",
+      "unlocksRooms": []
+    },
+    "midas_LeadBar_3": {
+      "level": "LEVEL6.PHD",
+      "baseType": "LeadBar_S_P",
+      "unlocksRooms": []
+    },
+    "cistern_Key3": {
+      "level": "LEVEL7A.PHD",
+      "baseType": "Key3_S_P",
+      "unlocksRooms": []
+    },
+    "cistern_Key2": {
+      "level": "LEVEL7A.PHD",
+      "baseType": "Key2_S_P",
+      "unlocksRooms": []
+    },
+    "cistern_Key2_2": {
+      "level": "LEVEL7A.PHD",
+      "baseType": "Key2_S_P",
+      "unlocksRooms": []
+    },
+    "cistern_Key1": {
+      "level": "LEVEL7A.PHD",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "cistern_Key3_2": {
+      "level": "LEVEL7A.PHD",
+      "baseType": "Key3_S_P",
+      "unlocksRooms": []
+    },
+    "tihocan_Key1": {
+      "level": "LEVEL7B.PHD",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "tihocan_Key3": {
+      "level": "LEVEL7B.PHD",
+      "baseType": "Key3_S_P",
+      "unlocksRooms": []
+    },
+    "tihocan_Key3_2": {
+      "level": "LEVEL7B.PHD",
+      "baseType": "Key3_S_P",
+      "unlocksRooms": []
+    },
+    "khamoon_Key1": {
+      "level": "LEVEL8A.PHD",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "khamoon_Key1_2": {
+      "level": "LEVEL8A.PHD",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "obelisk_Puzzle1": {
+      "level": "LEVEL8B.PHD",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "obelisk_Puzzle2": {
+      "level": "LEVEL8B.PHD",
+      "baseType": "Puzzle2_S_P",
+      "unlocksRooms": []
+    },
+    "obelisk_Puzzle3": {
+      "level": "LEVEL8B.PHD",
+      "baseType": "Puzzle3_S_P",
+      "unlocksRooms": []
+    },
+    "obelisk_Puzzle4": {
+      "level": "LEVEL8B.PHD",
+      "baseType": "Puzzle4_S_P",
+      "unlocksRooms": []
+    },
+    "obelisk_Key1": {
+      "level": "LEVEL8B.PHD",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "sanctuary_Puzzle1": {
+      "level": "LEVEL8C.PHD",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "sanctuary_Key1": {
+      "level": "LEVEL8C.PHD",
+      "baseType": "Key1_S_P",
+      "unlocksRooms": []
+    },
+    "sanctuary_Puzzle1_2": {
+      "level": "LEVEL8C.PHD",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "sanctuary_Puzzle2": {
+      "level": "LEVEL8C.PHD",
+      "baseType": "Puzzle2_S_P",
+      "unlocksRooms": []
+    },
+    "mines_Puzzle1": {
+      "level": "LEVEL10A.PHD",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "mines_Puzzle1_2": {
+      "level": "LEVEL10A.PHD",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "mines_Puzzle1_3": {
+      "level": "LEVEL10A.PHD",
+      "baseType": "Puzzle1_S_P",
+      "unlocksRooms": []
+    },
+    "mines_Puzzle2": {
+      "level": "LEVEL10A.PHD",
+      "baseType": "Puzzle2_S_P",
+      "unlocksRooms": []
+    }
+  },
+  "itemDefinitions": {
+    "vilcabamba_P1_GoldIdol": {
+      "id": 781143,
+      "name": "Vilcabamba Gold Idol",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "vilcabamba_K1_SilverKey": {
+      "id": 781183,
+      "name": "Vilcabamba Silver Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "valley_P1_CogAbovePool": {
+      "id": 782177,
+      "name": "Lost Valley Cog (Above Pool)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "valley_P1_CogTemple": {
+      "id": 782241,
+      "name": "Lost Valley Cog (Temple)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "valley_P1_CogBridge": {
+      "id": 782242,
+      "name": "Lost Valley Cog (Bridge)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "folly_K4_ThorKey": {
+      "id": 784280,
+      "name": "Folly Thor Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "folly_K3_DamoclesKey": {
+      "id": 784290,
+      "name": "Folly Damocles Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "folly_K2_AtlasKey": {
+      "id": 784299,
+      "name": "Folly Atlas Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "folly_K1_NeptuneKey": {
+      "id": 784315,
+      "name": "Folly Neptune Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "colosseum_K1_RustyKey": {
+      "id": 785217,
+      "name": "Colosseum Rusty Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "midas_LeadBar_SpikeRoom": {
+      "id": 786157,
+      "name": "Midas Lead Bar (Spike Room)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "midas_LeadBar_TempleRoof": {
+      "id": 786166,
+      "name": "Midas Lead Bar (Temple Roof)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "midas_LeadBar_FireRoom": {
+      "id": 786178,
+      "name": "Midas Lead Bar (Fire Room)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "cistern_K3_RustyKeyNearPierre": {
+      "id": 787143,
+      "name": "Cistern Rusty Key (Near Pierre)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "cistern_K2_SilverBehindDoor": {
+      "id": 787208,
+      "name": "Cistern Silver Key (Behind Door)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "cistern_K2_SilverBetweenDoors": {
+      "id": 787231,
+      "name": "Cistern Silver Key (Between Doors)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "cistern_K1_GoldKey": {
+      "id": 787245,
+      "name": "Cistern Gold Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "cistern_K3_RustyKeyMainRoom": {
+      "id": 787295,
+      "name": "Cistern Rusty Key (Main Room)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "tihocan_K1_GoldKeyFlipMap": {
+      "id": 788133,
+      "name": "Tihocan Gold Key (Flip Map)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "tihocan_K2_RustyKeyClangClang": {
+      "id": 788267,
+      "name": "Tihocan Rusty Key (Clang Clang)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "tihocan_K2_RustyKeyBoulders": {
+      "id": 788277,
+      "name": "Tihocan Rusty Key (Boulders)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "tihocan_K1_GoldKeyPierre": {
+      "id": 788389,
+      "name": "Tihocan Gold Key (Pierre)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "tihocan_Scion_EndRoom": {
+      "id": 788444,
+      "name": "Tihocan Scion",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "khamoon_K1_SapphireKeyEnd": {
+      "id": 789193,
+      "name": "Khamoon Sapphire Key (End)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "khamoon_K1_SapphireKeyStart": {
+      "id": 789217,
+      "name": "Khamoon Sapphire Key (Start)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "obelisk_P2_Scarab": {
+      "id": 790151,
+      "name": "Obelisk Scarab",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "obelisk_P3_SealOfAnubis": {
+      "id": 790152,
+      "name": "Obelisk Seal of Anubis",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "obelisk_P1_EyeOfHorus": {
+      "id": 790160,
+      "name": "Obelisk Eye of Horus",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "obelisk_P4_Ankh": {
+      "id": 790163,
+      "name": "Obelisk Ankh",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "obelisk_K1_SapphireKeyEnd": {
+      "id": 790213,
+      "name": "Obelisk Sapphire Key (End)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "obelisk_K1_SapphireKeyStart": {
+      "id": 790308,
+      "name": "Obelisk Sapphire Key (Start)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "sanctuary_P1_AnkhBehindSphinx": {
+      "id": 791100,
+      "name": "Sanctuary Ankh (Behind Sphinx)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "sanctuary_K1_GoldKey": {
+      "id": 791191,
+      "name": "Sanctuary Gold Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "sanctuary_P1_AnkhAfterKey": {
+      "id": 791196,
+      "name": "Sanctuary Ankh (After Key)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "sanctuary_P2_Scarab": {
+      "id": 791202,
+      "name": "Sanctuary Scarab",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "mines_K1_RustyKey": {
+      "id": 792137,
+      "name": "Mines Rusty Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "mines_P1_CowboyAltFuse": {
+      "id": 792146,
+      "name": "Mines Fuse (Cowboy Alt)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "mines_P1_CowboyFuse": {
+      "id": 792148,
+      "name": "Mines Fuse (Cowboy)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "mines_P1_BoulderFuse": {
+      "id": 792160,
+      "name": "Mines Fuse (Boulder)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "mines_P1_ConveyorFuse": {
+      "id": 792183,
+      "name": "Mines Fuse (Conveyor)",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "mines_P2_PyramidKey": {
+      "id": 792216,
+      "name": "Mines Pyramid Key",
+      "category": "key_item",
+      "apClassification": "progression"
+    },
+    "shotgun_S_P": {
+      "id": 770085,
+      "name": "Shotgun",
+      "category": "weapon",
+      "apClassification": "useful"
+    },
+    "magnums_S_P": {
+      "id": 770086,
+      "name": "Magnums",
+      "category": "weapon",
+      "apClassification": "useful"
+    },
+    "uzis_S_P": {
+      "id": 770087,
+      "name": "Uzis",
+      "category": "weapon",
+      "apClassification": "useful"
+    },
+    "shotgunAmmo_S_P": {
+      "id": 770089,
+      "name": "Shotgun Shells",
+      "category": "ammo",
+      "apClassification": "filler"
+    },
+    "magnumAmmo_S_P": {
+      "id": 770090,
+      "name": "Magnum Clips",
+      "category": "ammo",
+      "apClassification": "filler"
+    },
+    "uziAmmo_S_P": {
+      "id": 770091,
+      "name": "Uzi Clips",
+      "category": "ammo",
+      "apClassification": "filler"
+    },
+    "largeMed_S_P": {
+      "id": 770094,
+      "name": "Large Medipack",
+      "category": "large_medipack",
+      "apClassification": "useful"
+    },
+    "smallMed_S_P": {
+      "id": 770093,
+      "name": "Small Medipack",
+      "category": "small_medipack",
+      "apClassification": "filler"
+    }
+  }
+}
