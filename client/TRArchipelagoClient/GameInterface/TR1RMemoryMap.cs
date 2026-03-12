@@ -54,7 +54,7 @@ public static class TR1RMemoryMap
     /// Pointer to Lara's ITEM struct. Read as Int64 (8 bytes), then dereference.
     /// Usage: laraPtr = ReadPointer(tomb1Base + LaraBase)
     /// </summary>
-    public const int LaraBase = 0x311030;
+    public const int LaraBase = 0x32D020;
 
     // ----- ITEM Struct Offsets (from dereferenced LaraBase) -----
     // Each entity in the game uses this same struct layout.
@@ -104,35 +104,35 @@ public static class TR1RMemoryMap
     // ----- LARA_INFO Static Variables (direct offsets from tomb1.dll) -----
 
     /// <summary>Lara's entity index in the entities array. Int16.</summary>
-    public const int LaraId = 0x310e80;
+    public const int LaraId = 0x32CE70;
 
     /// <summary>Equipped weapon type. Int32. See GunType enum.</summary>
-    public const int LaraGunType = 0x310e82;
+    public const int LaraGunType = 0x32CE72;
 
     /// <summary>Oxygen / air timer. Int16. Max ~1800.</summary>
-    public const int LaraOxygen = 0x310E96;
+    public const int LaraOxygen = 0x32CE86;
 
     /// <summary>Gun state flags. UInt32.</summary>
-    public const int LaraGunFlags = 0x310ec0;
+    public const int LaraGunFlags = 0x32CEB0;
 
     /// <summary>Pointer to currently aimed enemy. UInt64.</summary>
-    public const int LaraAimingEnemy = 0x310f70;
+    public const int LaraAimingEnemy = 0x32CF60;
 
     /// <summary>Water state of current room. Int16.</summary>
-    public const int LaraRoomType = 0x310e8c;
+    public const int LaraRoomType = 0x32CE7C;
 
     // ----- LARA_INFO Ammo (live runtime, Int32 each, 8-byte stride) -----
     // These are the AMMO_INFO fields in LARA_INFO. Writing here changes ammo instantly.
     // Shotgun ammo is stored internally as rounds*6 (6 pellets per shot).
 
     /// <summary>Magnum ammo count. Int32. Direct value (1 ammo = 1 displayed).</summary>
-    public const int Lara_MagnumAmmo = 0x310FC8;
+    public const int Lara_MagnumAmmo = 0x32CFB8;
 
     /// <summary>Uzi ammo count. Int32. Direct value (1 ammo = 1 displayed).</summary>
-    public const int Lara_UziAmmo = 0x310FD0;
+    public const int Lara_UziAmmo = 0x32CFC0;
 
     /// <summary>Shotgun ammo count. Int32. Internal = displayed * 6 (6 pellets per shell).</summary>
-    public const int Lara_ShotgunAmmo = 0x310FD8;
+    public const int Lara_ShotgunAmmo = 0x32CFC8;
 
     /// <summary>Shotgun internal multiplier (each shell = 6 pellets).</summary>
     public const int ShotgunAmmoMultiplier = 6;
@@ -140,57 +140,57 @@ public static class TR1RMemoryMap
     // ----- Level & Game State -----
 
     /// <summary>Current TR1 level ID (0=Home, 1=Caves, ..., 24=Menu). Int32.</summary>
-    public const int LevelId = 0xe2ab8;
+    public const int LevelId = 0xFEAB8;
 
     /// <summary>Set to 1 when current level is completed. Int32.</summary>
-    public const int LevelCompleted = 0xfd750;
+    public const int LevelCompleted = 0x119740;
 
     /// <summary>Frame tick. Int8. Alternates each frame.</summary>
-    public const int BinaryTick = 0xfd760;
+    public const int BinaryTick = 0x119750;
 
     /// <summary>Greater than 0 = in gameplay, 0 or less = in menu/loading. Int32.</summary>
-    public const int IsInGameScene = 0xe2e50;
+    public const int IsInGameScene = 0xFEE50;
 
     /// <summary>Menu cursor position. UInt16.</summary>
-    public const int MenuSelection = 0xe2e54;
+    public const int MenuSelection = 0xFEE54;
 
     /// <summary>Menu state machine. UInt16. 0xD = exit to title.</summary>
-    public const int MenuState = 0x4c8d62;
+    public const int MenuState = 0x4E4D52;
 
     /// <summary>1 = New Game+ mode. UInt8.</summary>
-    public const int NewGamePlus = 0x4c542a;
+    public const int NewGamePlus = 0x4E141A;
 
     /// <summary>Input bitfield (action keys). UInt32.</summary>
-    public const int ActionKeys = 0x3f1e74;
+    public const int ActionKeys = 0x40DE64;
 
     // ----- Entity Array -----
 
     /// <summary>Pointer to the entity array in heap memory. Read as Int64.</summary>
-    public const int EntitiesPointer = 0x3f2178;
+    public const int EntitiesPointer = 0x40E168;
 
     /// <summary>Number of entities in the current level. Int16.</summary>
-    public const int EntitiesCount = 0x3c1b20;
+    public const int EntitiesCount = 0x3DDB10;
 
     // ----- Rooms -----
 
     /// <summary>Pointer to room array. Int64.</summary>
-    public const int RoomsPointer = 0x3f2168;
+    public const int RoomsPointer = 0x40E158;
 
     /// <summary>Number of rooms. Int16.</summary>
-    public const int RoomsCount = 0x3f2030;
+    public const int RoomsCount = 0x40E020;
 
     // ----- Inventory Ring (Main Ring) -----
     // Discovered via Cheat Engine RE of Inv_AddItem (tomb1.dll+1DE22).
     // The main ring stores items sorted by inv_pos.
 
     /// <summary>Main ring item count. Int16. Max 24.</summary>
-    public const int MainRingCount = 0xE2ABC;
+    public const int MainRingCount = 0xFEABC;
 
     /// <summary>Main ring items[] array. 24 × Int64 pointers to INVENTORY_ITEM structs.</summary>
-    public const int MainRingItems = 0xF8D20;
+    public const int MainRingItems = 0x114D10;
 
     /// <summary>Main ring qtys[] array. 24 × Int16 quantities. Stride 2.</summary>
-    public const int MainRingQtys = 0xF8DD8;
+    public const int MainRingQtys = 0x114DC8;
 
     /// <summary>Max items per ring.</summary>
     public const int MaxRingItems = 24;
@@ -200,22 +200,22 @@ public static class TR1RMemoryMap
     // Stores key items (keys, puzzles, pickups that go to the key ring).
 
     /// <summary>Keys ring item count. Int16. Max 24.</summary>
-    public const int KeysRingCount = 0xFD6CC;
+    public const int KeysRingCount = 0x1196BC;
 
     /// <summary>Keys ring items[] array. 24 × Int64 pointers to INVENTORY_ITEM structs.</summary>
-    public const int KeysRingItems = 0xF95A0;
+    public const int KeysRingItems = 0x115590;
 
     /// <summary>
     /// Keys ring qtys[] array. 24 × Int16 quantities. Stride 2.
     /// Confirmed via Cheat Engine scan (Int16 tracking cog qty 1→2→3→2).
     /// Note: qtys[] is BEFORE items[] in memory (not after).
     /// </summary>
-    public const int KeysRingQtys = 0xF8FF0;
+    public const int KeysRingQtys = 0x114FE0;
 
     /// <summary>
     /// INVENTORY_ITEM struct stride in the global table (3280 bytes).
     /// All INVENTORY_ITEM structs are stored sequentially in tomb1.dll.
-    /// Pointer for item X = Pistols_ptr + RelativeIndex * Stride.
+    /// Pointer for item X = Compass_ptr + RelativeIndex * Stride.
     /// </summary>
     public const int InventoryItemStride = 0xCD0;
 
@@ -223,42 +223,44 @@ public static class TR1RMemoryMap
     public const int InvItem_ObjectId = 0x08;
 
     /// <summary>
-    /// Relative table indices from Pistols' INVENTORY_ITEM.
-    /// Usage: target_ptr = pistols_ptr + RelIndex * InventoryItemStride
+    /// Relative table indices from Compass' INVENTORY_ITEM.
+    /// Usage: target_ptr = compass_ptr + RelIndex * InventoryItemStride
+    /// Compass is always in inventory and always at ring index 0 (lowest inv_pos).
     /// </summary>
     public static class InvItemRelIndex
     {
         // Main Ring items — weapons & gear
-        public const int ShotgunAmmo = -8;
-        public const int SmallMedipack = -6;
-        public const int LargeMedipack = -2;
-        public const int Pistols = 0;
-        public const int Shotgun = 1;
-        public const int MagnumAmmo = 4;
-        public const int Compass = 6;
-        public const int Uzis = 9;
-        public const int UziAmmo = 10;
-        public const int Magnums = 12;
+        public const int ShotgunAmmo = -14;
+        public const int SmallMedipack = -12;
+        public const int LargeMedipack = -8;
+        public const int Pistols = -6;
+        public const int Shotgun = -5;
+        public const int MagnumAmmo = -2;
+        public const int Compass = 0;
+        public const int Uzis = 3;
+        public const int UziAmmo = 4;
+        public const int Magnums = 6;
 
         // Keys Ring items — all confirmed via Mode 6 at St. Francis' Folly
-        public const int Key1 = -1;    // Neptune/Silver/Gold/Rusty/Sapphire Key
-        public const int Key2 = -7;    // Atlas Key, Cistern Silver Key
-        public const int Key3 = 7;     // Damocles Key, Cistern Rusty Key
+        public const int Key1 = -7;    // Neptune/Silver/Gold/Rusty/Sapphire Key
+        public const int Key2 = -13;   // Atlas Key, Cistern Silver Key
+        public const int Key3 = 1;     // Damocles Key, Cistern Rusty Key
         // Key4: NOT in the stride-aligned table. Use Key4ByteOffset instead.
-        public const int Puzzle1 = 11; // Gold Bar, Fuse, Ankh, Scarab, etc.
-        public const int Puzzle2 = -4; // Seal of Anubis, etc.
-        public const int Puzzle3 = 5;
-        public const int Puzzle4 = -5;
-        public const int Scion = -10;  // Scion piece
+        public const int Puzzle1 = 5;  // Gold Bar, Fuse, Ankh, Scarab, etc.
+        public const int Puzzle2 = -10; // Seal of Anubis, etc.
+        public const int Puzzle3 = -1;
+        public const int Puzzle4 = -11;
+        public const int Scion = -16;  // Scion piece
     }
 
     /// <summary>
     /// Key4 (Thor Key) has its INVENTORY_ITEM dynamically allocated outside the
-    /// stride-aligned global table. Its address is at a fixed BYTE offset from Pistols.
-    /// Usage: key4_ptr = pistols_ptr - 0x9E00
+    /// stride-aligned global table. Its address is at a fixed BYTE offset from Compass.
+    /// Usage: key4_ptr = compass_ptr - 0xEAE0
+    /// (= old Pistols offset -0x9E00, shifted by -6 strides: -0x9E00 - 6*0xCD0 = -0xEAE0)
     /// Only used in St. Francis' Folly. Confirmed via CE injection test.
     /// </summary>
-    public const int Key4ByteOffset = -0x9E00;
+    public const int Key4ByteOffset = -0xEAE0;
 
     /// <summary>
     /// Inventory object IDs (from INVENTORY_ITEM+0x08 in the global table).
@@ -319,12 +321,12 @@ public static class TR1RMemoryMap
 
     // ----- Camera -----
 
-    public const int CameraX = 0x29e2ec;
-    public const int CameraY = 0x29e2fc;
-    public const int CameraZ = 0x29E30C;
-    public const int CameraYaw = 0x29E26E;
-    public const int CameraPitch = 0x29e26c;
-    public const int CameraFov = 0x29e310;
+    public const int CameraX = 0x2BA2DC;
+    public const int CameraY = 0x2BA2EC;
+    public const int CameraZ = 0x2BA2FC;
+    public const int CameraYaw = 0x2BA25E;
+    public const int CameraPitch = 0x2BA25C;
+    public const int CameraFov = 0x2BA300;
 
     // ----- WorldState Backup Buffer -----
     // This is a 0x3800-byte buffer that uses the same layout as a save slot.
@@ -334,7 +336,7 @@ public static class TR1RMemoryMap
     /// Save-format buffer in memory. Same layout as a save file slot.
     /// Ammo/weapons/inventory can be read/written here using Save_* offsets.
     /// </summary>
-    public const int WorldStateBackup = 0x4c4e00;
+    public const int WorldStateBackup = 0x4E0DF0;
 
     /// <summary>Size of the WorldState backup buffer (same as save slot).</summary>
     public const int WorldStateBackupSize = 0x3800;
@@ -435,7 +437,7 @@ public static class TR1RMemoryMap
     /// <summary>
     /// Save counter offset within the WSB (runtime). The WSB layout differs from
     /// the save file by -4 bytes (no SlotStatus field), so Save_Number (0x00C in
-    /// the file) maps to 0x008 in the WSB. Confirmed via CE: tomb1.dll+0x4C4E08.
+    /// the file) maps to 0x008 in the WSB.
     /// </summary>
     public const int WSB_SaveCounter = 0x008;
     public const int Save_MagnumAmmo = 0x4C2;

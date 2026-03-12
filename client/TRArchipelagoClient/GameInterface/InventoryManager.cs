@@ -17,7 +17,7 @@ namespace TRArchipelagoClient.GameInterface;
 /// Both Main Ring and Keys Ring use the same structure:
 ///   count (Int16) + items[] (Int64 pointers) + qtys[] (Int16)
 ///   Items are INVENTORY_ITEM struct pointers computed as:
-///     target_ptr = pistols_ptr + relIdx * 0xCD0
+///     target_ptr = compass_ptr + relIdx * 0xCD0
 /// </summary>
 public class InventoryManager
 {
@@ -32,7 +32,7 @@ public class InventoryManager
     // Once all key items have been successfully injected after a load,
     // stop reconciling until the next load — prevents re-giving used keys.
     private bool _keyItemsEnsured;
-    private bool _loggedPistolsRetry;
+    private bool _loggedCompassRetry;
 
     // After injection, keep re-checking for this many ticks to make sure the
     // game engine doesn't overwrite the ring. Only set _keyItemsEnsured once
@@ -49,8 +49,8 @@ public class InventoryManager
     // added the medipack to the ring yet when the entity flag changes.
     private int _pendingSentinelRemovals;
 
-    // Cached Pistols pointer (reference for all relIdx calculations)
-    private IntPtr _pistolsPtr;
+    // Cached Compass pointer (reference for all relIdx calculations)
+    private IntPtr _compassPtr;
 
     /// <summary>Set by GameStateWatcher once the scanner finds the live inventory address.</summary>
     public InventoryScanner? Scanner { get; set; }
@@ -68,13 +68,13 @@ public class InventoryManager
     private IntPtr WorldStateAddr => _memory.Tomb1Base + TR1RMemoryMap.WorldStateBackup;
 
     /// <summary>
-    /// Call on level change to refresh the Pistols pointer cache.
+    /// Call on level change to refresh the Compass pointer cache.
     /// </summary>
-    public void RefreshPistolsPointer()
+    public void RefreshCompassPointer()
     {
-        _pistolsPtr = FindPistolsPointer();
-        if (_pistolsPtr != IntPtr.Zero)
-            ConsoleUI.Info($"[INV] Pistols reference: 0x{_pistolsPtr:X}");
+        _compassPtr = FindCompassPointer();
+        if (_compassPtr != IntPtr.Zero)
+            ConsoleUI.Info($"[INV] Compass reference: 0x{_compassPtr:X}");
     }
 
     /// <summary>
@@ -97,7 +97,7 @@ public class InventoryManager
         if (relIdx == int.MinValue) return;
 
         // Inject into Main Ring for immediate visibility
-        if (EnsurePistolsPointer())
+        if (EnsureCompassPointer())
         {
             bool injected = InjectToRing(
                 TR1RMemoryMap.MainRingCount,
@@ -179,7 +179,7 @@ public class InventoryManager
         if (laraInfoOffset < 0) return;
 
         // Check if the player has the weapon in the Main Ring
-        bool hasWeapon = EnsurePistolsPointer() && HasItemInRing(
+        bool hasWeapon = EnsureCompassPointer() && HasItemInRing(
             TR1RMemoryMap.MainRingCount, TR1RMemoryMap.MainRingItems, weaponRelIdx);
 
         if (hasWeapon)
@@ -191,7 +191,7 @@ public class InventoryManager
             _memory.Write(ammoAddr, newVal);
             ConsoleUI.Info($"[INV] Ammo: {current} -> {newVal} (LARA_INFO)");
         }
-        else if (EnsurePistolsPointer())
+        else if (EnsureCompassPointer())
         {
             // Player doesn't have the weapon — inject ammo item into Main Ring
             bool injected = InjectToRing(
@@ -210,7 +210,7 @@ public class InventoryManager
     /// <summary>
     /// Gives a medipack by injecting into the Main Ring.
     /// If the item is already in the ring, increments its qty.
-    /// Caller (ProcessReceivedItems) ensures Pistols pointer is ready.
+    /// Caller (ProcessReceivedItems) ensures Compass pointer is ready.
     /// </summary>
     public void GiveMedipack(long apItemId)
     {
@@ -226,7 +226,7 @@ public class InventoryManager
 
         if (relIdx == int.MinValue) return;
 
-        if (EnsurePistolsPointer())
+        if (EnsureCompassPointer())
         {
             bool injected = InjectToRing(
                 TR1RMemoryMap.MainRingCount,
@@ -272,7 +272,7 @@ public class InventoryManager
     /// </summary>
     private bool TryInjectKeyItem(long apItemId)
     {
-        if (!EnsurePistolsPointer())
+        if (!EnsureCompassPointer())
             return false;
 
         IntPtr targetPtr = ResolveKeyItemPointer(apItemId);
@@ -367,7 +367,7 @@ public class InventoryManager
 
         var items = GetReceivedKeyItems(mapperIdx);
         if (items.Count == 0) return;
-        if (!EnsurePistolsPointer()) return;
+        if (!EnsureCompassPointer()) return;
 
         // Count expected qty per pointer from received items (skip used copies only)
         var remainingUsed = new Dictionary<long, int>(_usedKeyItems);
@@ -486,7 +486,7 @@ public class InventoryManager
         if (!_receivedKeyItems.TryGetValue(mapperIdx, out var items))
             return;
 
-        if (!EnsurePistolsPointer())
+        if (!EnsureCompassPointer())
             return;
 
         var remainingUsed = new Dictionary<long, int>(usedKeyItems);
@@ -524,7 +524,7 @@ public class InventoryManager
         if (!_receivedKeyItems.TryGetValue(mapperIdx, out var items))
             return 0;
 
-        if (!EnsurePistolsPointer())
+        if (!EnsureCompassPointer())
             return 0;
 
         IntPtr targetPtr = new IntPtr(pointer);
@@ -544,14 +544,14 @@ public class InventoryManager
     // =================================================================
 
     /// <summary>
-    /// Injects an item into an inventory ring using a relIdx from Pistols.
+    /// Injects an item into an inventory ring using a relIdx from Compass.
     /// If the item already exists in the ring, increments its qty.
     /// Otherwise appends it at the end with the given qty.
     /// </summary>
     private bool InjectToRing(int ringCountOffset, int ringItemsOffset, int ringQtysOffset, int relIdx, short qty)
     {
-        if (_pistolsPtr == IntPtr.Zero) return false;
-        IntPtr targetPtr = _pistolsPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
+        if (_compassPtr == IntPtr.Zero) return false;
+        IntPtr targetPtr = _compassPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
         return InjectToRingRaw(ringCountOffset, ringItemsOffset, ringQtysOffset, targetPtr, qty);
     }
 
@@ -590,13 +590,13 @@ public class InventoryManager
     }
 
     /// <summary>
-    /// Checks whether an item (by relIdx from Pistols) exists in a ring.
+    /// Checks whether an item (by relIdx from Compass) exists in a ring.
     /// </summary>
     private bool HasItemInRing(int ringCountOffset, int ringItemsOffset, int weaponRelIdx)
     {
-        if (_pistolsPtr == IntPtr.Zero) return false;
+        if (_compassPtr == IntPtr.Zero) return false;
         IntPtr t1 = _memory.Tomb1Base;
-        IntPtr weaponPtr = _pistolsPtr + weaponRelIdx * TR1RMemoryMap.InventoryItemStride;
+        IntPtr weaponPtr = _compassPtr + weaponRelIdx * TR1RMemoryMap.InventoryItemStride;
         short count = _memory.ReadInt16(t1 + ringCountOffset);
         for (int i = 0; i < count; i++)
         {
@@ -612,9 +612,9 @@ public class InventoryManager
     /// </summary>
     private short RemoveFromRing(int ringCountOffset, int ringItemsOffset, int ringQtysOffset, int relIdx)
     {
-        if (_pistolsPtr == IntPtr.Zero) return 0;
+        if (_compassPtr == IntPtr.Zero) return 0;
         IntPtr t1 = _memory.Tomb1Base;
-        IntPtr targetPtr = _pistolsPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
+        IntPtr targetPtr = _compassPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
         short count = _memory.ReadInt16(t1 + ringCountOffset);
 
         // Find the item
@@ -648,24 +648,24 @@ public class InventoryManager
     }
 
     /// <summary>
-    /// Ensures the Pistols pointer is cached. Tries to find it if not set.
+    /// Ensures the Compass pointer is cached. Tries to find it if not set.
     /// </summary>
-    private bool EnsurePistolsPointer()
+    private bool EnsureCompassPointer()
     {
-        if (_pistolsPtr != IntPtr.Zero) return true;
-        _pistolsPtr = FindPistolsPointer();
-        return _pistolsPtr != IntPtr.Zero;
+        if (_compassPtr != IntPtr.Zero) return true;
+        _compassPtr = FindCompassPointer();
+        return _compassPtr != IntPtr.Zero;
     }
 
-    /// <summary>Invalidate cached pointer (call on level change).</summary>
-    public void InvalidatePistolsPointer() => _pistolsPtr = IntPtr.Zero;
+    /// <summary>Invalidate cached Compass pointer (call on level change).</summary>
+    public void InvalidateCompassPointer() => _compassPtr = IntPtr.Zero;
 
     /// <summary>
     /// Returns true if the inventory ring system is ready for injection
-    /// (Pistols pointer found). Items that need ring injection should be
+    /// (Compass pointer found). Items that need ring injection should be
     /// deferred until this returns true.
     /// </summary>
-    public bool IsInventoryReady() => EnsurePistolsPointer();
+    public bool IsInventoryReady() => EnsureCompassPointer();
 
     /// <summary>True once key items are confirmed stable in the ring after injection.</summary>
     public bool KeyItemsEnsured => _keyItemsEnsured;
@@ -709,10 +709,10 @@ public class InventoryManager
     /// </summary>
     private bool RemoveOneSentinelMedipack()
     {
-        if (!EnsurePistolsPointer()) return false;
+        if (!EnsureCompassPointer()) return false;
 
         IntPtr t1 = _memory.Tomb1Base;
-        IntPtr targetPtr = _pistolsPtr + TR1RMemoryMap.InvItemRelIndex.SmallMedipack * TR1RMemoryMap.InventoryItemStride;
+        IntPtr targetPtr = _compassPtr + TR1RMemoryMap.InvItemRelIndex.SmallMedipack * TR1RMemoryMap.InventoryItemStride;
         short ringCount = _memory.ReadInt16(t1 + TR1RMemoryMap.MainRingCount);
 
         for (int i = 0; i < ringCount; i++)
@@ -749,28 +749,24 @@ public class InventoryManager
     }
 
     /// <summary>
-    /// Finds the Pistols INVENTORY_ITEM pointer by cross-referencing Main Ring items.
-    /// Compass (items[0]) should be at Pistols + 6 * stride.
+    /// Finds the Compass INVENTORY_ITEM pointer from Main Ring items[0].
+    /// Compass is always at index 0 in the Main Ring (lowest inv_pos, always in inventory).
+    /// Verified by checking the object_id field.
     /// </summary>
-    private IntPtr FindPistolsPointer()
+    private IntPtr FindCompassPointer()
     {
         IntPtr t1 = _memory.Tomb1Base;
         short ringCount = _memory.ReadInt16(t1 + TR1RMemoryMap.MainRingCount);
-        if (ringCount < 2) return IntPtr.Zero;
+        if (ringCount < 1) return IntPtr.Zero;
 
         IntPtr item0 = _memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems);
+        if (item0 == IntPtr.Zero) return IntPtr.Zero;
 
-        for (int i = 1; i < ringCount; i++)
-        {
-            IntPtr itemPtr = _memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems + i * 8);
-            if (itemPtr == IntPtr.Zero) continue;
+        // Verify it's actually the Compass by checking its object_id
+        short objId = _memory.ReadInt16(item0 + TR1RMemoryMap.InvItem_ObjectId);
+        if (objId == TR1RMemoryMap.InvObjId.Compass)
+            return item0;
 
-            long diff = item0.ToInt64() - itemPtr.ToInt64();
-            if (diff == TR1RMemoryMap.InvItemRelIndex.Compass * TR1RMemoryMap.InventoryItemStride)
-                return itemPtr;
-        }
-
-        // No fallback — only return a verified pointer
         return IntPtr.Zero;
     }
 
@@ -815,10 +811,10 @@ public class InventoryManager
             relIdx = TR1RMemoryMap.InvItemRelIndex.Scion;
 
         if (relIdx.HasValue)
-            return _pistolsPtr + relIdx.Value * TR1RMemoryMap.InventoryItemStride;
+            return _compassPtr + relIdx.Value * TR1RMemoryMap.InventoryItemStride;
 
         if (isKey4)
-            return _pistolsPtr + TR1RMemoryMap.Key4ByteOffset;
+            return _compassPtr + TR1RMemoryMap.Key4ByteOffset;
 
         return IntPtr.Zero;
     }

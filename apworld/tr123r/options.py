@@ -31,14 +31,12 @@ class Goal(Choice):
     """
     Determines the win condition for this game.
 
-    Final Boss: Complete the final level of the last enabled game.
-    All Secrets: Collect all secrets across all enabled games.
+    All Levels: Complete every level of all enabled games.
     N Levels: Complete a configurable number of levels.
     """
     display_name = "Goal"
-    option_final_boss = 0
-    option_all_secrets = 1
-    option_n_levels = 2
+    option_all_levels = 0
+    option_n_levels = 1
     default = 0
 
 

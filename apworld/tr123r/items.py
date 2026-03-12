@@ -1,4 +1,4 @@
-"""
+."""
 Multi-game item definitions for TR Remastered Archipelago World.
 Loads items from all available game data files (tr1r_data.json, tr2r_data.json, tr3r_data.json).
 

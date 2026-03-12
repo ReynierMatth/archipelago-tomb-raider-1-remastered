@@ -177,6 +177,8 @@ class TR1RWorld(World):
             all_levels.extend([(level["name"], level["file"]) for level in levels])
             all_secrets.extend(len(level["secrets"]) for level in levels)
 
+        total_levels = sum(len(seqs) for seqs in level_sequences.values())
+
         return {
             "goal": self.options.goal.value,
             "levels_for_goal": self.options.levels_for_goal.value,
@@ -184,6 +186,7 @@ class TR1RWorld(World):
             "death_link": self.options.death_link.value,
             "starting_weapons": self.options.starting_weapons.value,
             "enabled_games": enabled,
+            "total_levels": total_levels,
             "total_secrets": sum(all_secrets),
             "level_sequences": level_sequences,
         }
@@ -194,40 +197,21 @@ class TR1RWorld(World):
         player = self.player
         enabled = self._get_enabled_games()
 
-        if goal == 0:  # final_boss - complete last level of last enabled game
-            last_game = enabled[-1] if enabled else "tr1"
-            game = load_game(last_game)
-            if game and game.levels:
-                last_level_name = game.levels[-1]["name"]
-                self.multiworld.completion_condition[player] = \
-                    lambda state, lv=last_level_name: state.has(
-                        f"Level Complete - {lv}", player
-                    )
+        all_level_names = []
+        for game_key in enabled:
+            game = load_game(game_key)
+            if game is None:
+                continue
+            all_level_names.extend(level["name"] for level in game.levels)
 
-        elif goal == 1:  # all_secrets
-            all_secret_locs = []
-            for game_key in enabled:
-                game = load_game(game_key)
-                if game is None:
-                    continue
-                for i, level in enumerate(game.levels):
-                    for s in range(len(level["secrets"])):
-                        all_secret_locs.append(f"{level['name']} - Secret {s + 1}")
-
+        if goal == 0:  # all_levels - complete every level of enabled games
             self.multiworld.completion_condition[player] = \
-                lambda state, locs=all_secret_locs: all(
-                    state.can_reach(loc, "Location", player) for loc in locs
+                lambda state, lvs=all_level_names: all(
+                    state.has(f"Level Complete - {lv}", player) for lv in lvs
                 )
 
-        elif goal == 2:  # n_levels
+        elif goal == 1:  # n_levels
             required = self.options.levels_for_goal.value
-            all_level_names = []
-            for game_key in enabled:
-                game = load_game(game_key)
-                if game is None:
-                    continue
-                all_level_names.extend(level["name"] for level in game.levels)
-
             self.multiworld.completion_condition[player] = \
                 lambda state, req=required, lvs=all_level_names: sum(
                     1 for lv in lvs if state.has(f"Level Complete - {lv}", player)

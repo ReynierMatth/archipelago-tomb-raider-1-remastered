@@ -151,9 +151,9 @@ static void RunLiveMonitor(ProcessMemory memory, IntPtr t1)
 // ====================================================================
 static void RunInventoryScanner(ProcessMemory memory, IntPtr t1)
 {
-    // We'll scan the LARA_INFO region around tomb1.dll+0x310e80
+    // We'll scan the LARA_INFO region around tomb1.dll+0x32CE70
     // and also a wider area to find inventory data
-    int laraInfoBase = 0x310e80;
+    int laraInfoBase = 0x32CE70;
     int scanSize = 0x200; // 512 bytes should cover LARA_INFO
 
     Console.WriteLine("\n=== INVENTORY SCANNER ===");
@@ -508,7 +508,7 @@ static void RunInventoryRingTester(ProcessMemory memory, IntPtr t1)
     Console.WriteLine("\n=== INVENTORY RING TESTER ===");
     Console.WriteLine("Add items directly to the main inventory ring via memory.\n");
 
-    // Item definitions: name, relative index from Pistols, default qty
+    // Item definitions: name, relative index from Compass, default qty
     var items = new (string Name, int RelIndex, int DefaultQty)[]
     {
         ("Shotgun",         TR1RMemoryMap.InvItemRelIndex.Shotgun,       1),
@@ -527,8 +527,9 @@ static void RunInventoryRingTester(ProcessMemory memory, IntPtr t1)
         Console.WriteLine($"\n--- Current Main Ring ({ringCount} items) ---");
         Console.ResetColor();
 
-        // Find Pistols pointer (usually at index 1, but search to be safe)
-        IntPtr pistolsPtr = IntPtr.Zero;
+        // Find Compass pointer (always at index 0 in the ring)
+        IntPtr compassPtr = FindCompassPointer(memory, t1);
+
         for (int i = 0; i < ringCount; i++)
         {
             IntPtr itemPtr = memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems + i * 8);
@@ -539,33 +540,12 @@ static void RunInventoryRingTester(ProcessMemory memory, IntPtr t1)
 
             // Identify the item by checking if its pointer matches known relative offsets
             string name = $"Unknown (objId=0x{objectId:X})";
-            if (pistolsPtr != IntPtr.Zero)
+            if (compassPtr != IntPtr.Zero)
             {
-                long offset = itemPtr.ToInt64() - pistolsPtr.ToInt64();
+                long offset = itemPtr.ToInt64() - compassPtr.ToInt64();
                 int relIdx = (int)(offset / TR1RMemoryMap.InventoryItemStride);
                 if (offset % TR1RMemoryMap.InventoryItemStride == 0)
                     name = IdentifyItem(relIdx);
-            }
-
-            // Pistols are at relative index 0 — detect by object_id pattern or position
-            // Pistols is typically index 1 in the ring (after Compass)
-            // We can identify Pistols: its pointer, when offset by known items, should match
-            if (pistolsPtr == IntPtr.Zero && i <= 2 && itemPtr != IntPtr.Zero)
-            {
-                // Try this pointer as Pistols reference: check if Compass would be at +6*stride
-                IntPtr testCompass = itemPtr + TR1RMemoryMap.InvItemRelIndex.Compass * TR1RMemoryMap.InventoryItemStride;
-                // Read compass object_id — if we can read it and it looks valid, this might be pistols
-                // Better approach: read items[0] (usually Compass at +6) and check if items[0] = this + 6*stride
-                if (ringCount >= 2)
-                {
-                    IntPtr item0 = memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems);
-                    long diff = item0.ToInt64() - itemPtr.ToInt64();
-                    if (diff == TR1RMemoryMap.InvItemRelIndex.Compass * TR1RMemoryMap.InventoryItemStride)
-                    {
-                        pistolsPtr = itemPtr;
-                        name = "Pistols";
-                    }
-                }
             }
 
             Console.Write($"  [{i,2}] ");
@@ -578,29 +558,18 @@ static void RunInventoryRingTester(ProcessMemory memory, IntPtr t1)
             Console.ResetColor();
         }
 
-        // If Pistols not found via Compass cross-check, try brute force:
-        // Ring index 1 is almost always Pistols
-        if (pistolsPtr == IntPtr.Zero && ringCount >= 2)
-        {
-            pistolsPtr = memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems + 1 * 8);
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine($"  (Assuming items[1] = Pistols: 0x{pistolsPtr:X})");
-            Console.ResetColor();
-        }
-
-        if (pistolsPtr == IntPtr.Zero)
+        if (compassPtr == IntPtr.Zero)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Cannot find Pistols pointer! Make sure you're in a level with pistols.");
+            Console.WriteLine("Cannot find Compass pointer! Make sure you're in a level.");
             Console.ResetColor();
             Console.WriteLine("Press ENTER to retry...");
             Console.ReadLine();
             continue;
         }
 
-        // Re-display ring with proper names now that we have Pistols ref
         Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.WriteLine($"\n  Pistols reference: 0x{pistolsPtr:X}");
+        Console.WriteLine($"\n  Compass reference: 0x{compassPtr:X}");
         Console.ResetColor();
 
         // Check which items already exist in ring
@@ -608,7 +577,7 @@ static void RunInventoryRingTester(ProcessMemory memory, IntPtr t1)
         for (int i = 0; i < ringCount; i++)
         {
             IntPtr itemPtr = memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems + i * 8);
-            long diff = itemPtr.ToInt64() - pistolsPtr.ToInt64();
+            long diff = itemPtr.ToInt64() - compassPtr.ToInt64();
             if (diff % TR1RMemoryMap.InventoryItemStride == 0)
             {
                 int relIdx = (int)(diff / TR1RMemoryMap.InventoryItemStride);
@@ -654,7 +623,7 @@ static void RunInventoryRingTester(ProcessMemory memory, IntPtr t1)
 
         if (input == "9")
         {
-            GiveWeaponWithConversion(memory, t1, pistolsPtr);
+            GiveWeaponWithConversion(memory, t1, compassPtr);
             continue;
         }
 
@@ -665,11 +634,11 @@ static void RunInventoryRingTester(ProcessMemory memory, IntPtr t1)
         }
 
         var selected = items[choice - 1];
-        IntPtr targetPtr = pistolsPtr + selected.RelIndex * TR1RMemoryMap.InventoryItemStride;
+        IntPtr targetPtr = compassPtr + selected.RelIndex * TR1RMemoryMap.InventoryItemStride;
 
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine($"\n  Target: {selected.Name}");
-        Console.WriteLine($"  Pointer: 0x{targetPtr:X} (Pistols + {selected.RelIndex} * 0x{TR1RMemoryMap.InventoryItemStride:X})");
+        Console.WriteLine($"  Pointer: 0x{targetPtr:X} (Compass + {selected.RelIndex} * 0x{TR1RMemoryMap.InventoryItemStride:X})");
 
         // Verify the target pointer looks valid (read object_id from the INVENTORY_ITEM struct)
         short targetObjId = memory.ReadInt16(targetPtr + TR1RMemoryMap.InvItem_ObjectId);
@@ -802,7 +771,7 @@ static void GiveAmmoMenu(ProcessMemory memory, IntPtr t1)
     Console.ResetColor();
 }
 
-static void GiveWeaponWithConversion(ProcessMemory memory, IntPtr t1, IntPtr pistolsPtr)
+static void GiveWeaponWithConversion(ProcessMemory memory, IntPtr t1, IntPtr compassPtr)
 {
     Console.WriteLine("\n--- Give Weapon (with ammo conversion) ---");
     Console.WriteLine("  1 = Shotgun");
@@ -825,7 +794,7 @@ static void GiveWeaponWithConversion(ProcessMemory memory, IntPtr t1, IntPtr pis
     if (laraAmmoOffset < 0) { Console.WriteLine("Invalid."); return; }
 
     // Step 1: Check if weapon already in ring
-    IntPtr weaponPtr = pistolsPtr + weaponRelIdx * TR1RMemoryMap.InventoryItemStride;
+    IntPtr weaponPtr = compassPtr + weaponRelIdx * TR1RMemoryMap.InventoryItemStride;
     short ringCount = memory.ReadInt16(t1 + TR1RMemoryMap.MainRingCount);
     bool hasWeapon = false;
     for (int i = 0; i < ringCount; i++)
@@ -853,7 +822,7 @@ static void GiveWeaponWithConversion(ProcessMemory memory, IntPtr t1, IntPtr pis
     }
 
     // Step 2: Find and remove ammo item from ring
-    IntPtr ammoPtr = pistolsPtr + ammoRelIdx * TR1RMemoryMap.InventoryItemStride;
+    IntPtr ammoPtr = compassPtr + ammoRelIdx * TR1RMemoryMap.InventoryItemStride;
     ringCount = memory.ReadInt16(t1 + TR1RMemoryMap.MainRingCount);
     int foundIdx = -1;
     short foundQty = 0;
@@ -914,18 +883,18 @@ static void RunKeysRingExplorer(ProcessMemory memory, IntPtr t1)
     Console.WriteLine("\n=== KEYS RING EXPLORER ===");
     Console.WriteLine("Explore the Keys Ring and discover key item INVENTORY_ITEM offsets.\n");
 
-    // First, find Pistols pointer (reference for all relIdx calculations)
-    IntPtr pistolsPtr = FindPistolsPointer(memory, t1);
-    if (pistolsPtr == IntPtr.Zero)
+    // First, find Compass pointer (reference for all relIdx calculations)
+    IntPtr compassPtr = FindCompassPointer(memory, t1);
+    if (compassPtr == IntPtr.Zero)
     {
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine("Cannot find Pistols pointer! Make sure you're in a level with pistols.");
+        Console.WriteLine("Cannot find Compass pointer! Make sure you're in a level.");
         Console.ResetColor();
         return;
     }
 
     Console.ForegroundColor = ConsoleColor.Green;
-    Console.WriteLine($"  Pistols reference: 0x{pistolsPtr:X}");
+    Console.WriteLine($"  Compass reference: 0x{compassPtr:X}");
     Console.ResetColor();
 
     while (memory.IsAttached)
@@ -945,12 +914,12 @@ static void RunKeysRingExplorer(ProcessMemory memory, IntPtr t1)
         if (string.IsNullOrEmpty(input) || input.ToLower() == "q")
             break;
 
-        // Re-find Pistols in case of level change
-        pistolsPtr = FindPistolsPointer(memory, t1);
-        if (pistolsPtr == IntPtr.Zero)
+        // Re-find Compass in case of level change
+        compassPtr = FindCompassPointer(memory, t1);
+        if (compassPtr == IntPtr.Zero)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Lost Pistols pointer. Are you still in a level?");
+            Console.WriteLine("Lost Compass pointer. Are you still in a level?");
             Console.ResetColor();
             continue;
         }
@@ -958,53 +927,44 @@ static void RunKeysRingExplorer(ProcessMemory memory, IntPtr t1)
         switch (input)
         {
             case "1":
-                ShowKeysRingState(memory, t1, pistolsPtr);
+                ShowKeysRingState(memory, t1, compassPtr);
                 break;
             case "2":
-                WatchKeyItemPickup(memory, t1, pistolsPtr);
+                WatchKeyItemPickup(memory, t1, compassPtr);
                 break;
             case "3":
-                ScanInventoryItemTable(memory, t1, pistolsPtr);
+                ScanInventoryItemTable(memory, t1, compassPtr);
                 break;
             case "4":
-                ScanKeysRingQtys(memory, t1, pistolsPtr);
+                ScanKeysRingQtys(memory, t1, compassPtr);
                 break;
             case "5":
-                InjectKeyItem(memory, t1, pistolsPtr);
+                InjectKeyItem(memory, t1, compassPtr);
                 break;
         }
     }
 }
 
-/// <summary>Finds the Pistols INVENTORY_ITEM pointer from the Main Ring.</summary>
-static IntPtr FindPistolsPointer(ProcessMemory memory, IntPtr t1)
+/// <summary>Finds the Compass INVENTORY_ITEM pointer from Main Ring items[0].</summary>
+static IntPtr FindCompassPointer(ProcessMemory memory, IntPtr t1)
 {
     short ringCount = memory.ReadInt16(t1 + TR1RMemoryMap.MainRingCount);
-    if (ringCount < 2) return IntPtr.Zero;
+    if (ringCount < 1) return IntPtr.Zero;
 
-    // Strategy: items[0] is typically Compass. Pistols = Compass - 6*stride
-    // Or items[1] is Pistols directly. Cross-check both.
-    for (int i = 0; i < ringCount; i++)
-    {
-        IntPtr itemPtr = memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems + i * 8);
-        if (itemPtr == IntPtr.Zero) continue;
+    // Compass is always at index 0 in the Main Ring (lowest inv_pos)
+    IntPtr item0 = memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems);
+    if (item0 == IntPtr.Zero) return IntPtr.Zero;
 
-        // Check if items[0] (Compass) confirms this as Pistols
-        IntPtr item0 = memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems);
-        long diff = item0.ToInt64() - itemPtr.ToInt64();
-        if (diff == TR1RMemoryMap.InvItemRelIndex.Compass * TR1RMemoryMap.InventoryItemStride)
-            return itemPtr;
-    }
-
-    // Fallback: items[1] is almost always Pistols
-    if (ringCount >= 2)
-        return memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems + 1 * 8);
+    // Verify it's actually the Compass by checking its object_id
+    short objId = memory.ReadInt16(item0 + TR1RMemoryMap.InvItem_ObjectId);
+    if (objId == TR1RMemoryMap.InvObjId.Compass)
+        return item0;
 
     return IntPtr.Zero;
 }
 
 /// <summary>Shows the current state of the Keys Ring.</summary>
-static void ShowKeysRingState(ProcessMemory memory, IntPtr t1, IntPtr pistolsPtr)
+static void ShowKeysRingState(ProcessMemory memory, IntPtr t1, IntPtr compassPtr)
 {
     short keyCount = memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingCount);
     Console.ForegroundColor = ConsoleColor.Yellow;
@@ -1022,8 +982,8 @@ static void ShowKeysRingState(ProcessMemory memory, IntPtr t1, IntPtr pistolsPtr
         IntPtr itemPtr = memory.ReadPointer(t1 + TR1RMemoryMap.KeysRingItems + i * 8);
         short objectId = (itemPtr != IntPtr.Zero) ? memory.ReadInt16(itemPtr + TR1RMemoryMap.InvItem_ObjectId) : (short)-1;
 
-        // Calculate relIdx from Pistols
-        long offset = itemPtr.ToInt64() - pistolsPtr.ToInt64();
+        // Calculate relIdx from Compass
+        long offset = itemPtr.ToInt64() - compassPtr.ToInt64();
         int relIdx = (offset % TR1RMemoryMap.InventoryItemStride == 0)
             ? (int)(offset / TR1RMemoryMap.InventoryItemStride)
             : 99999;
@@ -1058,7 +1018,7 @@ static void ShowKeysRingState(ProcessMemory memory, IntPtr t1, IntPtr pistolsPtr
 }
 
 /// <summary>Watches for key item pickup in real-time.</summary>
-static void WatchKeyItemPickup(ProcessMemory memory, IntPtr t1, IntPtr pistolsPtr)
+static void WatchKeyItemPickup(ProcessMemory memory, IntPtr t1, IntPtr compassPtr)
 {
     short prevCount = memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingCount);
     Console.ForegroundColor = ConsoleColor.Cyan;
@@ -1067,7 +1027,7 @@ static void WatchKeyItemPickup(ProcessMemory memory, IntPtr t1, IntPtr pistolsPt
     Console.ResetColor();
 
     // Also snapshot the qtys area (wider scan to find the real offset)
-    int scanStart = 0xF8F00; // scan a wide range around estimated qtys
+    int scanStart = 0x114EF0; // scan a wide range around estimated qtys
     int scanSize = 0x800;
     byte[] baselineQtyArea = memory.ReadBytes(t1 + scanStart, scanSize);
 
@@ -1088,7 +1048,7 @@ static void WatchKeyItemPickup(ProcessMemory memory, IntPtr t1, IntPtr pistolsPt
                 IntPtr newPtr = memory.ReadPointer(t1 + TR1RMemoryMap.KeysRingItems + newIdx * 8);
                 short objectId = (newPtr != IntPtr.Zero) ? memory.ReadInt16(newPtr + TR1RMemoryMap.InvItem_ObjectId) : (short)-1;
 
-                long offset = newPtr.ToInt64() - pistolsPtr.ToInt64();
+                long offset = newPtr.ToInt64() - compassPtr.ToInt64();
                 int relIdx = (offset % TR1RMemoryMap.InventoryItemStride == 0)
                     ? (int)(offset / TR1RMemoryMap.InventoryItemStride)
                     : 99999;
@@ -1099,8 +1059,8 @@ static void WatchKeyItemPickup(ProcessMemory memory, IntPtr t1, IntPtr pistolsPt
                 Console.WriteLine($"  New item at ring index {newIdx}:");
                 Console.WriteLine($"    Pointer:   0x{newPtr:X}");
                 Console.WriteLine($"    Object ID: 0x{objectId:X4} ({name})");
-                Console.WriteLine($"    RelIdx:    {relIdx} (from Pistols)");
-                Console.WriteLine($"    Formula:   pistolsPtr + {relIdx} * 0x{TR1RMemoryMap.InventoryItemStride:X}");
+                Console.WriteLine($"    RelIdx:    {relIdx} (from Compass)");
+                Console.WriteLine($"    Formula:   compassPtr + {relIdx} * 0x{TR1RMemoryMap.InventoryItemStride:X}");
                 Console.ResetColor();
 
                 // Scan for qty changes in the wider area
@@ -1139,13 +1099,13 @@ static void WatchKeyItemPickup(ProcessMemory memory, IntPtr t1, IntPtr pistolsPt
 }
 
 /// <summary>
-/// Scans the INVENTORY_ITEM global table sequentially from Pistols.
+/// Scans the INVENTORY_ITEM global table sequentially from Compass.
 /// Reads object_id at each stride to identify all items.
 /// </summary>
-static void ScanInventoryItemTable(ProcessMemory memory, IntPtr t1, IntPtr pistolsPtr)
+static void ScanInventoryItemTable(ProcessMemory memory, IntPtr t1, IntPtr compassPtr)
 {
     Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.WriteLine($"\n  Scanning INVENTORY_ITEM table from Pistols (0x{pistolsPtr:X})...");
+    Console.WriteLine($"\n  Scanning INVENTORY_ITEM table from Compass (0x{compassPtr:X})...");
     Console.WriteLine($"  Stride: 0x{TR1RMemoryMap.InventoryItemStride:X} ({TR1RMemoryMap.InventoryItemStride} bytes)");
     Console.ResetColor();
 
@@ -1160,7 +1120,7 @@ static void ScanInventoryItemTable(ProcessMemory memory, IntPtr t1, IntPtr pisto
 
     for (int relIdx = scanMin; relIdx <= scanMax; relIdx++)
     {
-        IntPtr itemAddr = pistolsPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
+        IntPtr itemAddr = compassPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
         short objectId;
 
         try
@@ -1191,7 +1151,7 @@ static void ScanInventoryItemTable(ProcessMemory memory, IntPtr t1, IntPtr pisto
         else
             Console.ForegroundColor = ConsoleColor.White;
 
-        string marker = relIdx == 0 ? " <-- PISTOLS" : isKeyItem ? " <-- KEY ITEM" : "";
+        string marker = relIdx == 0 ? " <-- COMPASS" : isKeyItem ? " <-- KEY ITEM" : "";
         Console.WriteLine($"  {relIdx,7} | 0x{itemAddr:X} | 0x{objectId:X4}   | {name,-30}{marker}");
         Console.ResetColor();
     }
@@ -1206,20 +1166,20 @@ static void ScanInventoryItemTable(ProcessMemory memory, IntPtr t1, IntPtr pisto
 /// Scans memory around the estimated Keys Ring qtys offset
 /// to find where qty values change when a key item is picked up.
 /// </summary>
-static void ScanKeysRingQtys(ProcessMemory memory, IntPtr t1, IntPtr pistolsPtr)
+static void ScanKeysRingQtys(ProcessMemory memory, IntPtr t1, IntPtr compassPtr)
 {
     Console.ForegroundColor = ConsoleColor.Cyan;
     Console.WriteLine("\n  === Keys Ring Qtys Scanner ===");
     Console.WriteLine("  This will snapshot memory, then detect changes when you pick up a key item.");
-    Console.WriteLine("  Scanning range: tomb1.dll+0xF8E00..+0xFD800 (broad search)");
+    Console.WriteLine("  Scanning range: tomb1.dll+0x114DF0..+0x1197F0 (broad search)");
     Console.ResetColor();
 
     // Take multiple scan regions
     var scanRegions = new (int offset, int size)[]
     {
-        (0xF8E00, 0x1000),  // near main ring qtys
-        (0xF9600, 0x200),   // near estimated keys ring qtys
-        (0xFD600, 0x200),   // near keys ring count
+        (0x114DF0, 0x1000),  // near main ring qtys
+        (0x1155F0, 0x200),   // near estimated keys ring qtys
+        (0x1195F0, 0x200),   // near keys ring count
     };
 
     Console.Write("  Press ENTER to take baseline snapshot...");
@@ -1291,14 +1251,14 @@ static void ScanKeysRingQtys(ProcessMemory memory, IntPtr t1, IntPtr pistolsPtr)
 /// <summary>
 /// Injects a key item into the Keys Ring by appending it.
 /// </summary>
-static void InjectKeyItem(ProcessMemory memory, IntPtr t1, IntPtr pistolsPtr)
+static void InjectKeyItem(ProcessMemory memory, IntPtr t1, IntPtr compassPtr)
 {
     Console.ForegroundColor = ConsoleColor.Cyan;
     Console.WriteLine("\n  === Inject Key Item ===");
     Console.ResetColor();
 
     // Show current Keys Ring
-    ShowKeysRingState(memory, t1, pistolsPtr);
+    ShowKeysRingState(memory, t1, compassPtr);
 
     Console.Write("\n  Enter the relIdx of the key item to inject (from table scan): ");
     string? input = Console.ReadLine()?.Trim();
@@ -1308,7 +1268,7 @@ static void InjectKeyItem(ProcessMemory memory, IntPtr t1, IntPtr pistolsPtr)
         return;
     }
 
-    IntPtr targetPtr = pistolsPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
+    IntPtr targetPtr = compassPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
     short objectId = memory.ReadInt16(targetPtr + TR1RMemoryMap.InvItem_ObjectId);
     string name = TR1RMemoryMap.InvObjIdNames.GetValueOrDefault(objectId, "Unknown");
 
@@ -1376,7 +1336,7 @@ static void InjectKeyItem(ProcessMemory memory, IntPtr t1, IntPtr pistolsPtr)
     Console.ResetColor();
 
     // Show updated state
-    ShowKeysRingState(memory, t1, pistolsPtr);
+    ShowKeysRingState(memory, t1, compassPtr);
 }
 
 // ====================================================================

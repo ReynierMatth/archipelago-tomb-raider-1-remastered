@@ -57,7 +57,7 @@ public class GameStateWatcher : IDisposable
     // Entity tracking: entityIndex -> last known flags value
     private readonly Dictionary<int, short> _entityFlags = new();
 
-    // Items waiting for ring injection (deferred until Pistols pointer is found)
+    // Items waiting for ring injection (deferred until Compass pointer is found)
     private readonly Queue<(long ItemId, ItemCategory Category)> _pendingItems = new();
 
     // Complete history of all received ring items (weapons, ammo, medipacks).
@@ -202,7 +202,7 @@ public class GameStateWatcher : IDisposable
 
             // Reset cached pointers — heap addresses shift on any load (even same level)
             _scanner.Reset();
-            _inventory.InvalidatePistolsPointer();
+            _inventory.InvalidateCompassPointer();
             _inventory.ResetKeyItemEnsurance();
 
             // First frame in-game — capture current state without reporting changes.
@@ -393,7 +393,7 @@ public class GameStateWatcher : IDisposable
 
         // Reset inventory pointers (heap shifts on any load)
         _inventory.ResetKeyItemEnsurance();
-        _inventory.InvalidatePistolsPointer();
+        _inventory.InvalidateCompassPointer();
         _inventory.ResetSentinelRemovals();
 
         _activeSaveNumber = saveNumber;
@@ -459,8 +459,8 @@ public class GameStateWatcher : IDisposable
         // Reset inventory scanner (heap addresses shift on level load)
         _scanner.Reset();
 
-        // Invalidate Pistols pointer — will be re-found lazily when ring is stable
-        _inventory.InvalidatePistolsPointer();
+        // Invalidate Compass pointer — will be re-found lazily when ring is stable
+        _inventory.InvalidateCompassPointer();
 
         // Reset key item tracking for the new level
         _inventory.ResetKeyItemEnsurance();
@@ -504,7 +504,7 @@ public class GameStateWatcher : IDisposable
         _lastSaveNumber = _memory.ReadInt32(
             _memory.Tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.WSB_SaveCounter);
         _scanner.Reset();
-        _inventory.InvalidatePistolsPointer();
+        _inventory.InvalidateCompassPointer();
 
         // Take a fresh Keys Ring snapshot and resume monitoring
         _keyMonitor.SnapshotKeysRing();
@@ -786,7 +786,7 @@ public class GameStateWatcher : IDisposable
     /// Processes items received from other AP players and injects them in real-time.
     /// Items that need ring injection (weapons, ammo, medipacks) are deferred to
     /// _pendingItems if the inventory isn't ready yet. Traps and key items are
-    /// processed immediately (they don't need the Pistols pointer).
+    /// processed immediately (they don't need the Compass pointer).
     /// </summary>
     private void ProcessReceivedItems(int levelId)
     {
@@ -846,8 +846,8 @@ public class GameStateWatcher : IDisposable
 
         bool victory = _session.SlotData.Goal switch
         {
-            0 => _completedLevels.Contains(TR1RMemoryMap.Level_Pyramid),
-            2 => _completedLevels.Count >= _session.SlotData.LevelsForGoal,
+            0 => _completedLevels.Count >= _session.SlotData.TotalLevels, // all_levels
+            1 => _completedLevels.Count >= _session.SlotData.LevelsForGoal, // n_levels
             _ => false,
         };
 
