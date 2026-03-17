@@ -86,7 +86,7 @@ public static class TR2RMemoryMap
     // ----- Level & Game State -----
 
     /// <summary>Current TR2 level ID (0=Home, 1=Great Wall, ..., 63=Menu). Int32.</summary>
-    public const int LevelId = 0x132b58;
+    public const int LevelId = 0x157168;
 
     /// <summary>Set to 1 when current level is completed. Int32.</summary>
     public const int LevelCompleted = 0x1330b8;
@@ -126,15 +126,71 @@ public static class TR2RMemoryMap
     // Same ring system as TR1: count (Int16) + items[] (Int64 pointers) + qtys[] (Int16)
     // Found via Cheat Engine (Patch 4.1).
 
-    public const int MainRingCount = 0x113EDC;
-    public const int MainRingItems = 0x12E5E0;
-    public const int MainRingQtys = 0x12E698;
+    public const int MainRingCount = 0x137EDC;
+    public const int MainRingItems = 0x1525F0;
+    public const int MainRingQtys = 0x1526A8;
     // public const int KeysRingCount = ???;
     // public const int KeysRingItems = ???;
     // public const int KeysRingQtys = ???;
     public const int MaxRingItems = 24;
     public const int InventoryItemStride = 0xCD0;
     public const int InvItem_ObjectId = 0x08;
+
+    /// <summary>
+    /// TR2 inventory object IDs (different from TR1).
+    /// Discovered via MainRingItems pointer dereference + 0x08.
+    /// </summary>
+    public static class InvObjId
+    {
+        public const int Statistiques = 0x79;
+        public const int Pistols = 0x9D;
+        public const int Shotgun = 0x9E;
+        public const int AutoPistols = 0x9F;
+        public const int Uzis = 0xA0;
+        public const int HarpoonGun = 0xA1;
+        public const int M16 = 0xA2;
+        public const int GrenadeLauncher = 0xA3;
+        public const int AutoPistolAmmo = 0xA6;  // relIdx=-2
+        // public const int AutoPistolAmmo = ???;
+        // public const int UziAmmo = ???;
+        // public const int M16Ammo = ???;
+        // public const int GrenadeAmmo = ???;
+        // public const int Harpoons = ???;
+        public const int SmallMedipack = 0xAB;
+        public const int LargeMedipack = 0xAC;
+        public const int Flares = 0xAD;
+    }
+
+    /// <summary>
+    /// Maps TR2 inventory object_id values to human-readable names.
+    /// </summary>
+    public static readonly Dictionary<int, string> InvObjIdNames = new()
+    {
+        [InvObjId.Statistiques] = "Statistiques",
+        [InvObjId.Pistols] = "Pistols",
+        [InvObjId.Shotgun] = "Shotgun",
+        [InvObjId.AutoPistols] = "Auto Pistols",
+        [InvObjId.Uzis] = "Uzis",
+        [InvObjId.HarpoonGun] = "Harpoon Gun",
+        [InvObjId.M16] = "M16",
+        [InvObjId.GrenadeLauncher] = "Grenade Launcher",
+        [InvObjId.AutoPistolAmmo] = "Auto Pistol Ammo",
+        [InvObjId.SmallMedipack] = "Small Medipack",
+        [InvObjId.LargeMedipack] = "Large Medipack",
+        [InvObjId.Flares] = "Flares",
+    };
+
+    /// <summary>
+    /// Byte offsets from Statistiques INVENTORY_ITEM for items NOT stride-aligned.
+    /// Usage: ptr = statsPtr + ByteOffset
+    /// Discovered via CE ring scan.
+    /// </summary>
+    public static readonly Dictionary<int, int> NonStrideByteOffsets = new()
+    {
+        [InvObjId.AutoPistols] = 0x5DF0,
+        [InvObjId.Uzis] = 0x2AB0,
+        [InvObjId.Flares] = 0x5120,
+    };
 
     // ----- WorldState Backup Buffer -----
 

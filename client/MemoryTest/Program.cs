@@ -24,6 +24,8 @@ Console.WriteLine("  3 = Entity flag watcher (test pickup detection)");
 Console.WriteLine("  4 = Entity struct dumper (find real struct layout)");
 Console.WriteLine("  5 = Inventory ring tester (add items to inventory)");
 Console.WriteLine("  6 = Keys ring explorer (discover key item offsets)");
+Console.WriteLine("  --- TR2 (tomb2.dll) ---");
+Console.WriteLine("  8 = TR2 Inventory ring tester (add items to TR2 inventory)");
 Console.WriteLine("  --- Multi-Game ---");
 Console.WriteLine("  7 = Inventory item table scanner (TR1/TR2/TR3)");
 Console.Write("\nMode: ");
@@ -32,6 +34,23 @@ string mode = Console.ReadLine()?.Trim() ?? "1";
 if (mode == "7")
 {
     RunMultiGameInventoryScanner(memory);
+}
+else if (mode == "8")
+{
+    // TR2 mode: wait for tomb2.dll
+    Console.Write("Waiting for tomb2.dll...");
+    while (memory.Tomb2Base == IntPtr.Zero)
+    {
+        memory.RefreshTomb1Base(); // also refreshes tomb2/tomb3
+        if (memory.Tomb2Base == IntPtr.Zero)
+        {
+            Console.Write(".");
+            Thread.Sleep(1000);
+        }
+    }
+    IntPtr t2 = memory.Tomb2Base;
+    Console.WriteLine($"\n  tomb2.dll base: 0x{t2:X}");
+    RunTR2InventoryRingTester(memory, t2);
 }
 else
 {
@@ -91,7 +110,7 @@ static void RunLiveMonitor(ProcessMemory memory, IntPtr t1)
             int levelId = memory.ReadInt32(t1, TR1RMemoryMap.LevelId);
             int levelCompleted = memory.ReadInt32(t1, TR1RMemoryMap.LevelCompleted);
             int entityCount = memory.ReadInt16(t1 + TR1RMemoryMap.EntitiesCount);
-            ushort secrets = memory.ReadUInt16(t1 + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Save_SecretsFound);
+            ushort secrets = memory.ReadUInt16(t1 + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Runtime_SecretsFound);
 
             IntPtr laraPtr = memory.ReadPointer(t1, TR1RMemoryMap.LaraBase);
             short health = 0;
@@ -118,19 +137,22 @@ static void RunLiveMonitor(ProcessMemory memory, IntPtr t1)
                 Console.ResetColor();
             }
 
+            int secretCount = 0; ushort sv = secrets;
+            while (sv != 0) { secretCount += sv & 1; sv >>= 1; }
+
             if (secrets != lastSecrets)
             {
+                int prevCount = 0; ushort pv = lastSecrets;
+                while (pv != 0) { prevCount += pv & 1; pv >>= 1; }
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                int count = 0; ushort v = secrets;
-                while (v != 0) { count += v & 1; v >>= 1; }
-                Console.WriteLine($"  *** SECRET! Bitmask: 0b{Convert.ToString(secrets, 2).PadLeft(8, '0')} ({count} total) ***");
+                Console.WriteLine($"  *** SECRET FOUND! {prevCount} -> {secretCount} secrets ***");
                 Console.ResetColor();
             }
 
             Console.Write($"\r  [{state}] {levelName,-25} HP:{health,5}/{TR1RMemoryMap.MaxHealth}" +
                           $"  Pos:({posX,7},{posY,7},{posZ,7}) Room:{room,3}" +
                           $"  Spd:{speed,4}  Ent:{entityCount,3}" +
-                          $"  Secrets:0b{Convert.ToString(secrets, 2).PadLeft(3, '0')}" +
+                          $"  Secrets:{secretCount}" +
                           $"  Done:{levelCompleted}     ");
 
             if (levelId != lastLevel || health != lastHealth)
@@ -596,8 +618,9 @@ static void RunInventoryRingTester(ProcessMemory memory, IntPtr t1)
             Console.WriteLine($"  {i + 1} = {items[i].Name}{status}");
         }
         Console.WriteLine($"  7 = Dump ring raw bytes");
-        Console.WriteLine($"  8 = Give ammo (shotgun/magnum/uzi)");
-        Console.WriteLine($"  9 = Give weapon + convert ammo items");
+        Console.WriteLine($"  8 = Give ammo item (into ring, no weapon needed)");
+        Console.WriteLine($"  9 = Give weapon + convert ammo items to LARA_INFO");
+        Console.WriteLine($"  10 = Give weapon only (no ammo conversion)");
         Console.WriteLine($"  0 = Refresh / re-read ring");
         Console.WriteLine($"  q = Quit");
 
@@ -617,13 +640,19 @@ static void RunInventoryRingTester(ProcessMemory memory, IntPtr t1)
 
         if (input == "8")
         {
-            GiveAmmoMenu(memory, t1);
+            GiveAmmoToRing(memory, t1, compassPtr);
             continue;
         }
 
         if (input == "9")
         {
             GiveWeaponWithConversion(memory, t1, compassPtr);
+            continue;
+        }
+
+        if (input == "10")
+        {
+            GiveWeaponOnly(memory, t1, compassPtr);
             continue;
         }
 
@@ -742,32 +771,95 @@ static void DumpRingRawBytes(ProcessMemory memory, IntPtr t1, short ringCount)
     }
 }
 
-static void GiveAmmoMenu(ProcessMemory memory, IntPtr t1)
+static void GiveAmmoToRing(ProcessMemory memory, IntPtr t1, IntPtr compassPtr)
 {
-    Console.WriteLine("\n--- Give Ammo ---");
-    Console.WriteLine("  1 = Magnum ammo (+50)");
-    Console.WriteLine("  2 = Uzi ammo (+100)");
-    Console.WriteLine("  3 = Shotgun ammo (+12 internal = 2 shells)");
+    Console.WriteLine("\n--- Give Ammo (inject into ring) ---");
+    Console.WriteLine("  1 = Shotgun Ammo");
+    Console.WriteLine("  2 = Magnum Ammo");
+    Console.WriteLine("  3 = Uzi Ammo");
     Console.Write("Choice: ");
     string? input = Console.ReadLine()?.Trim();
 
-    (int offset, int amount, string name) = input switch
+    (int relIdx, string name) = input switch
     {
-        "1" => (TR1RMemoryMap.Lara_MagnumAmmo, 50, "Magnum"),
-        "2" => (TR1RMemoryMap.Lara_UziAmmo, 100, "Uzi"),
-        "3" => (TR1RMemoryMap.Lara_ShotgunAmmo, 12, "Shotgun"),
-        _ => (-1, 0, ""),
+        "1" => (TR1RMemoryMap.InvItemRelIndex.ShotgunAmmo, "Shotgun Ammo"),
+        "2" => (TR1RMemoryMap.InvItemRelIndex.MagnumAmmo, "Magnum Ammo"),
+        "3" => (TR1RMemoryMap.InvItemRelIndex.UziAmmo, "Uzi Ammo"),
+        _ => (int.MinValue, ""),
     };
 
-    if (offset < 0) { Console.WriteLine("Invalid."); return; }
+    if (relIdx == int.MinValue) { Console.WriteLine("Invalid."); return; }
 
-    IntPtr addr = t1 + offset;
-    int current = memory.ReadInt32(addr);
-    int newVal = Math.Min(current + amount, 999999);
-    memory.Write(addr, newVal);
+    IntPtr targetPtr = compassPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
+    short ringCount = memory.ReadInt16(t1 + TR1RMemoryMap.MainRingCount);
+
+    // Check if already in ring → increment qty
+    for (int i = 0; i < ringCount; i++)
+    {
+        if (memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems + i * 8) == targetPtr)
+        {
+            IntPtr qtyAddr = t1 + TR1RMemoryMap.MainRingQtys + i * 2;
+            short qty = memory.ReadInt16(qtyAddr);
+            memory.Write(qtyAddr, (short)(qty + 1));
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"  >>> {name} qty: {qty} -> {qty + 1}");
+            Console.ResetColor();
+            return;
+        }
+    }
+
+    // Not in ring → append
+    if (ringCount >= TR1RMemoryMap.MaxRingItems) { Console.WriteLine("  Ring full!"); return; }
+    memory.Write(t1 + TR1RMemoryMap.MainRingItems + ringCount * 8, targetPtr.ToInt64());
+    memory.Write(t1 + TR1RMemoryMap.MainRingQtys + ringCount * 2, (short)1);
+    memory.Write(t1 + TR1RMemoryMap.MainRingCount, (short)(ringCount + 1));
 
     Console.ForegroundColor = ConsoleColor.Green;
-    Console.WriteLine($"  {name} ammo: {current} -> {newVal} at tomb1.dll+0x{offset:X}");
+    Console.WriteLine($"  >>> {name} injected at ring index {ringCount}, qty=1");
+    Console.ResetColor();
+}
+
+static void GiveWeaponOnly(ProcessMemory memory, IntPtr t1, IntPtr compassPtr)
+{
+    Console.WriteLine("\n--- Give Weapon Only ---");
+    Console.WriteLine("  1 = Shotgun");
+    Console.WriteLine("  2 = Magnums");
+    Console.WriteLine("  3 = Uzis");
+    Console.Write("Choice: ");
+    string? input = Console.ReadLine()?.Trim();
+
+    (int relIdx, string name) = input switch
+    {
+        "1" => (TR1RMemoryMap.InvItemRelIndex.Shotgun, "Shotgun"),
+        "2" => (TR1RMemoryMap.InvItemRelIndex.Magnums, "Magnums"),
+        "3" => (TR1RMemoryMap.InvItemRelIndex.Uzis, "Uzis"),
+        _ => (int.MinValue, ""),
+    };
+
+    if (relIdx == int.MinValue) { Console.WriteLine("Invalid."); return; }
+
+    IntPtr weaponPtr = compassPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
+    short ringCount = memory.ReadInt16(t1 + TR1RMemoryMap.MainRingCount);
+
+    // Check if already in ring
+    for (int i = 0; i < ringCount; i++)
+    {
+        if (memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems + i * 8) == weaponPtr)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"  {name} already in ring.");
+            Console.ResetColor();
+            return;
+        }
+    }
+
+    if (ringCount >= TR1RMemoryMap.MaxRingItems) { Console.WriteLine("  Ring full!"); return; }
+    memory.Write(t1 + TR1RMemoryMap.MainRingItems + ringCount * 8, weaponPtr.ToInt64());
+    memory.Write(t1 + TR1RMemoryMap.MainRingQtys + ringCount * 2, (short)1);
+    memory.Write(t1 + TR1RMemoryMap.MainRingCount, (short)(ringCount + 1));
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"  >>> {name} injected at ring index {ringCount}");
     Console.ResetColor();
 }
 
@@ -1361,6 +1453,7 @@ static void RunMultiGameInventoryScanner(ProcessMemory memory)
         IntPtr dllBase;
         int mainRingCountOffset, mainRingItemsOffset, mainRingQtysOffset;
         int invItemStride, invItemObjIdOffset;
+        Dictionary<int, string>? objIdNames = null;
 
         bool isT1Active = memory.Tomb1Base != IntPtr.Zero
             && memory.ReadInt32(memory.Tomb1Base + TR1RMemoryMap.IsInGameScene) > 0;
@@ -1398,6 +1491,7 @@ static void RunMultiGameInventoryScanner(ProcessMemory memory)
             mainRingQtysOffset = TR1RMemoryMap.MainRingQtys;
             invItemStride = TR1RMemoryMap.InventoryItemStride;
             invItemObjIdOffset = TR1RMemoryMap.InvItem_ObjectId;
+            objIdNames = TR1RMemoryMap.InvObjIdNames;
         }
         else if (gameChoice == 2 && memory.Tomb2Base != IntPtr.Zero)
         {
@@ -1408,6 +1502,7 @@ static void RunMultiGameInventoryScanner(ProcessMemory memory)
             mainRingQtysOffset = TR2RMemoryMap.MainRingQtys;
             invItemStride = TR2RMemoryMap.InventoryItemStride;
             invItemObjIdOffset = TR2RMemoryMap.InvItem_ObjectId;
+            objIdNames = TR2RMemoryMap.InvObjIdNames;
         }
         else if (gameChoice == 3 && memory.Tomb3Base != IntPtr.Zero)
         {
@@ -1478,11 +1573,17 @@ static void RunMultiGameInventoryScanner(ProcessMemory memory)
                 relInfo = "  <-- ANCHOR (ring[0])";
             }
 
+            string itemName = objIdNames?.GetValueOrDefault(objectId, "") ?? "";
             Console.Write($"  [{i,2}] ");
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write($"0x{itemPtr:X}");
             Console.ResetColor();
             Console.Write($"  objId=0x{objectId:X4}  qty={qty,3}");
+            if (!string.IsNullOrEmpty(itemName))
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write($"  {itemName}");
+            }
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine(relInfo);
             Console.ResetColor();
@@ -1506,6 +1607,7 @@ static void RunMultiGameInventoryScanner(ProcessMemory memory)
         Console.WriteLine("  2 = Inject item by N offset (anchor + N * stride)");
         Console.WriteLine("  3 = Change qty of existing ring item");
         Console.WriteLine("  4 = Live ring monitor (watch for changes)");
+        Console.WriteLine("  5 = Inject item by name");
         Console.WriteLine("  0 = Refresh / re-read");
         Console.WriteLine("  q = Quit");
         Console.Write("\n  Choice: ");
@@ -1517,7 +1619,7 @@ static void RunMultiGameInventoryScanner(ProcessMemory memory)
         switch (input)
         {
             case "1":
-                ScanItemTable(memory, anchorPtr, invItemStride, invItemObjIdOffset);
+                ScanItemTable(memory, anchorPtr, invItemStride, invItemObjIdOffset, objIdNames);
                 break;
             case "2":
                 InjectByOffset(memory, dllBase, anchorPtr, invItemStride, invItemObjIdOffset,
@@ -1531,8 +1633,125 @@ static void RunMultiGameInventoryScanner(ProcessMemory memory)
                 LiveRingMonitor(memory, dllBase, mainRingCountOffset, mainRingItemsOffset,
                     mainRingQtysOffset, invItemStride, invItemObjIdOffset);
                 break;
+            case "5":
+                InjectByName(memory, dllBase, anchorPtr, invItemStride, invItemObjIdOffset,
+                    mainRingCountOffset, mainRingItemsOffset, mainRingQtysOffset, objIdNames);
+                break;
         }
     }
+}
+
+static void InjectByName(ProcessMemory memory, IntPtr dllBase, IntPtr anchorPtr,
+    int stride, int objIdOffset,
+    int ringCountOffset, int ringItemsOffset, int ringQtysOffset,
+    Dictionary<int, string>? objIdNames)
+{
+    if (objIdNames == null || objIdNames.Count == 0)
+    {
+        Console.WriteLine("  No item names available for this game.");
+        return;
+    }
+
+    // List available items
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("\n  --- Available Items ---");
+    Console.ResetColor();
+
+    var itemList = objIdNames.OrderBy(kv => kv.Key).ToList();
+    for (int i = 0; i < itemList.Count; i++)
+    {
+        Console.WriteLine($"  {i + 1,3} = {itemList[i].Value} (0x{itemList[i].Key:X2})");
+    }
+
+    Console.Write($"\n  Choose item (1-{itemList.Count}): ");
+    if (!int.TryParse(Console.ReadLine()?.Trim(), out int choice) || choice < 1 || choice > itemList.Count)
+    {
+        Console.WriteLine("  Invalid choice.");
+        return;
+    }
+
+    int targetObjId = itemList[choice - 1].Key;
+    string targetName = itemList[choice - 1].Value;
+
+    Console.Write("  Qty (default 1): ");
+    string? qtyInput = Console.ReadLine()?.Trim();
+    short qty = 1;
+    if (!string.IsNullOrEmpty(qtyInput)) short.TryParse(qtyInput, out qty);
+
+    // First try stride-aligned
+    for (int n = -30; n <= 30; n++)
+    {
+        IntPtr itemAddr = anchorPtr + n * stride;
+        try
+        {
+            short objId = memory.ReadInt16(itemAddr + objIdOffset);
+            if (objId == targetObjId)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"  Found {targetName} at N={n} (stride-aligned)");
+                Console.ResetColor();
+                InjectPtrToRing(memory, dllBase, itemAddr, qty, ringCountOffset, ringItemsOffset, ringQtysOffset);
+                return;
+            }
+        }
+        catch { }
+    }
+
+    // Check known non-stride byte offsets (TR2 specific)
+    if (TR2RMemoryMap.NonStrideByteOffsets.TryGetValue(targetObjId, out int byteOffset))
+    {
+        IntPtr itemAddr = anchorPtr + byteOffset;
+        short verifyId = memory.ReadInt16(itemAddr + objIdOffset);
+        if (verifyId == targetObjId)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"  Found {targetName} at known offset +0x{byteOffset:X}");
+            Console.ResetColor();
+            InjectPtrToRing(memory, dllBase, itemAddr, qty, ringCountOffset, ringItemsOffset, ringQtysOffset);
+            return;
+        }
+    }
+
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine($"  {targetName} not found in memory.");
+    Console.ResetColor();
+}
+
+static void InjectPtrToRing(ProcessMemory memory, IntPtr dllBase, IntPtr targetPtr, short qty,
+    int ringCountOffset, int ringItemsOffset, int ringQtysOffset)
+{
+    short ringCount = memory.ReadInt16(dllBase + ringCountOffset);
+
+    // Check if already in ring
+    for (int i = 0; i < ringCount; i++)
+    {
+        if (memory.ReadPointer(dllBase + ringItemsOffset + i * 8) == targetPtr)
+        {
+            IntPtr qtyAddr = dllBase + ringQtysOffset + i * 2;
+            short currentQty = memory.ReadInt16(qtyAddr);
+            memory.Write(qtyAddr, (short)(currentQty + qty));
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"  >>> Already in ring [{i}], qty: {currentQty} -> {currentQty + qty}");
+            Console.ResetColor();
+            return;
+        }
+    }
+
+    if (ringCount >= 24)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("  Ring full!");
+        Console.ResetColor();
+        return;
+    }
+
+    memory.Write(dllBase + ringItemsOffset + ringCount * 8, targetPtr.ToInt64());
+    memory.Write(dllBase + ringQtysOffset + ringCount * 2, qty);
+    memory.Write(dllBase + ringCountOffset, (short)(ringCount + 1));
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"  >>> Injected at ring index {ringCount}, qty={qty}");
+    Console.ResetColor();
 }
 
 /// <summary>
@@ -1540,7 +1759,7 @@ static void RunMultiGameInventoryScanner(ProcessMemory memory)
 /// Uses the anchor pointer (ring[0], typically Statistiques/Compass) as reference.
 /// Reads object_id at each stride position to build the full item table.
 /// </summary>
-static void ScanItemTable(ProcessMemory memory, IntPtr anchorPtr, int stride, int objIdOffset)
+static void ScanItemTable(ProcessMemory memory, IntPtr anchorPtr, int stride, int objIdOffset, Dictionary<int, string>? objIdNames = null)
 {
     Console.Write("\n  Scan range (negative to positive N)? Default: -30 to +30\n");
     Console.Write("  Min N [-30]: ");
@@ -1591,7 +1810,8 @@ static void ScanItemTable(ProcessMemory memory, IntPtr anchorPtr, int stride, in
         else
             Console.ForegroundColor = ConsoleColor.Green;
 
-        string marker = n == 0 ? " <-- ANCHOR" : "";
+        string scanItemName = objIdNames?.GetValueOrDefault(objectId, "") ?? "";
+        string marker = n == 0 ? " <-- ANCHOR" : !string.IsNullOrEmpty(scanItemName) ? $"  {scanItemName}" : "";
         Console.WriteLine($"  {n,5} | 0x{itemAddr:X} | 0x{objectId:X4}   | {objectId,5}{marker}");
         Console.ResetColor();
 
@@ -1782,4 +2002,284 @@ static void LiveRingMonitor(ProcessMemory memory, IntPtr dllBase, int countOffse
 
     if (Console.KeyAvailable) Console.ReadKey(true);
     Console.WriteLine("  Stopped monitoring.");
+}
+
+// ====================================================================
+// MODE 8: TR2 Inventory Ring Tester
+// ====================================================================
+static void RunTR2InventoryRingTester(ProcessMemory memory, IntPtr t2)
+{
+    Console.WriteLine("\n=== TR2 INVENTORY RING TESTER ===");
+    Console.WriteLine("Add items directly to the TR2 main inventory ring via memory.\n");
+
+    while (memory.IsAttached)
+    {
+        short ringCount = memory.ReadInt16(t2 + TR2RMemoryMap.MainRingCount);
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine($"\n--- Current TR2 Main Ring ({ringCount} items) ---");
+        Console.ResetColor();
+
+        // Find Statistiques pointer (always at index 0, objId = 0x79)
+        IntPtr statsPtr = IntPtr.Zero;
+        if (ringCount >= 1)
+        {
+            IntPtr item0 = memory.ReadPointer(t2 + TR2RMemoryMap.MainRingItems);
+            if (item0 != IntPtr.Zero)
+            {
+                short objId = memory.ReadInt16(item0 + TR2RMemoryMap.InvItem_ObjectId);
+                if (objId == TR2RMemoryMap.InvObjId.Statistiques)
+                    statsPtr = item0;
+            }
+        }
+
+        // Display ring contents
+        for (int i = 0; i < ringCount && i < TR2RMemoryMap.MaxRingItems; i++)
+        {
+            IntPtr itemPtr = memory.ReadPointer(t2 + TR2RMemoryMap.MainRingItems + i * 8);
+            short qty = memory.ReadInt16(t2 + TR2RMemoryMap.MainRingQtys + i * 2);
+            short objectId = (itemPtr != IntPtr.Zero) ? memory.ReadInt16(itemPtr + TR2RMemoryMap.InvItem_ObjectId) : (short)-1;
+
+            string name = $"Unknown (objId=0x{objectId:X})";
+            if (statsPtr != IntPtr.Zero)
+            {
+                long offset = itemPtr.ToInt64() - statsPtr.ToInt64();
+                int relIdx = (offset % TR2RMemoryMap.InventoryItemStride == 0)
+                    ? (int)(offset / TR2RMemoryMap.InventoryItemStride) : 99999;
+                name = TR2IdentifyItem(objectId, relIdx);
+            }
+
+            Console.Write($"  [{i,2}] ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($"0x{itemPtr:X}");
+            Console.ResetColor();
+            Console.Write($"  objId=0x{objectId:X4}  qty={qty,3}");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"  {name}");
+            Console.ResetColor();
+        }
+
+        if (statsPtr == IntPtr.Zero)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Cannot find Statistiques pointer! Make sure you're in a TR2 level.");
+            Console.ResetColor();
+            Console.WriteLine("Press ENTER to retry...");
+            Console.ReadLine();
+            continue;
+        }
+
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.WriteLine($"\n  Statistiques reference: 0x{statsPtr:X}");
+        Console.ResetColor();
+
+        // Menu
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\n--- Actions ---");
+        Console.ResetColor();
+        Console.WriteLine("  1 = Inject item by relIdx");
+        Console.WriteLine("  2 = Scan INVENTORY_ITEM table (find all items by objId)");
+        Console.WriteLine("  3 = Inject item by objId (scan table first)");
+        Console.WriteLine("  0 = Refresh / re-read ring");
+        Console.WriteLine("  q = Quit");
+
+        Console.Write("\nChoice: ");
+        string? input = Console.ReadLine()?.Trim();
+
+        if (string.IsNullOrEmpty(input) || input == "0")
+            continue;
+        if (input.ToLower() == "q")
+            break;
+
+        // Re-find Statistiques
+        statsPtr = IntPtr.Zero;
+        if (ringCount >= 1)
+        {
+            IntPtr item0 = memory.ReadPointer(t2 + TR2RMemoryMap.MainRingItems);
+            if (item0 != IntPtr.Zero)
+            {
+                short objId = memory.ReadInt16(item0 + TR2RMemoryMap.InvItem_ObjectId);
+                if (objId == TR2RMemoryMap.InvObjId.Statistiques)
+                    statsPtr = item0;
+            }
+        }
+
+        switch (input)
+        {
+            case "1":
+                TR2InjectByRelIdx(memory, t2, statsPtr);
+                break;
+            case "2":
+                TR2ScanInventoryTable(memory, t2, statsPtr);
+                break;
+            case "3":
+                TR2InjectByObjId(memory, t2, statsPtr);
+                break;
+        }
+    }
+}
+
+static string TR2IdentifyItem(short objectId, int relIdx)
+{
+    if (TR2RMemoryMap.InvObjIdNames.TryGetValue(objectId, out string? name))
+        return name;
+    return $"objId=0x{objectId:X} relIdx={relIdx}";
+}
+
+static void TR2InjectByRelIdx(ProcessMemory memory, IntPtr t2, IntPtr statsPtr)
+{
+    Console.Write("\n  Enter relIdx (from Statistiques): ");
+    if (!int.TryParse(Console.ReadLine()?.Trim(), out int relIdx))
+    {
+        Console.WriteLine("  Invalid number.");
+        return;
+    }
+
+    IntPtr targetPtr = statsPtr + relIdx * TR2RMemoryMap.InventoryItemStride;
+    short objectId = memory.ReadInt16(targetPtr + TR2RMemoryMap.InvItem_ObjectId);
+
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine($"  Target: relIdx={relIdx}, ptr=0x{targetPtr:X}, objId=0x{objectId:X4}");
+    Console.ResetColor();
+
+    Console.Write("  Qty to set (default 1): ");
+    string? qtyInput = Console.ReadLine()?.Trim();
+    short qty = 1;
+    if (!string.IsNullOrEmpty(qtyInput)) short.TryParse(qtyInput, out qty);
+
+    TR2InjectToRing(memory, t2, targetPtr, qty);
+}
+
+static void TR2InjectByObjId(ProcessMemory memory, IntPtr t2, IntPtr statsPtr)
+{
+    Console.Write("\n  Enter objId (hex, e.g. 9D for Pistols): ");
+    string? input = Console.ReadLine()?.Trim();
+    if (!int.TryParse(input, System.Globalization.NumberStyles.HexNumber, null, out int targetObjId))
+    {
+        Console.WriteLine("  Invalid hex number.");
+        return;
+    }
+
+    // First try stride-aligned scan
+    for (int relIdx = -30; relIdx <= 30; relIdx++)
+    {
+        IntPtr itemAddr = statsPtr + relIdx * TR2RMemoryMap.InventoryItemStride;
+        try
+        {
+            short objId = memory.ReadInt16(itemAddr + TR2RMemoryMap.InvItem_ObjectId);
+            if (objId == targetObjId)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"  Found objId=0x{targetObjId:X} at relIdx={relIdx} (stride-aligned), ptr=0x{itemAddr:X}");
+                Console.ResetColor();
+
+                Console.Write("  Qty to set (default 1): ");
+                string? qtyInput = Console.ReadLine()?.Trim();
+                short qty = 1;
+                if (!string.IsNullOrEmpty(qtyInput)) short.TryParse(qtyInput, out qty);
+
+                TR2InjectToRing(memory, t2, itemAddr, qty);
+                return;
+            }
+        }
+        catch { /* unreadable memory */ }
+    }
+
+    // Check known non-stride byte offsets
+    if (TR2RMemoryMap.NonStrideByteOffsets.TryGetValue(targetObjId, out int byteOffset))
+    {
+        IntPtr itemAddr = statsPtr + byteOffset;
+        short verifyId = memory.ReadInt16(itemAddr + TR2RMemoryMap.InvItem_ObjectId);
+        if (verifyId == targetObjId)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"  Found objId=0x{targetObjId:X} at known offset +0x{byteOffset:X}");
+            Console.ResetColor();
+
+            Console.Write("  Qty to set (default 1): ");
+            string? qtyInput = Console.ReadLine()?.Trim();
+            short qty = 1;
+            if (!string.IsNullOrEmpty(qtyInput)) short.TryParse(qtyInput, out qty);
+
+            TR2InjectToRing(memory, t2, itemAddr, qty);
+            return;
+        }
+    }
+
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine($"  objId=0x{targetObjId:X} not found.");
+    Console.ResetColor();
+}
+
+static void TR2InjectToRing(ProcessMemory memory, IntPtr t2, IntPtr targetPtr, short qty)
+{
+    short ringCount = memory.ReadInt16(t2 + TR2RMemoryMap.MainRingCount);
+
+    // Check if already in ring
+    for (int i = 0; i < ringCount; i++)
+    {
+        if (memory.ReadPointer(t2 + TR2RMemoryMap.MainRingItems + i * 8) == targetPtr)
+        {
+            IntPtr qtyAddr = t2 + TR2RMemoryMap.MainRingQtys + i * 2;
+            short currentQty = memory.ReadInt16(qtyAddr);
+            memory.Write(qtyAddr, (short)(currentQty + qty));
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"  >>> Already in ring at [{i}], qty: {currentQty} -> {currentQty + qty}");
+            Console.ResetColor();
+            return;
+        }
+    }
+
+    if (ringCount >= TR2RMemoryMap.MaxRingItems)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("  Ring full!");
+        Console.ResetColor();
+        return;
+    }
+
+    memory.Write(t2 + TR2RMemoryMap.MainRingItems + ringCount * 8, targetPtr.ToInt64());
+    memory.Write(t2 + TR2RMemoryMap.MainRingQtys + ringCount * 2, qty);
+    memory.Write(t2 + TR2RMemoryMap.MainRingCount, (short)(ringCount + 1));
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"  >>> Injected at ring index {ringCount}, qty={qty}");
+    Console.ResetColor();
+}
+
+static void TR2ScanInventoryTable(ProcessMemory memory, IntPtr t2, IntPtr statsPtr)
+{
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine($"\n  Scanning INVENTORY_ITEM table from Statistiques (0x{statsPtr:X})...");
+    Console.WriteLine($"  Stride: 0x{TR2RMemoryMap.InventoryItemStride:X}");
+    Console.ResetColor();
+
+    Console.ForegroundColor = ConsoleColor.DarkGray;
+    Console.WriteLine($"\n  {"RelIdx",7} | {"Address",18} | {"ObjId",8} | {"Hex",6}");
+    Console.WriteLine($"  {new string('-', 7)}-+-{new string('-', 18)}-+-{new string('-', 8)}-+-{new string('-', 6)}");
+    Console.ResetColor();
+
+    for (int relIdx = -20; relIdx <= 30; relIdx++)
+    {
+        IntPtr itemAddr = statsPtr + relIdx * TR2RMemoryMap.InventoryItemStride;
+        short objectId;
+        try
+        {
+            objectId = memory.ReadInt16(itemAddr + TR2RMemoryMap.InvItem_ObjectId);
+        }
+        catch { continue; }
+
+        if (objectId <= 0 && relIdx != 0) continue;
+
+        string marker = relIdx == 0 ? " <-- STATISTIQUES" : "";
+        bool isKnown = objectId == TR2RMemoryMap.InvObjId.Statistiques
+            || objectId == TR2RMemoryMap.InvObjId.Pistols
+            || objectId == TR2RMemoryMap.InvObjId.Shotgun;
+
+        Console.ForegroundColor = isKnown ? ConsoleColor.Green
+            : objectId > 0 ? ConsoleColor.Yellow
+            : ConsoleColor.White;
+
+        Console.WriteLine($"  {relIdx,7} | 0x{itemAddr:X} | {objectId,5}   | 0x{objectId:X4}{marker}");
+        Console.ResetColor();
+    }
 }

@@ -54,7 +54,7 @@ public static class TR1RMemoryMap
     /// Pointer to Lara's ITEM struct. Read as Int64 (8 bytes), then dereference.
     /// Usage: laraPtr = ReadPointer(tomb1Base + LaraBase)
     /// </summary>
-    public const int LaraBase = 0x32D020;
+    public const int LaraBase = 0x3369F0;
 
     // ----- ITEM Struct Offsets (from dereferenced LaraBase) -----
     // Each entity in the game uses this same struct layout.
@@ -104,35 +104,35 @@ public static class TR1RMemoryMap
     // ----- LARA_INFO Static Variables (direct offsets from tomb1.dll) -----
 
     /// <summary>Lara's entity index in the entities array. Int16.</summary>
-    public const int LaraId = 0x32CE70;
+    public const int LaraId = 0x336840;
 
     /// <summary>Equipped weapon type. Int32. See GunType enum.</summary>
-    public const int LaraGunType = 0x32CE72;
+    public const int LaraGunType = 0x336842;
 
     /// <summary>Oxygen / air timer. Int16. Max ~1800.</summary>
-    public const int LaraOxygen = 0x32CE86;
+    public const int LaraOxygen = 0x336856;
 
     /// <summary>Gun state flags. UInt32.</summary>
-    public const int LaraGunFlags = 0x32CEB0;
+    public const int LaraGunFlags = 0x336880;
 
     /// <summary>Pointer to currently aimed enemy. UInt64.</summary>
-    public const int LaraAimingEnemy = 0x32CF60;
+    public const int LaraAimingEnemy = 0x336930;
 
     /// <summary>Water state of current room. Int16.</summary>
-    public const int LaraRoomType = 0x32CE7C;
+    public const int LaraRoomType = 0x33684C;
 
     // ----- LARA_INFO Ammo (live runtime, Int32 each, 8-byte stride) -----
     // These are the AMMO_INFO fields in LARA_INFO. Writing here changes ammo instantly.
     // Shotgun ammo is stored internally as rounds*6 (6 pellets per shot).
 
     /// <summary>Magnum ammo count. Int32. Direct value (1 ammo = 1 displayed).</summary>
-    public const int Lara_MagnumAmmo = 0x32CFB8;
+    public const int Lara_MagnumAmmo = 0x336988;
 
     /// <summary>Uzi ammo count. Int32. Direct value (1 ammo = 1 displayed).</summary>
-    public const int Lara_UziAmmo = 0x32CFC0;
+    public const int Lara_UziAmmo = 0x336990;
 
     /// <summary>Shotgun ammo count. Int32. Internal = displayed * 6 (6 pellets per shell).</summary>
-    public const int Lara_ShotgunAmmo = 0x32CFC8;
+    public const int Lara_ShotgunAmmo = 0x336998;
 
     /// <summary>Shotgun internal multiplier (each shell = 6 pellets).</summary>
     public const int ShotgunAmmoMultiplier = 6;
@@ -143,7 +143,7 @@ public static class TR1RMemoryMap
     public const int LevelId = 0xFEAB8;
 
     /// <summary>Set to 1 when current level is completed. Int32.</summary>
-    public const int LevelCompleted = 0x119740;
+    public const int LevelCompleted = 0x11F1A4;
 
     /// <summary>Frame tick. Int8. Alternates each frame.</summary>
     public const int BinaryTick = 0x119750;
@@ -166,7 +166,7 @@ public static class TR1RMemoryMap
     // ----- Entity Array -----
 
     /// <summary>Pointer to the entity array in heap memory. Read as Int64.</summary>
-    public const int EntitiesPointer = 0x40E168;
+    public const int EntitiesPointer = 0x418798;
 
     /// <summary>Number of entities in the current level. Int16.</summary>
     public const int EntitiesCount = 0x3DDB10;
@@ -200,7 +200,7 @@ public static class TR1RMemoryMap
     // Stores key items (keys, puzzles, pickups that go to the key ring).
 
     /// <summary>Keys ring item count. Int16. Max 24.</summary>
-    public const int KeysRingCount = 0x1196BC;
+    public const int KeysRingCount = 0x119C64;
 
     /// <summary>Keys ring items[] array. 24 × Int64 pointers to INVENTORY_ITEM structs.</summary>
     public const int KeysRingItems = 0x115590;
@@ -336,7 +336,7 @@ public static class TR1RMemoryMap
     /// Save-format buffer in memory. Same layout as a save file slot.
     /// Ammo/weapons/inventory can be read/written here using Save_* offsets.
     /// </summary>
-    public const int WorldStateBackup = 0x4E0DF0;
+    public const int WorldStateBackup = 0x4EB420;
 
     /// <summary>Size of the WorldState backup buffer (same as save slot).</summary>
     public const int WorldStateBackupSize = 0x3800;
