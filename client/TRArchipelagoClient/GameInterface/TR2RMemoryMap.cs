@@ -21,9 +21,16 @@ public static class TR2RMemoryMap
     // All offsets relative to tomb2.dll base address.
     // =================================================================
 
-    // ----- Lara Pointer Chain -----
+    // ----- Lara HP -----
+    // Unlike TR1 (pointer chain: LaraBase → deref → +0x26), TR2 stores HP at a
+    // static address in tomb2.dll. Found via CE unknown-value scan.
 
-    /// <summary>Pointer to Lara's ITEM struct. Read as Int64, then dereference.</summary>
+    /// <summary>Lara's HP. Int32 (not Int16 like TR1). Static address, no dereference needed.
+    /// Range 0-1000. Read directly: memory.ReadInt32(tomb2Base + LaraHP).</summary>
+    public const int LaraHP = 0x154E58;
+
+    /// <summary>Pointer to Lara's ITEM struct. Read as Int64, then dereference.
+    /// WARNING: not yet re-verified after game update.</summary>
     public const int LaraBase = 0x346170;
 
     /// <summary>Lara's entity index in the entities array. Int16.</summary>
@@ -89,13 +96,16 @@ public static class TR2RMemoryMap
     public const int LevelId = 0x157168;
 
     /// <summary>Set to 1 when current level is completed. Int32.</summary>
-    public const int LevelCompleted = 0x1330b8;
+    public const int LevelCompleted = 0x15CB74;
 
     /// <summary>Frame tick. Int8.</summary>
     public const int BinaryTick = 0x1330c8;
 
     /// <summary>Greater than 0 = in gameplay, 0 or less = in menu/loading. Int32.</summary>
-    public const int IsInGameScene = 0x1142ec;
+    /// <summary>Greater than 0 = in gameplay, 0 = menu/inventory/loading.
+    /// NOTE: also returns 1 when passport is open from main menu.
+    /// Not a perfect "Lara controllable" flag — use with save counter + settle period.</summary>
+    public const int IsInGameScene = 0x157210;
 
     /// <summary>Menu cursor position. UInt16.</summary>
     public const int MenuSelection = 0x113f14;
@@ -112,7 +122,7 @@ public static class TR2RMemoryMap
     // ----- Entity Array -----
 
     /// <summary>Pointer to the entity array in heap memory. Read as Int64.</summary>
-    public const int EntitiesPointer = 0x4f9fc0;
+    public const int EntitiesPointer = 0x5285E0;
 
     /// <summary>Number of entities in the current level. Int16.</summary>
     public const int EntitiesCount = 0x3FD1B4;
@@ -129,9 +139,9 @@ public static class TR2RMemoryMap
     public const int MainRingCount = 0x137EDC;
     public const int MainRingItems = 0x1525F0;
     public const int MainRingQtys = 0x1526A8;
-    // public const int KeysRingCount = ???;
-    // public const int KeysRingItems = ???;
-    // public const int KeysRingQtys = ???;
+    public const int KeysRingCount = 0x1571B0;
+    public const int KeysRingItems = 0x1528F0;
+    public const int KeysRingQtys = 0x1528C0;
     public const int MaxRingItems = 24;
     public const int InventoryItemStride = 0xCD0;
     public const int InvItem_ObjectId = 0x08;
@@ -150,12 +160,23 @@ public static class TR2RMemoryMap
         public const int HarpoonGun = 0xA1;
         public const int M16 = 0xA2;
         public const int GrenadeLauncher = 0xA3;
+        public const int ShotgunAmmo = 0xA5;     // relIdx=-18
         public const int AutoPistolAmmo = 0xA6;  // relIdx=-2
-        // public const int AutoPistolAmmo = ???;
-        // public const int UziAmmo = ???;
-        // public const int M16Ammo = ???;
-        // public const int GrenadeAmmo = ???;
-        // public const int Harpoons = ???;
+        public const int UziAmmo = 0xA7;         // NOT stride-aligned
+        // public const int ShotgunAmmo was guessed 0xA8 but is actually 0xA5
+        public const int HarpoonAmmo = 0xA8;      // relIdx=-5
+        public const int M16Ammo = 0xA9;         // relIdx=-11
+        public const int GrenadeAmmo = 0xAA;     // relIdx=-7
+
+        // Keys Ring items — Key slots
+        public const int Puzzle1 = 0xB2;         // confirmed, NOT stride-aligned +0x4450
+        public const int Puzzle2 = 0xB3;         // confirmed, Prayer Wheel, N=-13
+        // Puzzle3 (0xB4) NOT used in TR2 — displays "Select Level" glitch
+        public const int Puzzle4 = 0xB5;         // confirmed, Seraph, N=-14
+        public const int Key1 = 0xC5;            // confirmed, Guardhouse Key, N=-8
+        public const int Key2 = 0xC6;            // confirmed, Rusty Key, N=-17
+        public const int Key3 = 0xC7;            // confirmed, N=1
+        public const int Key4 = 0xC8;            // confirmed, N=-22
         public const int SmallMedipack = 0xAB;
         public const int LargeMedipack = 0xAC;
         public const int Flares = 0xAD;
@@ -174,7 +195,19 @@ public static class TR2RMemoryMap
         [InvObjId.HarpoonGun] = "Harpoon Gun",
         [InvObjId.M16] = "M16",
         [InvObjId.GrenadeLauncher] = "Grenade Launcher",
+        [InvObjId.ShotgunAmmo] = "Shotgun Ammo",
         [InvObjId.AutoPistolAmmo] = "Auto Pistol Ammo",
+        [InvObjId.UziAmmo] = "Uzi Ammo",
+        [InvObjId.HarpoonAmmo] = "Harpoon Ammo",
+        [InvObjId.M16Ammo] = "M16 Ammo",
+        [InvObjId.GrenadeAmmo] = "Grenade Ammo",
+        [InvObjId.Puzzle1] = "Puzzle 1",
+        [InvObjId.Puzzle2] = "Puzzle 2",
+        [InvObjId.Puzzle4] = "Puzzle 4 (Seraph)",
+        [InvObjId.Key1] = "Key 1",
+        [InvObjId.Key2] = "Key 2",
+        [InvObjId.Key3] = "Key 3",
+        [InvObjId.Key4] = "Key 4",
         [InvObjId.SmallMedipack] = "Small Medipack",
         [InvObjId.LargeMedipack] = "Large Medipack",
         [InvObjId.Flares] = "Flares",
@@ -189,13 +222,15 @@ public static class TR2RMemoryMap
     {
         [InvObjId.AutoPistols] = 0x5DF0,
         [InvObjId.Uzis] = 0x2AB0,
+        [InvObjId.UziAmmo] = 0x3780,
         [InvObjId.Flares] = 0x5120,
+        [InvObjId.Puzzle1] = 0x4450,
     };
 
     // ----- WorldState Backup Buffer -----
 
     /// <summary>Save-format buffer in memory. Same 0x3800-byte layout as a save slot.</summary>
-    public const int WorldStateBackup = 0x4f9fe0;
+    public const int WorldStateBackup = 0x528600;
 
     public const int WorldStateBackupSize = 0x3800;
 
@@ -316,8 +351,12 @@ public static class TR2RMemoryMap
     public const int Save_MedipacksUsed = 0x627;
     public const int Save_LevelIndex = 0x628;
 
-    /// <summary>Runtime secrets bitmask in WSB (save offset - 4 for missing SlotStatus).</summary>
-    public const int Runtime_SecretsFound = 0x620;
+    /// <summary>
+    /// Runtime secrets counter (NOT bitmask like TR1). Int16.
+    /// Increments 0→1→2→3 as silver/jade/gold dragons are collected.
+    /// Direct offset, not in WSB.
+    /// </summary>
+    public const int Runtime_SecretsFound = 0x528C34;
 
     // Weapon flags (OR'd into weapon config byte)
     public const byte Weapon_None = 1;

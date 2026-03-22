@@ -1452,6 +1452,7 @@ static void RunMultiGameInventoryScanner(ProcessMemory memory)
         string gameName;
         IntPtr dllBase;
         int mainRingCountOffset, mainRingItemsOffset, mainRingQtysOffset;
+        int keysRingCountOffset = 0, keysRingItemsOffset = 0, keysRingQtysOffset = 0;
         int invItemStride, invItemObjIdOffset;
         Dictionary<int, string>? objIdNames = null;
 
@@ -1489,6 +1490,9 @@ static void RunMultiGameInventoryScanner(ProcessMemory memory)
             mainRingCountOffset = TR1RMemoryMap.MainRingCount;
             mainRingItemsOffset = TR1RMemoryMap.MainRingItems;
             mainRingQtysOffset = TR1RMemoryMap.MainRingQtys;
+            keysRingCountOffset = TR1RMemoryMap.KeysRingCount;
+            keysRingItemsOffset = TR1RMemoryMap.KeysRingItems;
+            keysRingQtysOffset = TR1RMemoryMap.KeysRingQtys;
             invItemStride = TR1RMemoryMap.InventoryItemStride;
             invItemObjIdOffset = TR1RMemoryMap.InvItem_ObjectId;
             objIdNames = TR1RMemoryMap.InvObjIdNames;
@@ -1500,6 +1504,9 @@ static void RunMultiGameInventoryScanner(ProcessMemory memory)
             mainRingCountOffset = TR2RMemoryMap.MainRingCount;
             mainRingItemsOffset = TR2RMemoryMap.MainRingItems;
             mainRingQtysOffset = TR2RMemoryMap.MainRingQtys;
+            keysRingCountOffset = TR2RMemoryMap.KeysRingCount;
+            keysRingItemsOffset = TR2RMemoryMap.KeysRingItems;
+            keysRingQtysOffset = TR2RMemoryMap.KeysRingQtys;
             invItemStride = TR2RMemoryMap.InventoryItemStride;
             invItemObjIdOffset = TR2RMemoryMap.InvItem_ObjectId;
             objIdNames = TR2RMemoryMap.InvObjIdNames;
@@ -1599,6 +1606,54 @@ static void RunMultiGameInventoryScanner(ProcessMemory memory)
             continue;
         }
 
+        // Display Keys Ring
+        if (keysRingCountOffset != 0)
+        {
+            short keysCount = memory.ReadInt16(dllBase + keysRingCountOffset);
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine($"\n  --- Current Keys Ring ({keysCount} items) ---");
+            Console.ResetColor();
+
+            for (int i = 0; i < keysCount && i < 24; i++)
+            {
+                IntPtr itemPtr = memory.ReadPointer(dllBase + keysRingItemsOffset + i * 8);
+                short qty = memory.ReadInt16(dllBase + keysRingQtysOffset + i * 2);
+                short objectId = (itemPtr != IntPtr.Zero) ? memory.ReadInt16(itemPtr + invItemObjIdOffset) : (short)-1;
+
+                string keyName = objIdNames?.GetValueOrDefault(objectId, "") ?? "";
+                if (string.IsNullOrEmpty(keyName))
+                    keyName = $"objId=0x{objectId:X4}";
+
+                string relInfo = "";
+                if (anchorPtr != IntPtr.Zero)
+                {
+                    long diff = itemPtr.ToInt64() - anchorPtr.ToInt64();
+                    if (diff % invItemStride == 0)
+                        relInfo = $"  N={diff / invItemStride}";
+                    else
+                        relInfo = $"  offset=0x{diff:X}";
+                }
+
+                Console.Write($"  [{i,2}] ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write($"0x{itemPtr:X}");
+                Console.ResetColor();
+                Console.Write($"  qty={qty,3}");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write($"  {keyName}");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(relInfo);
+                Console.ResetColor();
+            }
+
+            if (keysCount == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("  (empty)");
+                Console.ResetColor();
+            }
+        }
+
         // Menu
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("\n  --- Actions ---");
@@ -1635,15 +1690,30 @@ static void RunMultiGameInventoryScanner(ProcessMemory memory)
                 break;
             case "5":
                 InjectByName(memory, dllBase, anchorPtr, invItemStride, invItemObjIdOffset,
-                    mainRingCountOffset, mainRingItemsOffset, mainRingQtysOffset, objIdNames);
+                    mainRingCountOffset, mainRingItemsOffset, mainRingQtysOffset,
+                    keysRingCountOffset, keysRingItemsOffset, keysRingQtysOffset,
+                    objIdNames);
                 break;
         }
     }
 }
 
+/// <summary>Key/Puzzle objId ranges for routing to Keys Ring instead of Main Ring.</summary>
+static bool IsKeyItem(int objId)
+{
+    // TR1: Key1-4=0x85-0x88, Puzzle1-4=0x72-0x75, Scion=0x96
+    // TR2: Key1-4=0xC5-0xC8, Puzzle1-4=0xB2-0xB5
+    return objId is (>= 0x72 and <= 0x75)   // TR1 Puzzle1-4
+        or (>= 0x85 and <= 0x88)            // TR1 Key1-4
+        or 0x96                              // TR1 Scion
+        or (>= 0xB2 and <= 0xB5)            // TR2 Puzzle1-4
+        or (>= 0xC5 and <= 0xC8);           // TR2 Key1-4
+}
+
 static void InjectByName(ProcessMemory memory, IntPtr dllBase, IntPtr anchorPtr,
     int stride, int objIdOffset,
-    int ringCountOffset, int ringItemsOffset, int ringQtysOffset,
+    int mainRingCountOffset, int mainRingItemsOffset, int mainRingQtysOffset,
+    int keysRingCountOffset, int keysRingItemsOffset, int keysRingQtysOffset,
     Dictionary<int, string>? objIdNames)
 {
     if (objIdNames == null || objIdNames.Count == 0)
@@ -1660,7 +1730,8 @@ static void InjectByName(ProcessMemory memory, IntPtr dllBase, IntPtr anchorPtr,
     var itemList = objIdNames.OrderBy(kv => kv.Key).ToList();
     for (int i = 0; i < itemList.Count; i++)
     {
-        Console.WriteLine($"  {i + 1,3} = {itemList[i].Value} (0x{itemList[i].Key:X2})");
+        string ring = IsKeyItem(itemList[i].Key) ? " [Keys Ring]" : "";
+        Console.WriteLine($"  {i + 1,3} = {itemList[i].Value} (0x{itemList[i].Key:X2}){ring}");
     }
 
     Console.Write($"\n  Choose item (1-{itemList.Count}): ");
@@ -1677,6 +1748,19 @@ static void InjectByName(ProcessMemory memory, IntPtr dllBase, IntPtr anchorPtr,
     string? qtyInput = Console.ReadLine()?.Trim();
     short qty = 1;
     if (!string.IsNullOrEmpty(qtyInput)) short.TryParse(qtyInput, out qty);
+
+    // Choose correct ring
+    bool useKeysRing = IsKeyItem(targetObjId) && keysRingCountOffset != 0;
+    int ringCountOffset = useKeysRing ? keysRingCountOffset : mainRingCountOffset;
+    int ringItemsOffset = useKeysRing ? keysRingItemsOffset : mainRingItemsOffset;
+    int ringQtysOffset = useKeysRing ? keysRingQtysOffset : mainRingQtysOffset;
+
+    if (useKeysRing)
+    {
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine($"  -> Injecting into Keys Ring");
+        Console.ResetColor();
+    }
 
     // First try stride-aligned
     for (int n = -30; n <= 30; n++)
