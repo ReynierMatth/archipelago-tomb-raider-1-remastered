@@ -9,7 +9,7 @@ public static class GameMemoryMapFactory
     {
         0 => new TR1GameMemoryMap(),
         1 => new TR2GameMemoryMap(),
-        // 2 => new TR3GameMemoryMap(), // TODO: implement when offsets are found
+        2 => new TR3GameMemoryMap(),
         _ => throw new ArgumentException($"Unsupported game version: {gameVersion}")
     };
 }

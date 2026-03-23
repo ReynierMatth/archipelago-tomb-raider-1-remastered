@@ -1515,12 +1515,15 @@ static void RunMultiGameInventoryScanner(ProcessMemory memory)
         {
             gameName = "TR3 (tomb3.dll)";
             dllBase = memory.Tomb3Base;
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("  TR3 Main Ring offsets are not yet mapped.");
-            Console.ResetColor();
-            Console.Write("\nPress ENTER to re-scan...");
-            Console.ReadLine();
-            continue;
+            mainRingCountOffset = TR3RMemoryMap.MainRingCount;
+            mainRingItemsOffset = TR3RMemoryMap.MainRingItems;
+            mainRingQtysOffset = TR3RMemoryMap.MainRingQtys;
+            keysRingCountOffset = TR3RMemoryMap.KeysRingCount;
+            keysRingItemsOffset = TR3RMemoryMap.KeysRingItems;
+            keysRingQtysOffset = TR3RMemoryMap.KeysRingQtys;
+            invItemStride = TR3RMemoryMap.InventoryItemStride;
+            invItemObjIdOffset = TR3RMemoryMap.InvItem_ObjectId;
+            objIdNames = TR3RMemoryMap.InvObjIdNames;
         }
         else
         {
@@ -1781,8 +1784,11 @@ static void InjectByName(ProcessMemory memory, IntPtr dllBase, IntPtr anchorPtr,
         catch { }
     }
 
-    // Check known non-stride byte offsets (TR2 specific)
-    if (TR2RMemoryMap.NonStrideByteOffsets.TryGetValue(targetObjId, out int byteOffset))
+    // Check known non-stride byte offsets (TR2/TR3)
+    int byteOffset = 0;
+    bool hasNonStride = TR2RMemoryMap.NonStrideByteOffsets.TryGetValue(targetObjId, out byteOffset)
+        || TR3RMemoryMap.NonStrideByteOffsets.TryGetValue(targetObjId, out byteOffset);
+    if (hasNonStride)
     {
         IntPtr itemAddr = anchorPtr + byteOffset;
         short verifyId = memory.ReadInt16(itemAddr + objIdOffset);
