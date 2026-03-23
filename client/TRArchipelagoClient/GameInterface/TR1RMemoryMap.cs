@@ -33,7 +33,7 @@ public static class TR1RMemoryMap
     public const int Exe_Level = 0x263CD0;
 
     /// <summary>Active game: 0=TR1, 1=TR2, 2=TR3. Int32.</summary>
-    public const int Exe_GameVersion = 0xe4bd8;
+    public const int Exe_GameVersion = 0xE9428;
 
     /// <summary>Non-zero when exiting the game. Int8.</summary>
     public const int Exe_ExitingGame = 0x2f35ec;

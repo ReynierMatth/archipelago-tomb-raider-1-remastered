@@ -179,6 +179,22 @@ class TR1RWorld(World):
 
         total_levels = sum(len(seqs) for seqs in level_sequences.values())
 
+        # Build key_item_slots: maps AP item ID -> slot type string
+        # e.g. 880250 -> "K2", 883377 -> "P2"
+        # The client uses this to know which InvObjId to inject for each key item.
+        key_item_slots: Dict[int, str] = {}
+        for game_key in enabled:
+            game = load_game(game_key)
+            if game is None:
+                continue
+            for def_key, item_def in game.raw.get("itemDefinitions", {}).items():
+                if item_def.get("category") != "key_item":
+                    continue
+                # Extract slot type from the def key: "gW_K2_RustyKey" -> "K2"
+                parts = def_key.split("_", 2)
+                if len(parts) >= 2:
+                    key_item_slots[item_def["id"]] = parts[1]
+
         return {
             "goal": self.options.goal.value,
             "levels_for_goal": self.options.levels_for_goal.value,
@@ -189,6 +205,7 @@ class TR1RWorld(World):
             "total_levels": total_levels,
             "total_secrets": sum(all_secrets),
             "level_sequences": level_sequences,
+            "key_item_slots": key_item_slots,
         }
 
     def set_completion_rules(self) -> None:

@@ -9,6 +9,7 @@ namespace TRArchipelagoClient.Core;
 public class ItemMapper
 {
     private readonly GameConfig _config;
+    public GameConfig Config => _config;
     private readonly Dictionary<int, TR1Type> _idToTR1Type;
 
     // TR1 type mappings (offset -> TR1Type)

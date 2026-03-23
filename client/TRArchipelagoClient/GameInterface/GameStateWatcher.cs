@@ -31,15 +31,17 @@ public class GameStateWatcher : IDisposable
     private readonly SaveStateStore _stateStore;
     private readonly KeyItemMonitor _keyMonitor;
 
-    // Cached base addresses
-    private IntPtr _tomb1Base;
+    // Game context (active game map + DLL base)
+    private readonly GameContext _context;
+
+    // Cached addresses
     private IntPtr _laraPtr;
     private IntPtr _entitiesBase;
 
     // Tracked state
     private int _lastLevelId = -1;
     private bool _wasInGame;
-    private short _lastHealth = TR1RMemoryMap.MaxHealth;
+    private short _lastHealth = 1000; // MaxHealth, updated from _context.Map after init
     private int _lastLevelCompleted;
     private ushort _lastSecretsFound;
     private int _itemsReceivedIndex;
@@ -81,22 +83,27 @@ public class GameStateWatcher : IDisposable
         ItemMapper itemMapper,
         LocationMapper locationMapper,
         Dictionary<int, Dictionary<int, long>> levelEntityLocations,
-        SaveStateStore stateStore)
+        SaveStateStore stateStore,
+        GameContext context)
     {
         _session = session;
         _memory = memory;
         _itemMapper = itemMapper;
         _locationMapper = locationMapper;
+        _context = context;
         _inventory = new InventoryManager(memory, itemMapper, locationMapper);
-        _scanner = new InventoryScanner(memory);
+        _inventory.SetGameContext(context);
+        _inventory.SetSlotData(session.SlotData);
+        _scanner = new InventoryScanner(memory, context);
         _inventory.Scanner = _scanner;
         _levelEntityLocations = levelEntityLocations;
         _stateStore = stateStore;
-        _keyMonitor = new KeyItemMonitor(memory);
+        _keyMonitor = new KeyItemMonitor(memory, context);
     }
 
     /// <summary>
-    /// Waits until tomb123.exe is running and tomb1.dll is loaded.
+    /// Waits until tomb123.exe is running and any game DLL is loaded.
+    /// Updates the GameContext with the detected game.
     /// </summary>
     public async Task WaitForGameAsync(CancellationToken ct = default)
     {
@@ -106,27 +113,29 @@ public class GameStateWatcher : IDisposable
         {
             if (_memory.TryAttach())
             {
-                if (_memory.Tomb1Base != IntPtr.Zero)
+                // Check for any loaded game DLL
+                _memory.RefreshTomb1Base(); // also refreshes tomb2/tomb3
+                IntPtr dllBase = _context.Map.GetDllBase(_memory);
+                if (dllBase != IntPtr.Zero)
                 {
-                    _tomb1Base = _memory.Tomb1Base;
-                    ConsoleUI.Success($"Attached! tomb1.dll at 0x{_tomb1Base:X}");
+                    _context.DllBase = dllBase;
+                    ConsoleUI.Success($"Attached! {_context.Map.ModuleName} at 0x{dllBase:X}");
                     return;
                 }
 
-                // Process found but tomb1.dll not loaded yet (might be on menu)
-                ConsoleUI.Info("tomb123.exe found, waiting for tomb1.dll to load...");
+                ConsoleUI.Info("tomb123.exe found, waiting for game DLL to load...");
             }
 
             await Task.Delay(1000, ct);
 
-            // Try refreshing module list
-            if (_memory.IsAttached && _memory.Tomb1Base == IntPtr.Zero)
+            if (_memory.IsAttached)
             {
                 _memory.RefreshTomb1Base();
-                if (_memory.Tomb1Base != IntPtr.Zero)
+                IntPtr dllBase = _context.Map.GetDllBase(_memory);
+                if (dllBase != IntPtr.Zero)
                 {
-                    _tomb1Base = _memory.Tomb1Base;
-                    ConsoleUI.Success($"tomb1.dll loaded at 0x{_tomb1Base:X}");
+                    _context.DllBase = dllBase;
+                    ConsoleUI.Success($"{_context.Map.ModuleName} loaded at 0x{dllBase:X}");
                     return;
                 }
             }
@@ -159,15 +168,35 @@ public class GameStateWatcher : IDisposable
 
     private void PollGameState()
     {
+        // Detect game switch (TR1 ↔ TR2 ↔ TR3)
+        int gameVersion = _memory.ReadInt32(_memory.ExeBase + TR1RMemoryMap.Exe_GameVersion);
+        if (gameVersion != _context.GameVersion && gameVersion >= 0 && gameVersion <= 2)
+        {
+            var newMap = GameMemoryMapFactory.Create(gameVersion);
+            IntPtr newBase = newMap.GetDllBase(_memory);
+            if (newBase != IntPtr.Zero)
+            {
+                _context.SwitchGame(gameVersion, newMap, newBase);
+                ConsoleUI.Info($"[GSW] Switched to {newMap.GameKey.ToUpper()} ({newMap.ModuleName} at 0x{newBase:X})");
+
+                // Reset all cached state
+                _lastLevelId = -1;
+                _wasInGame = false;
+                _entityFlags.Clear();
+                _scanner.Reset();
+                _inventory.InvalidateCompassPointer();
+            }
+        }
+
+        var map = _context.Map;
+        IntPtr dllBase = _context.DllBase;
+
         // Check if we're in-game (not menu/loading)
-        int inGameScene = _memory.ReadInt32(_tomb1Base, TR1RMemoryMap.IsInGameScene);
+        int inGameScene = _memory.ReadInt32(dllBase, map.IsInGameScene);
         bool isInGame = inGameScene > 0;
 
         if (!isInGame)
         {
-            // Save Lara pointer before going out-of-game. On return, if the
-            // pointer changed, the heap shifted → a real load happened (not
-            // just an inventory open). Used by the !_wasInGame block below.
             if (_wasInGame)
                 _laraPtrBeforeTransition = _laraPtr;
             _wasInGame = false;
@@ -175,19 +204,19 @@ public class GameStateWatcher : IDisposable
         }
 
         // Read current level
-        int levelId = _memory.ReadInt32(_tomb1Base, TR1RMemoryMap.LevelId);
+        int levelId = _memory.ReadInt32(dllBase, map.LevelId);
 
-        // Skip non-game levels (Home=0, Menu=24)
-        if (levelId == TR1RMemoryMap.Level_Home || levelId == TR1RMemoryMap.Level_MainMenu)
+        // Skip non-game levels (Home, Menu)
+        if (levelId == map.Level_Home || levelId == map.Level_MainMenu)
         {
-            _lastLevelId = -1; // ensure OnLevelChanged fires when re-entering gameplay
+            _lastLevelId = -1;
             return;
         }
 
-        // Resolve Lara pointer (must dereference)
-        _laraPtr = _memory.ReadPointer(_tomb1Base, TR1RMemoryMap.LaraBase);
-        if (_laraPtr == IntPtr.Zero)
-            return;
+        // Resolve Lara pointer (TR1/TR3 use this for HP; TR2 doesn't need it)
+        if (_context.GameVersion != 1) // not TR2
+            _laraPtr = _memory.ReadPointer(dllBase + TR1RMemoryMap.LaraBase);
+        // For TR2, health is read from a static address via map.ReadHealth()
 
         // Detect level change
         if (levelId != _lastLevelId)
@@ -212,10 +241,9 @@ public class GameStateWatcher : IDisposable
             // moments (during loading flickers) and would overwrite the stable snapshot
             // from OnSettleComplete. Entity flags are managed by OnSettleComplete (after
             // level transitions) and the Save_Number change handler (after save loads).
-            _lastHealth = _memory.ReadInt16(_laraPtr + TR1RMemoryMap.Item_HitPoints);
-            _lastLevelCompleted = _memory.ReadInt32(_tomb1Base, TR1RMemoryMap.LevelCompleted);
-            _lastSecretsFound = _memory.ReadUInt16(
-                _tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Runtime_SecretsFound);
+            _lastHealth = map.ReadHealth(_memory, dllBase);
+            _lastLevelCompleted = _memory.ReadInt32(dllBase, map.LevelCompleted);
+            _lastSecretsFound = map.ReadSecrets(_memory, dllBase);
 
             // If a settle period is active, restart it — we just came back from a
             // loading screen (isInGameScene was 0). The settle must count from AFTER
@@ -264,7 +292,7 @@ public class GameStateWatcher : IDisposable
         // MUST be before CheckEntityPickups — after a reload, entity flags revert
         // to the saved state, so we need to re-snapshot before checking for changes.
         int saveNumber = _memory.ReadInt32(
-            _memory.Tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.WSB_SaveCounter);
+            dllBase + map.WorldStateBackup + map.WSB_SaveCounter);
         if (_lastSaveNumber >= 0 && saveNumber != _lastSaveNumber)
         {
             HandleSaveNumberChange(saveNumber, levelId);
@@ -287,7 +315,7 @@ public class GameStateWatcher : IDisposable
         CheckKeyItemUsage(levelId);
 
         // Auto-find live inventory address
-        _scanner.Poll(_tomb1Base);
+        _scanner.Poll();
 
         // Process received items from AP
         ProcessReceivedItems(levelId);
@@ -337,7 +365,7 @@ public class GameStateWatcher : IDisposable
     /// </summary>
     private void OnGameSaved(int saveNumber, int levelId)
     {
-        int mapperIdx = TR1RMemoryMap.ToLocationMapperIndex(levelId);
+        int mapperIdx = _context.Map.ToLocationMapperIndex(levelId);
 
         // Build checked location sets from AP session
         var checkedEntities = new HashSet<long>();
@@ -420,7 +448,7 @@ public class GameStateWatcher : IDisposable
     /// </summary>
     private void ReconcileAfterLoad(SaveSnapshot snapshot, int levelId)
     {
-        int mapperIdx = TR1RMemoryMap.ToLocationMapperIndex(levelId);
+        int mapperIdx = _context.Map.ToLocationMapperIndex(levelId);
 
         // Set used key items so EnsureKeyItemsInRing skips them
         _inventory.SetUsedKeyItems(new Dictionary<long, int>(snapshot.UsedKeyItems));
@@ -446,7 +474,7 @@ public class GameStateWatcher : IDisposable
 
     private void OnLevelChanged(int previousLevelId, int newLevelId)
     {
-        string newName = TR1RMemoryMap.LevelNames.GetValueOrDefault(newLevelId, $"Level {newLevelId}");
+        string newName = _context.Map.LevelNames.GetValueOrDefault(newLevelId, $"Level {newLevelId}");
 
         // Level completion is handled by CheckLevelCompletion (LevelCompleted flag),
         // NOT here — OnLevelChanged also fires on save loads.
@@ -470,7 +498,7 @@ public class GameStateWatcher : IDisposable
         _entityFlags.Clear();
         _lastSecretsFound = 0;
         _lastLevelCompleted = 0;
-        _lastHealth = TR1RMemoryMap.MaxHealth;
+        _lastHealth = _context.Map.MaxHealth;
         _lastSaveNumber = -1; // re-capture on next tick
 
         // Wait for the game engine to finish initializing entities/rings
@@ -497,12 +525,13 @@ public class GameStateWatcher : IDisposable
         _entityFlags.Clear();
         SnapshotEntityFlags(levelId);
 
-        _lastSecretsFound = _memory.ReadUInt16(
-            _tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Runtime_SecretsFound);
-        _lastHealth = _memory.ReadInt16(_laraPtr + TR1RMemoryMap.Item_HitPoints);
-        _lastLevelCompleted = _memory.ReadInt32(_tomb1Base, TR1RMemoryMap.LevelCompleted);
+        var map = _context.Map;
+        IntPtr dllBase = _context.DllBase;
+        _lastSecretsFound = map.ReadSecrets(_memory, dllBase);
+        _lastHealth = map.ReadHealth(_memory, dllBase);
+        _lastLevelCompleted = _memory.ReadInt32(dllBase, map.LevelCompleted);
         _lastSaveNumber = _memory.ReadInt32(
-            _memory.Tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.WSB_SaveCounter);
+            dllBase + map.WorldStateBackup + map.WSB_SaveCounter);
         _scanner.Reset();
         _inventory.InvalidateCompassPointer();
 
@@ -513,9 +542,9 @@ public class GameStateWatcher : IDisposable
         if (_settleFromMenu)
         {
             // Detect new game vs loaded save by checking the Main Ring.
-            // New game: ring has only Compass + Pistols (count = 2).
+            // New game: ring has only anchor + Pistols (count = 2).
             // Loaded save: ring has additional items from the save.
-            short ringCount = _memory.ReadInt16(_memory.Tomb1Base + TR1RMemoryMap.MainRingCount);
+            short ringCount = _memory.ReadInt16(dllBase + map.MainRingCount);
 
             if (ringCount <= 2 && _allReceivedRingItems.Count > 0)
             {
@@ -556,20 +585,21 @@ public class GameStateWatcher : IDisposable
     {
         _entityFlags.Clear();
 
-        int mapperIdx = TR1RMemoryMap.ToLocationMapperIndex(levelId);
+        int mapperIdx = _context.Map.ToLocationMapperIndex(levelId);
         if (mapperIdx < 0 || !_levelEntityLocations.ContainsKey(mapperIdx))
             return;
 
         // Resolve entities array
-        _entitiesBase = _memory.ReadPointer(_tomb1Base, TR1RMemoryMap.EntitiesPointer);
+        var map = _context.Map;
+        _entitiesBase = _memory.ReadPointer(_context.DllBase, map.EntitiesPointer);
         if (_entitiesBase == IntPtr.Zero)
             return;
 
         var entityLocations = _levelEntityLocations[mapperIdx];
         foreach (int entityIndex in entityLocations.Keys)
         {
-            IntPtr entityAddr = _entitiesBase + (entityIndex * TR1RMemoryMap.EntitySize);
-            short flags = _memory.ReadInt16(entityAddr + TR1RMemoryMap.Item_Flags);
+            IntPtr entityAddr = _entitiesBase + (entityIndex * map.EntitySize);
+            short flags = _memory.ReadInt16(entityAddr + map.Item_Flags);
             _entityFlags[entityIndex] = flags;
         }
     }
@@ -580,13 +610,13 @@ public class GameStateWatcher : IDisposable
     /// </summary>
     private void CheckEntityPickups(int levelId)
     {
-        int mapperIdx = TR1RMemoryMap.ToLocationMapperIndex(levelId);
+        int mapperIdx = _context.Map.ToLocationMapperIndex(levelId);
         if (mapperIdx < 0 || !_levelEntityLocations.ContainsKey(mapperIdx))
             return;
 
         if (_entitiesBase == IntPtr.Zero)
         {
-            _entitiesBase = _memory.ReadPointer(_tomb1Base, TR1RMemoryMap.EntitiesPointer);
+            _entitiesBase = _memory.ReadPointer(_context.DllBase, _context.Map.EntitiesPointer);
             if (_entitiesBase == IntPtr.Zero) return;
         }
 
@@ -596,8 +626,8 @@ public class GameStateWatcher : IDisposable
         var entityLocations = _levelEntityLocations[mapperIdx];
         foreach (var (entityIndex, locationId) in entityLocations)
         {
-            IntPtr entityAddr = _entitiesBase + (entityIndex * TR1RMemoryMap.EntitySize);
-            short currentFlags = _memory.ReadInt16(entityAddr + TR1RMemoryMap.Item_Flags);
+            IntPtr entityAddr = _entitiesBase + (entityIndex * _context.Map.EntitySize);
+            short currentFlags = _memory.ReadInt16(entityAddr + _context.Map.Item_Flags);
 
             if (_entityFlags.TryGetValue(entityIndex, out short previousFlags))
             {
@@ -639,7 +669,7 @@ public class GameStateWatcher : IDisposable
     /// </summary>
     private void CheckSecrets(int levelId)
     {
-        int mapperIdx = TR1RMemoryMap.ToLocationMapperIndex(levelId);
+        int mapperIdx = _context.Map.ToLocationMapperIndex(levelId);
         if (mapperIdx < 0) return;
 
         ReadSecretsState();
@@ -647,23 +677,22 @@ public class GameStateWatcher : IDisposable
 
     private void ReadSecretsState()
     {
-        // Secrets bitmask is at the same offset as in save file, within the WorldStateBackup
-        ushort secrets = _memory.ReadUInt16(
-            _tomb1Base + TR1RMemoryMap.WorldStateBackup + TR1RMemoryMap.Runtime_SecretsFound);
+        var map = _context.Map;
+        ushort secrets = map.ReadSecrets(_memory, _context.DllBase);
 
         if (secrets != _lastSecretsFound)
         {
-            ushort newBits = (ushort)(secrets & ~_lastSecretsFound);
-            int mapperIdx = TR1RMemoryMap.ToLocationMapperIndex(_lastLevelId);
+            var newSecrets = map.DetectNewSecrets(_lastSecretsFound, secrets);
+            int mapperIdx = map.ToLocationMapperIndex(_lastLevelId);
 
-            for (int s = 0; s < 16; s++)
+            foreach (int s in newSecrets)
             {
-                if ((newBits & (1 << s)) != 0 && mapperIdx >= 0)
+                if (mapperIdx >= 0)
                 {
                     long secretLocId = _locationMapper.GetSecretLocationId(mapperIdx, s);
                     _session.SendLocationCheck(secretLocId);
 
-                    string levelName = TR1RMemoryMap.LevelNames.GetValueOrDefault(_lastLevelId, "Unknown");
+                    string levelName = map.LevelNames.GetValueOrDefault(_lastLevelId, "Unknown");
                     ConsoleUI.SecretFound(s + 1, levelName);
                 }
             }
@@ -677,18 +706,18 @@ public class GameStateWatcher : IDisposable
     /// </summary>
     private void CheckLevelCompletion(int levelId)
     {
-        int completed = _memory.ReadInt32(_tomb1Base, TR1RMemoryMap.LevelCompleted);
+        int completed = _memory.ReadInt32(_context.DllBase, _context.Map.LevelCompleted);
 
         if (completed == 1 && _lastLevelCompleted != 1)
         {
-            int mapperIdx = TR1RMemoryMap.ToLocationMapperIndex(levelId);
+            int mapperIdx = _context.Map.ToLocationMapperIndex(levelId);
             if (mapperIdx >= 0 && !_completedLevels.Contains(levelId))
             {
                 long locId = _locationMapper.GetLevelCompleteId(mapperIdx);
                 _session.SendLocationCheck(locId);
                 _completedLevels.Add(levelId);
 
-                string levelName = TR1RMemoryMap.LevelNames.GetValueOrDefault(levelId, $"Level {levelId}");
+                string levelName = _context.Map.LevelNames.GetValueOrDefault(levelId, $"Level {levelId}");
                 ConsoleUI.Success($"Completed: {levelName}");
 
                 CheckVictory();
@@ -703,7 +732,7 @@ public class GameStateWatcher : IDisposable
     /// </summary>
     private void CheckHealth()
     {
-        short health = _memory.ReadInt16(_laraPtr + TR1RMemoryMap.Item_HitPoints);
+        short health = _context.Map.ReadHealth(_memory, _context.DllBase);
 
         // Detect death: health dropped to 0 or below
         if (health <= 0 && _lastHealth > 0)
@@ -725,7 +754,7 @@ public class GameStateWatcher : IDisposable
     /// </summary>
     private void CheckKeyItemUsage(int levelId)
     {
-        int mapperIdx = TR1RMemoryMap.ToLocationMapperIndex(levelId);
+        int mapperIdx = _context.Map.ToLocationMapperIndex(levelId);
         if (mapperIdx < 0) return;
 
         var usedKeys = _keyMonitor.DetectUsedKeys();

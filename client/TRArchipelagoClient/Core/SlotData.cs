@@ -19,6 +19,12 @@ public class SlotData
     public List<string> EnabledGames { get; set; } = new();
     public List<string> LevelSequence { get; set; } = new();
 
+    /// <summary>
+    /// Maps AP item ID -> slot type string (e.g. "K1", "K2", "P1", "P2", "Scion", "LeadBar").
+    /// Used by the client to determine which inventory slot to inject key items into.
+    /// </summary>
+    public Dictionary<long, string> KeyItemSlots { get; set; } = new();
+
     public static SlotData FromDictionary(IReadOnlyDictionary<string, object> data)
     {
         var slotData = new SlotData
@@ -44,6 +50,14 @@ public class SlotData
             slotData.EnabledGames = gamesArr.ToObject<List<string>>() ?? new();
         if (data.TryGetValue("level_sequence", out var levelSeq) && levelSeq is JArray arr)
             slotData.LevelSequence = arr.ToObject<List<string>>() ?? new();
+        if (data.TryGetValue("key_item_slots", out var keySlots) && keySlots is JObject slotsObj)
+        {
+            foreach (var kv in slotsObj)
+            {
+                if (long.TryParse(kv.Key, out long apId))
+                    slotData.KeyItemSlots[apId] = kv.Value?.ToString() ?? "";
+            }
+        }
 
         return slotData;
     }

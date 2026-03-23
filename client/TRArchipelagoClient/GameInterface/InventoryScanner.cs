@@ -17,6 +17,11 @@ namespace TRArchipelagoClient.GameInterface;
 public class InventoryScanner
 {
     private readonly ProcessMemory _memory;
+    private readonly GameContext _context;
+
+    // WSB offset for small medipack count (relative to WSB start).
+    // TR1: 0x626, TR2: 0x626 (same layout within WSB for medipacks).
+    private const int WSB_SmallMedOffset = 0x626;
 
     // Scan state
     private byte _lastWsbSmallMed;
@@ -26,9 +31,10 @@ public class InventoryScanner
     private bool _scanning;
     private int _scanPhase; // 0=idle, 1=baseline taken, 2=found
 
-    public InventoryScanner(ProcessMemory memory)
+    public InventoryScanner(ProcessMemory memory, GameContext context)
     {
         _memory = memory;
+        _context = context;
     }
 
     /// <summary>True when the live inventory address has been found.</summary>
@@ -52,12 +58,15 @@ public class InventoryScanner
     /// Called every poll cycle. Monitors WSB and triggers scans when needed.
     /// Returns true if a new address was just found this cycle.
     /// </summary>
-    public bool Poll(IntPtr tomb1Base)
+    public bool Poll()
     {
         if (_scanning || _scanPhase >= 2) return false;
 
+        var map = _context.Map;
+        IntPtr dllBase = _context.DllBase;
+
         byte wsbSmallMed = _memory.ReadByte(
-            tomb1Base + TR1RMemoryMap.WorldStateBackup + 0x626); // Runtime WSB offset for small meds
+            dllBase + map.WorldStateBackup + WSB_SmallMedOffset);
 
         if (_scanPhase == 0)
         {
@@ -65,7 +74,6 @@ public class InventoryScanner
             _lastWsbSmallMed = wsbSmallMed;
             _scanning = true;
 
-            // Run scan in background to avoid blocking the poll loop
             Task.Run(() =>
             {
                 try
@@ -114,22 +122,22 @@ public class InventoryScanner
                             _memory.Write(ptr, (byte)(before + 5));
                             // Read WSB to see if it was affected (if so, it's just a WSB mirror)
                             byte wsbCheck = _memory.ReadByte(
-                                _memory.Tomb1Base + TR1RMemoryMap.WorldStateBackup + 0x626);
+                                dllBase + map.WorldStateBackup + WSB_SmallMedOffset);
                             _memory.Write(ptr, before); // restore
 
-                            // Skip if this address IS the WSB
-                            long tomb1Start = (long)_memory.Tomb1Base;
-                            if (addr >= tomb1Start && addr < tomb1Start + 0x500000)
+                            // Skip if this address is within the DLL static region
+                            long dllStart = (long)dllBase;
+                            if (addr >= dllStart && addr < dllStart + 0x600000)
                                 continue;
 
-                            // Accept the first non-tomb1.dll candidate
+                            // Accept the first non-DLL candidate
                             _foundAddress = ptr;
                             _scanPhase = 2;
                             ConsoleUI.Success($"[Scanner] Found live inventory at 0x{addr:X}!");
                             return;
                         }
 
-                        // If all were tomb1.dll, pick the first heap one anyway
+                        // If all were in-DLL, pick the first heap one anyway
                         if (_foundAddress == IntPtr.Zero && _candidates.Count > 0)
                         {
                             long first = _candidates.First();
@@ -160,14 +168,14 @@ public class InventoryScanner
     private HashSet<long> ScanForValue(byte value)
     {
         var results = new HashSet<long>();
-        long tomb1Start = (long)_memory.Tomb1Base;
-        long tomb1End = tomb1Start + 0x500000;
+        long dllStart = (long)_context.DllBase;
+        long dllEnd = dllStart + 0x600000;
 
         foreach (var (regionAddr, regionSize) in _regions!)
         {
-            // Skip tomb1.dll static region (we know WSB is there, not live inventory)
+            // Skip DLL static region (we know WSB is there, not live inventory)
             long rStart = (long)regionAddr;
-            if (rStart >= tomb1Start && rStart < tomb1End)
+            if (rStart >= dllStart && rStart < dllEnd)
                 continue;
 
             try

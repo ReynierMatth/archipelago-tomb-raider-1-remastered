@@ -81,12 +81,12 @@ public static class TR2RMemoryMap
     // Expected: Int32 fields with 8-byte stride (AMMO_INFO structs)
     // Starting point: LaraId + ~0x148 (by analogy with TR1)
 
-    // public const int Lara_AutoPistolAmmo = ???;
-    // public const int Lara_UziAmmo = ???;
-    // public const int Lara_ShotgunAmmo = ???;
-    // public const int Lara_M16Ammo = ???;
-    // public const int Lara_GrenadeAmmo = ???;
-    // public const int Lara_HarpoonAmmo = ???;
+    public const int Lara_AutoPistolAmmo = 0x373AC8;
+    public const int Lara_UziAmmo = 0x373AD0;
+    public const int Lara_ShotgunAmmo = 0x373AD8;
+    public const int Lara_HarpoonAmmo = 0x373AE0;
+    public const int Lara_GrenadeAmmo = 0x373AE8;
+    public const int Lara_M16Ammo = 0x373AF8;
 
     public const int ShotgunAmmoMultiplier = 6;
 
@@ -124,8 +124,9 @@ public static class TR2RMemoryMap
     /// <summary>Pointer to the entity array in heap memory. Read as Int64.</summary>
     public const int EntitiesPointer = 0x5285E0;
 
-    /// <summary>Number of entities in the current level. Int16.</summary>
-    public const int EntitiesCount = 0x3FD1B4;
+    /// <summary>Number of entities in the current level. Int32 (not Int16 like TR1).
+    /// Includes all entity slots, even inactive ones with ObjectId=0.</summary>
+    public const int EntitiesCount = 0x4251C8;
 
     // ----- Rooms -----
 

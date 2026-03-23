@@ -9,14 +9,16 @@ namespace TRArchipelagoClient.GameInterface;
 public class KeyItemMonitor
 {
     private readonly ProcessMemory _memory;
+    private readonly GameContext _context;
     private bool _paused;
 
     // Last known state of the Keys Ring: pointer → qty
     private readonly Dictionary<long, short> _lastKeysRing = new();
 
-    public KeyItemMonitor(ProcessMemory memory)
+    public KeyItemMonitor(ProcessMemory memory, GameContext context)
     {
         _memory = memory;
+        _context = context;
     }
 
     /// <summary>
@@ -27,13 +29,14 @@ public class KeyItemMonitor
     {
         _lastKeysRing.Clear();
 
-        IntPtr t1 = _memory.Tomb1Base;
-        short count = _memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingCount);
+        var map = _context.Map;
+        IntPtr dllBase = _context.DllBase;
+        short count = _memory.ReadInt16(dllBase + map.KeysRingCount);
 
         for (int i = 0; i < count; i++)
         {
-            long ptr = _memory.ReadInt64(t1 + TR1RMemoryMap.KeysRingItems + i * 8);
-            short qty = _memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingQtys + i * 2);
+            long ptr = _memory.ReadInt64(dllBase + map.KeysRingItems + i * 8);
+            short qty = _memory.ReadInt16(dllBase + map.KeysRingQtys + i * 2);
             if (ptr != 0)
                 _lastKeysRing[ptr] = qty;
         }
@@ -51,15 +54,16 @@ public class KeyItemMonitor
 
         var result = new List<(long, short)>();
 
-        IntPtr t1 = _memory.Tomb1Base;
-        short count = _memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingCount);
+        var map = _context.Map;
+        IntPtr dllBase = _context.DllBase;
+        short count = _memory.ReadInt16(dllBase + map.KeysRingCount);
 
         // Build current state
         var currentRing = new Dictionary<long, short>();
         for (int i = 0; i < count; i++)
         {
-            long ptr = _memory.ReadInt64(t1 + TR1RMemoryMap.KeysRingItems + i * 8);
-            short qty = _memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingQtys + i * 2);
+            long ptr = _memory.ReadInt64(dllBase + map.KeysRingItems + i * 8);
+            short qty = _memory.ReadInt16(dllBase + map.KeysRingQtys + i * 2);
             if (ptr != 0)
                 currentRing[ptr] = qty;
         }

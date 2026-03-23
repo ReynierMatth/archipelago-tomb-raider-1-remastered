@@ -117,7 +117,10 @@ class Program
             ConsoleUI.Info($"Tracking {entityLocations.Values.Sum(m => m.Count)} pickup locations across {entityLocations.Count} levels.");
 
             var stateStore = new SaveStateStore(session.SlotName, session.Seed);
-            var watcher = new GameStateWatcher(session, memory, itemMapper, locationMapper, entityLocations, stateStore);
+            // Default to TR1; GameStateWatcher will detect and switch at runtime
+            var gameContext = new GameContext();
+            gameContext.SwitchGame(0, new TR1GameMemoryMap(), memory.Tomb1Base);
+            var watcher = new GameStateWatcher(session, memory, itemMapper, locationMapper, entityLocations, stateStore, gameContext);
 
             ConsoleUI.Info("Waiting for game to launch...");
             ConsoleUI.Info("Start tomb123.exe and begin playing TR1!\n");
