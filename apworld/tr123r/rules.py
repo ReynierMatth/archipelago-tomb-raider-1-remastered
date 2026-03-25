@@ -82,6 +82,17 @@ def _set_rules_prefix_match(multiworld, player: int, game: GameData) -> None:
         prefix = key.split("_")[0].lower()
         prefix_to_items.setdefault(prefix, []).append(idef["name"])
 
+    # Prefix aliases: keyDependencies and itemDefinitions sometimes use
+    # different prefixes for the same level (e.g., "doria" vs "wreck").
+    # Map the keyDep prefix to the itemDef prefix when they differ.
+    _PREFIX_ALIASES: Dict[str, str] = {
+        "doria": "wreck",       # Maria Doria (KEEL.TR2)
+        "icepalace": "chicken", # Ice Palace (ICECAVE.TR2)
+    }
+    for alias, real in _PREFIX_ALIASES.items():
+        if alias not in prefix_to_items and real in prefix_to_items:
+            prefix_to_items[alias] = prefix_to_items[real]
+
     # Step 3: for each level with key items, require all matching definitions
     for level in game.levels:
         if not level.get("keyItems"):
@@ -91,6 +102,13 @@ def _set_rules_prefix_match(multiworld, player: int, game: GameData) -> None:
         required: List[str] = []
         for prefix in prefixes:
             required.extend(prefix_to_items.get(prefix, []))
+
+        # Safety: don't require more items than the level actually has.
+        # Prefix mismatch (e.g., "doria" vs "wreck") can cause 0 matches,
+        # and overcounting can demand items not associated with this level.
+        key_item_count = len(level.get("keyItems", []))
+        if len(required) > key_item_count:
+            required = required[:key_item_count]
 
         if required:
             _set_completion_rule(multiworld, player, level["name"], required)
@@ -107,6 +125,9 @@ def _alias_type_to_abbrev(alias_type: str) -> str:
     m = re.match(r"^Puzzle(\d+)$", alias_type)
     if m:
         return f"P{m.group(1)}"
+    m = re.match(r"^Quest(\d+)$", alias_type)
+    if m:
+        return f"Q{m.group(1)}"
     return alias_type
 
 
@@ -129,6 +150,13 @@ def _build_key_item_name_map(game: GameData) -> Dict[str, str]:
     raw = game.raw
     item_defs = raw.get("itemDefinitions", {})
 
+    # Prefix aliases: keyDependencies and itemDefinitions sometimes use
+    # different prefixes for the same level.
+    _PREFIX_ALIASES: Dict[str, str] = {
+        "doria": "wreck",       # Maria Doria (KEEL.TR2)
+        "icepalace": "chicken", # Ice Palace (ICECAVE.TR2)
+    }
+
     # Group key_item definitions by (prefix, type_abbrev),
     # preserving JSON insertion order for duplicate matching.
     def_groups: Dict[tuple, List[str]] = defaultdict(list)
@@ -141,6 +169,10 @@ def _build_key_item_name_map(game: GameData) -> Dict[str, str]:
         prefix = parts[0].lower()
         type_abbrev = parts[1]
         def_groups[(prefix, type_abbrev)].append(idef["name"])
+        # Also register under alias prefix so keyItem alias lookup works
+        for alias_from, alias_to in _PREFIX_ALIASES.items():
+            if prefix == alias_to:
+                def_groups[(alias_from, type_abbrev)].append(idef["name"])
 
     # Collect available abbreviation numbers per (prefix, base_letter)
     # e.g., tihocan K -> [1, 2]
