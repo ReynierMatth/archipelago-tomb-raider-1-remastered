@@ -80,13 +80,11 @@ class StartingWeapons(Choice):
     Which weapons Lara starts with.
 
     Pistols: Standard pistols only.
-    Random: A random weapon set.
     All: All weapons from the start.
     """
     display_name = "Starting Weapons"
     option_pistols = 0
-    option_random = 1
-    option_all = 2
+    option_all = 1
     default = 0
 
 
