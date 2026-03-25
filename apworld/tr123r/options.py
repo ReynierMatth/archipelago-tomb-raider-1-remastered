@@ -75,19 +75,6 @@ class TrapPercentage(Range):
     default = 10
 
 
-class StartingWeapons(Choice):
-    """
-    Which weapons Lara starts with.
-
-    Pistols: Standard pistols only.
-    All: All weapons from the start.
-    """
-    display_name = "Starting Weapons"
-    option_pistols = 0
-    option_all = 1
-    default = 0
-
-
 @dataclass
 class TR1ROptions(PerGameCommonOptions):
     include_tr1: IncludeTR1
@@ -97,5 +84,4 @@ class TR1ROptions(PerGameCommonOptions):
     levels_for_goal: LevelsForGoal
     secrets_mode: SecretsMode
     trap_percentage: TrapPercentage
-    starting_weapons: StartingWeapons
     death_link: DeathLink

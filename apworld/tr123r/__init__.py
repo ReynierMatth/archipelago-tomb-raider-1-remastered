@@ -200,7 +200,6 @@ class TR1RWorld(World):
             "levels_for_goal": self.options.levels_for_goal.value,
             "secrets_mode": self.options.secrets_mode.value,
             "death_link": self.options.death_link.value,
-            "starting_weapons": self.options.starting_weapons.value,
             "enabled_games": enabled,
             "total_levels": total_levels,
             "total_secrets": sum(all_secrets),
