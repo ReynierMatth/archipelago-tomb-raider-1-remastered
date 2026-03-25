@@ -67,6 +67,21 @@ public class InventoryManager
     /// <summary>Set by GameStateWatcher after construction.</summary>
     public void SetGameContext(GameContext context) => _context = context;
 
+    /// <summary>Active game's item base ID (uses context if available, falls back to constructor config).</summary>
+    private int ActiveItemBaseId => _context?.ActiveConfig?.ItemBaseId ?? _itemMapper.Config.ItemBaseId;
+
+    /// <summary>Active game's trap base ID.</summary>
+    private int ActiveTrapBaseId => _context?.ActiveConfig?.TrapBaseId ?? _itemMapper.Config.TrapBaseId;
+
+    /// <summary>SmallMedipack inventory object ID for the active game.</summary>
+    private int GetSmallMedipackObjId() => _context?.GameVersion switch
+    {
+        0 => TR1RMemoryMap.InvObjId.SmallMedipack,
+        1 => TR2RMemoryMap.InvObjId.SmallMedipack,
+        2 => TR3RMemoryMap.InvObjId.SmallMedipack,
+        _ => TR1RMemoryMap.InvObjId.SmallMedipack,
+    };
+
     /// <summary>Set by GameStateWatcher once slot data is available.</summary>
     public void SetSlotData(SlotData slotData) => _slotData = slotData;
 
@@ -93,7 +108,7 @@ public class InventoryManager
     public void GiveWeapon(long apItemId)
     {
         var map = _context!.Map;
-        var recipe = map.GetWeaponRecipe(apItemId, _itemMapper.Config.ItemBaseId);
+        var recipe = map.GetWeaponRecipe(apItemId, ActiveItemBaseId);
         if (recipe == null) return;
 
         // Inject weapon into Main Ring
@@ -148,16 +163,32 @@ public class InventoryManager
     public void GiveAmmo(long apItemId)
     {
         var map = _context!.Map;
-        var recipe = map.GetAmmoRecipe(apItemId, _itemMapper.Config.ItemBaseId);
+        var recipe = map.GetAmmoRecipe(apItemId, ActiveItemBaseId);
         if (recipe == null) return;
 
         // Check if the player has the weapon in the Main Ring
+        // Double-verify: pointer must be in ring AND ObjId at that address must match.
+        // Prevents false positives from stale compass pointers after game switches.
         bool hasWeapon = false;
         if (EnsureCompassPointer())
         {
             IntPtr weaponPtr = map.ResolveInventoryItemPointer(_compassPtr, recipe.WeaponObjId);
             if (weaponPtr != IntPtr.Zero)
-                hasWeapon = HasItemInRingByPtr(_context.Map.MainRingCount, _context.Map.MainRingItems, weaponPtr);
+            {
+                short objIdAtPtr = _memory.ReadInt16(weaponPtr + map.InvItem_ObjectId);
+                hasWeapon = objIdAtPtr == recipe.WeaponObjId
+                    && HasItemInRingByPtr(_context.Map.MainRingCount, _context.Map.MainRingItems, weaponPtr);
+            }
+        }
+
+        // DEBUG: trace weapon ownership check
+        if (_context.GameVersion != 0)
+        {
+            IntPtr dbgWeaponPtr = EnsureCompassPointer() ? _context.Map.ResolveInventoryItemPointer(_compassPtr, recipe.WeaponObjId) : IntPtr.Zero;
+            short dbgRingCount = _memory.ReadInt16(_context.DllBase + _context.Map.MainRingCount);
+            ConsoleUI.Info($"[DBG] GiveAmmo {recipe.Name}: compass=0x{_compassPtr:X} weaponPtr=0x{dbgWeaponPtr:X} " +
+                $"objId=0x{(dbgWeaponPtr != IntPtr.Zero ? _memory.ReadInt16(dbgWeaponPtr + _context.Map.InvItem_ObjectId) : 0):X4} " +
+                $"ringCount={dbgRingCount} hasWeapon={hasWeapon} dllBase=0x{_context.DllBase:X}");
         }
 
         if (hasWeapon && recipe.LaraAmmoOffset >= 0)
@@ -193,7 +224,7 @@ public class InventoryManager
     public void GiveMedipack(long apItemId)
     {
         var map = _context!.Map;
-        int objId = map.GetMedipackObjId(apItemId, _itemMapper.Config.ItemBaseId);
+        int objId = map.GetMedipackObjId(apItemId, ActiveItemBaseId);
         if (objId < 0) return;
 
         if (EnsureCompassPointer())
@@ -275,7 +306,7 @@ public class InventoryManager
     public void ApplyTrap(long apItemId)
     {
         var map = _context!.Map;
-        var recipe = map.GetTrapRecipe(apItemId, _itemMapper.Config.TrapBaseId);
+        var recipe = map.GetTrapRecipe(apItemId, ActiveTrapBaseId);
         if (recipe == null) return;
 
         switch (recipe.Type)
@@ -304,8 +335,7 @@ public class InventoryManager
                 if (EnsureCompassPointer())
                 {
                     IntPtr smallMedPtr = map.ResolveInventoryItemPointer(_compassPtr,
-                        _context.GameVersion == 0 ? TR1RMemoryMap.InvObjId.SmallMedipack
-                                                   : TR2RMemoryMap.InvObjId.SmallMedipack);
+                        GetSmallMedipackObjId());
                     if (smallMedPtr != IntPtr.Zero)
                     {
                         short count = _memory.ReadInt16(_context.DllBase + map.MainRingCount);
@@ -715,8 +745,7 @@ public class InventoryManager
         if (!EnsureCompassPointer()) return false;
 
         IntPtr t1 = _context!.DllBase;
-        int smallMedObjId = _context.GameVersion == 0
-            ? TR1RMemoryMap.InvObjId.SmallMedipack : TR2RMemoryMap.InvObjId.SmallMedipack;
+        int smallMedObjId = GetSmallMedipackObjId();
         IntPtr targetPtr = _context.Map.ResolveInventoryItemPointer(_compassPtr, smallMedObjId);
         short ringCount = _memory.ReadInt16(t1 + _context.Map.MainRingCount);
 
@@ -792,7 +821,7 @@ public class InventoryManager
             // Fallback for TR1: parse TR1Type enum name (backwards compat)
             if (_context.GameVersion == 0)
             {
-                int offset = (int)(apItemId - _itemMapper.Config.ItemBaseId);
+                int offset = (int)(apItemId - ActiveItemBaseId);
                 var tr1Type = (TR1Type)offset;
                 string name = tr1Type.ToString();
                 if (name == offset.ToString())

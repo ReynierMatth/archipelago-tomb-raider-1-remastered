@@ -29,7 +29,7 @@ public class SlotData
     {
         var slotData = new SlotData
         {
-            Game = "Tomb Raider 1 Remastered",
+            Game = "Tomb Raider Remastered",
         };
 
         if (data.TryGetValue("goal", out var goal))

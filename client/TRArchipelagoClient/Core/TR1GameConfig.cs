@@ -7,7 +7,7 @@ public static class TR1GameConfig
 {
     public static GameConfig Create() => new()
     {
-        ApGameName = "Tomb Raider 1 Remastered",
+        ApGameName = "Tomb Raider Remastered",
         GameKey = "tr1",
         ModuleName = "tomb1.dll",
         DataSubDir = "1",

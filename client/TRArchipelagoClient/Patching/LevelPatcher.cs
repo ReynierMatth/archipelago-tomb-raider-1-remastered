@@ -9,6 +9,7 @@ namespace TRArchipelagoClient.Patching;
 /// Patches TR level files for Archipelago multiworld.
 /// Replaces randomizable pickups with a sentinel entity type
 /// and records entity-to-AP-location mappings.
+/// Supports TR1, TR2, and TR3 level formats.
 /// </summary>
 public class LevelPatcher
 {
@@ -20,14 +21,29 @@ public class LevelPatcher
     // Mapping of (levelFile, entityIndex) -> AP location ID
     private readonly Dictionary<string, Dictionary<int, long>> _locationMappings = new();
 
-    // Items that are AP locations (pickups + key items) — TR1 specific for now
-    private static readonly HashSet<TR1Type> _trackableTypes = new(
+    // TR1 trackable types
+    private static readonly HashSet<TR1Type> _tr1TrackableTypes = new(
         TR1TypeUtilities.GetStandardPickupTypes()
             .Concat(TR1TypeUtilities.GetKeyItemTypes())
     );
 
-    // Sentinel type: SmallMed_S_P exists in every level (has mesh data).
-    private const TR1Type SentinelType = TR1Type.SmallMed_S_P;
+    // TR2 trackable types (GetStandardPickupTypes only has guns+ammo, not medipacks)
+    private static readonly HashSet<TR2Type> _tr2TrackableTypes = new(
+        TR2TypeUtilities.GetStandardPickupTypes()
+            .Concat(TR2TypeUtilities.GetKeyItemTypes())
+            .Append(TR2Type.SmallMed_S_P)
+            .Append(TR2Type.LargeMed_S_P)
+            .Append(TR2Type.Flares_S_P)
+    );
+
+    // TR3 trackable types (same issue — medipacks not in GetStandardPickupTypes)
+    private static readonly HashSet<TR3Type> _tr3TrackableTypes = new(
+        TR3TypeUtilities.GetStandardPickupTypes()
+            .Concat(TR3TypeUtilities.GetKeyItemTypes())
+            .Append(TR3Type.SmallMed_P)
+            .Append(TR3Type.LargeMed_P)
+            .Append(TR3Type.Flares_P)
+    );
 
     public LevelPatcher(string gameDir, GameConfig config, LocationMapper locationMapper)
     {
@@ -65,9 +81,28 @@ public class LevelPatcher
 
     /// <summary>
     /// Scan and patch a single level file.
-    /// Replaces all pickup/key item entities with sentinel type.
+    /// Dispatches to the correct level control based on game key.
     /// </summary>
     private void PatchLevel(string levelFile, string levelPath, int levelIndex)
+    {
+        switch (_config.GameKey)
+        {
+            case "tr1":
+                PatchTR1Level(levelFile, levelPath, levelIndex);
+                break;
+            case "tr2":
+                PatchTR2Level(levelFile, levelPath, levelIndex);
+                break;
+            case "tr3":
+                PatchTR3Level(levelFile, levelPath, levelIndex);
+                break;
+            default:
+                Console.WriteLine($"[Patcher] Unknown game key: {_config.GameKey}");
+                break;
+        }
+    }
+
+    private void PatchTR1Level(string levelFile, string levelPath, int levelIndex)
     {
         var control = new TR1LevelControl();
         TR1Level level;
@@ -88,18 +123,104 @@ public class LevelPatcher
         for (int i = 0; i < level.Entities.Count; i++)
         {
             var entity = level.Entities[i];
-
-            if (!_trackableTypes.Contains(entity.TypeID))
+            if (!_tr1TrackableTypes.Contains(entity.TypeID))
                 continue;
 
-            // Calculate the AP location ID for this entity
             long locationId = _locationMapper.GetPickupLocationId(levelIndex, i);
-
-            // Record the mapping
             entityMapping[i] = locationId;
+            entity.TypeID = TR1Type.SmallMed_S_P;
+            patchedCount++;
+        }
 
-            // Replace with sentinel
-            entity.TypeID = SentinelType;
+        if (patchedCount > 0)
+        {
+            try
+            {
+                control.Write(level, levelPath);
+                Console.WriteLine($"[Patcher] {levelFile}: patched {patchedCount} pickups");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Patcher] Failed to write {levelFile}: {ex.Message}");
+            }
+        }
+
+        _locationMappings[levelFile] = entityMapping;
+    }
+
+    private void PatchTR2Level(string levelFile, string levelPath, int levelIndex)
+    {
+        var control = new TR2LevelControl();
+        TR2Level level;
+
+        try
+        {
+            level = control.Read(levelPath);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Patcher] Failed to read {levelFile}: {ex.Message}");
+            return;
+        }
+
+        var entityMapping = new Dictionary<int, long>();
+        int patchedCount = 0;
+
+        for (int i = 0; i < level.Entities.Count; i++)
+        {
+            var entity = level.Entities[i];
+            if (!_tr2TrackableTypes.Contains(entity.TypeID))
+                continue;
+
+            long locationId = _locationMapper.GetPickupLocationId(levelIndex, i);
+            entityMapping[i] = locationId;
+            entity.TypeID = TR2Type.SmallMed_S_P;
+            patchedCount++;
+        }
+
+        if (patchedCount > 0)
+        {
+            try
+            {
+                control.Write(level, levelPath);
+                Console.WriteLine($"[Patcher] {levelFile}: patched {patchedCount} pickups");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Patcher] Failed to write {levelFile}: {ex.Message}");
+            }
+        }
+
+        _locationMappings[levelFile] = entityMapping;
+    }
+
+    private void PatchTR3Level(string levelFile, string levelPath, int levelIndex)
+    {
+        var control = new TR3LevelControl();
+        TR3Level level;
+
+        try
+        {
+            level = control.Read(levelPath);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Patcher] Failed to read {levelFile}: {ex.Message}");
+            return;
+        }
+
+        var entityMapping = new Dictionary<int, long>();
+        int patchedCount = 0;
+
+        for (int i = 0; i < level.Entities.Count; i++)
+        {
+            var entity = level.Entities[i];
+            if (!_tr3TrackableTypes.Contains(entity.TypeID))
+                continue;
+
+            long locationId = _locationMapper.GetPickupLocationId(levelIndex, i);
+            entityMapping[i] = locationId;
+            entity.TypeID = TR3Type.SmallMed_P;
             patchedCount++;
         }
 

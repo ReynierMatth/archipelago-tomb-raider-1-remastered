@@ -24,8 +24,8 @@ public class GameStateWatcher : IDisposable
 
     private readonly APSession _session;
     private readonly ProcessMemory _memory;
-    private readonly ItemMapper _itemMapper;
-    private readonly LocationMapper _locationMapper;
+    private ItemMapper _itemMapper;
+    private LocationMapper _locationMapper;
     private readonly InventoryManager _inventory;
     private readonly InventoryScanner _scanner;
     private readonly SaveStateStore _stateStore;
@@ -56,6 +56,10 @@ public class GameStateWatcher : IDisposable
     // Saved Lara pointer to detect heap shifts (real load vs inventory open)
     private IntPtr _laraPtrBeforeTransition;
 
+    // BinaryTick-based in-game detection (fallback when IsInGameScene offset is stale)
+    private int _lastBinaryTick;
+    private bool _binaryTickMoving;
+
     // Entity tracking: entityIndex -> last known flags value
     private readonly Dictionary<int, short> _entityFlags = new();
 
@@ -71,8 +75,23 @@ public class GameStateWatcher : IDisposable
     private int _levelSettleTicks;
     private bool _settleFromMenu; // true = menu→game, false = level→level
 
+    // Post-settle stabilization: re-snapshot entity flags after a few ticks
+    // to absorb engine initialization flag changes (especially TR2/TR3).
+    private int _postSettleResnapTicks;
+
+    // Tracks which game versions have had their ring items replayed this session.
+    // Only replay once per game — subsequent entries use normal save reconciliation.
+    private readonly HashSet<int> _replayedGameVersions = new();
+
     // Which entity indices are AP locations (set by LevelPatcher)
+    // Keys are composite: gameVersion * 1000 + mapperIdx
     private readonly Dictionary<int, Dictionary<int, long>> _levelEntityLocations;
+
+    /// <summary>
+    /// Composite key for _levelEntityLocations: gameVersion * 1000 + mapperIdx.
+    /// Prevents collisions between games that share level indices.
+    /// </summary>
+    private int EntityLocationKey(int mapperIdx) => _context.GameVersion * 1000 + mapperIdx;
 
     // Completed tracking
     private readonly HashSet<int> _completedLevels = new();
@@ -179,6 +198,12 @@ public class GameStateWatcher : IDisposable
                 _context.SwitchGame(gameVersion, newMap, newBase);
                 ConsoleUI.Info($"[GSW] Switched to {newMap.GameKey.ToUpper()} ({newMap.ModuleName} at 0x{newBase:X})");
 
+                // Switch per-game mappers if registered in context
+                if (_context.ActiveItemMapper != null)
+                    _itemMapper = _context.ActiveItemMapper;
+                if (_context.ActiveLocationMapper != null)
+                    _locationMapper = _context.ActiveLocationMapper;
+
                 // Reset all cached state
                 _lastLevelId = -1;
                 _wasInGame = false;
@@ -193,7 +218,26 @@ public class GameStateWatcher : IDisposable
 
         // Check if we're in-game (not menu/loading)
         int inGameScene = _memory.ReadInt32(dllBase, map.IsInGameScene);
-        bool isInGame = inGameScene > 0;
+        bool isInGame;
+
+        if (inGameScene >= 0 && inGameScene <= 10)
+        {
+            // Normal range: 0 = menu/loading, >0 = in gameplay
+            isInGame = inGameScene > 0;
+        }
+        else
+        {
+            // Garbage value — IsInGameScene offset is stale for this game.
+            // Fallback: check if entities are loaded (valid pointer + count > 0).
+            // In menus, the entities array is null/empty. In levels, it's populated.
+            IntPtr entPtr = _memory.ReadPointer(dllBase + map.EntitiesPointer);
+            int entCount = _memory.ReadInt32(dllBase + map.EntitiesCount);
+            int fallbackLevel = _memory.ReadInt32(dllBase, map.LevelId);
+
+            isInGame = entPtr != IntPtr.Zero && entCount > 5
+                && fallbackLevel > map.Level_Home
+                && fallbackLevel != map.Level_MainMenu;
+        }
 
         if (!isInGame)
         {
@@ -299,8 +343,22 @@ public class GameStateWatcher : IDisposable
         }
         _lastSaveNumber = saveNumber;
 
-        // Check entity pickups (real-time!)
-        CheckEntityPickups(levelId);
+        // Post-settle stabilization: re-snapshot to absorb engine init flag changes
+        if (_postSettleResnapTicks > 0)
+        {
+            _postSettleResnapTicks--;
+            if (_postSettleResnapTicks == 0)
+            {
+                _entityFlags.Clear();
+                SnapshotEntityFlags(levelId);
+            }
+            // Don't check entity pickups during stabilization
+        }
+        else
+        {
+            // Check entity pickups (real-time!)
+            CheckEntityPickups(levelId);
+        }
 
         // Check secrets
         CheckSecrets(levelId);
@@ -525,6 +583,10 @@ public class GameStateWatcher : IDisposable
         _entityFlags.Clear();
         SnapshotEntityFlags(levelId);
 
+        // Schedule a re-snapshot after a few ticks to absorb any remaining
+        // engine initialization flag changes (TR2/TR3 entity init is delayed).
+        _postSettleResnapTicks = 5; // 0.5 seconds
+
         var map = _context.Map;
         IntPtr dllBase = _context.DllBase;
         _lastSecretsFound = map.ReadSecrets(_memory, dllBase);
@@ -538,6 +600,21 @@ public class GameStateWatcher : IDisposable
         // Take a fresh Keys Ring snapshot and resume monitoring
         _keyMonitor.SnapshotKeysRing();
         _keyMonitor.Resume();
+
+        // After switching to a different game (TR1↔TR2↔TR3), replay all ring items
+        // so items received while playing another game get injected.
+        // The InventoryManager will only inject items whose recipes match the
+        // active game — cross-game items are silently skipped.
+        // Only replay once per game switch (not on every TR3→menu→TR3 cycle).
+        if (!_replayedGameVersions.Contains(_context.GameVersion) && _allReceivedRingItems.Count > 0)
+        {
+            _replayedGameVersions.Add(_context.GameVersion);
+            _pendingItems.Clear();
+            foreach (var item in _allReceivedRingItems)
+                _pendingItems.Enqueue(item);
+            ConsoleUI.Info($"[GSW] First entry into {_context.Map.GameKey.ToUpper()} — replaying {_allReceivedRingItems.Count} ring items");
+            return;
+        }
 
         if (_settleFromMenu)
         {
@@ -586,7 +663,8 @@ public class GameStateWatcher : IDisposable
         _entityFlags.Clear();
 
         int mapperIdx = _context.Map.ToLocationMapperIndex(levelId);
-        if (mapperIdx < 0 || !_levelEntityLocations.ContainsKey(mapperIdx))
+        int elKey = EntityLocationKey(mapperIdx);
+        if (mapperIdx < 0 || !_levelEntityLocations.ContainsKey(elKey))
             return;
 
         // Resolve entities array
@@ -595,7 +673,7 @@ public class GameStateWatcher : IDisposable
         if (_entitiesBase == IntPtr.Zero)
             return;
 
-        var entityLocations = _levelEntityLocations[mapperIdx];
+        var entityLocations = _levelEntityLocations[elKey];
         foreach (int entityIndex in entityLocations.Keys)
         {
             IntPtr entityAddr = _entitiesBase + (entityIndex * map.EntitySize);
@@ -611,7 +689,8 @@ public class GameStateWatcher : IDisposable
     private void CheckEntityPickups(int levelId)
     {
         int mapperIdx = _context.Map.ToLocationMapperIndex(levelId);
-        if (mapperIdx < 0 || !_levelEntityLocations.ContainsKey(mapperIdx))
+        int elKey = EntityLocationKey(mapperIdx);
+        if (mapperIdx < 0 || !_levelEntityLocations.ContainsKey(elKey))
             return;
 
         if (_entitiesBase == IntPtr.Zero)
@@ -623,7 +702,7 @@ public class GameStateWatcher : IDisposable
         // Get the active snapshot for save-aware checking
         var activeSnapshot = _stateStore.GetSnapshot(_activeSaveNumber);
 
-        var entityLocations = _levelEntityLocations[mapperIdx];
+        var entityLocations = _levelEntityLocations[elKey];
         foreach (var (entityIndex, locationId) in entityLocations)
         {
             IntPtr entityAddr = _entitiesBase + (entityIndex * _context.Map.EntitySize);
@@ -790,7 +869,9 @@ public class GameStateWatcher : IDisposable
             ConsoleUI.ItemReceived(itemName, playerName);
             _itemsReceivedIndex++;
 
-            var category = _itemMapper.GetCategory(item.ItemId);
+            // Check all registered games for category (cross-game items are common)
+            var mapper = _context.GetItemMapperForId(item.ItemId) ?? _itemMapper;
+            var category = mapper.GetCategory(item.ItemId);
 
             if (category == ItemCategory.KeyItem)
             {
@@ -827,7 +908,9 @@ public class GameStateWatcher : IDisposable
             ConsoleUI.ItemReceived(itemName, playerName);
             _itemsReceivedIndex++;
 
-            var category = _itemMapper.GetCategory(item.ItemId);
+            // Check all registered games for category (cross-game items are common)
+            var mapper = _context.GetItemMapperForId(item.ItemId) ?? _itemMapper;
+            var category = mapper.GetCategory(item.ItemId);
 
             // Traps and key items don't need the ring — process immediately
             if (category == ItemCategory.Trap)

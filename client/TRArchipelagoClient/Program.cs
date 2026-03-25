@@ -80,13 +80,12 @@ class Program
 
         ConsoleUI.Info($"Connecting to {server} as {slotName}...");
 
-        var config = TR1GameConfig.Create();
-        var itemMapper = new ItemMapper(config);
-        var locationMapper = new LocationMapper(config);
-        var session = new APSession(config);
+        // Use TR1 config for AP session (all games share the same AP game name)
+        var tr1Config = TR1GameConfig.Create();
+        var session = new APSession(tr1Config);
         var memory = new ProcessMemory();
         var cts = new CancellationTokenSource();
-        LevelPatcher? patcher = null;
+        var allPatchers = new List<LevelPatcher>();
 
         Console.CancelKeyPress += (_, e) =>
         {
@@ -107,23 +106,88 @@ class Program
 
             ConsoleUI.Success($"Connected! Game: {session.SlotData?.Game ?? "unknown"}");
 
+            // Determine enabled games from slot data
+            var enabledGames = session.SlotData?.EnabledGames ?? new List<string> { "tr1" };
+
+            // Map game key -> (gameVersion, config creator)
+            var gameRegistry = new Dictionary<string, (int version, Func<GameConfig> createConfig)>
+            {
+                ["tr1"] = (0, TR1GameConfig.Create),
+                ["tr2"] = (1, TR2GameConfig.Create),
+                ["tr3"] = (2, TR3GameConfig.Create),
+            };
+
+            // Build per-game configs, mappers, patchers and merged entity locations
+            // Entity location keys use composite: gameVersion * 1000 + levelIdx
+            var mergedEntityLocations = new Dictionary<int, Dictionary<int, long>>();
+            var gameContext = new GameContext();
+
+            // Track which config/mapper to use as the initial default
+            GameConfig? firstConfig = null;
+            ItemMapper? firstItemMapper = null;
+            LocationMapper? firstLocationMapper = null;
+
             ConsoleUI.Info("Backing up and patching level files...");
-            patcher = new LevelPatcher(gameDir, config, locationMapper);
-            patcher.PatchAll();
+            int totalLocations = 0;
+            int totalLevels = 0;
+
+            foreach (var gameKey in enabledGames)
+            {
+                if (!gameRegistry.TryGetValue(gameKey, out var entry))
+                {
+                    ConsoleUI.Info($"[Init] Skipping unknown game key: {gameKey}");
+                    continue;
+                }
+
+                var config = entry.createConfig();
+                var itemMapper = new ItemMapper(config);
+                var locationMapper = new LocationMapper(config);
+                var patcher = new LevelPatcher(gameDir, config, locationMapper);
+
+                patcher.PatchAll();
+                allPatchers.Add(patcher);
+
+                var entityLocations = patcher.GetAllMappingsByLevelIndex();
+
+                // Merge into composite-keyed dictionary
+                foreach (var (levelIdx, entities) in entityLocations)
+                {
+                    int compositeKey = entry.version * 1000 + levelIdx;
+                    mergedEntityLocations[compositeKey] = entities;
+                }
+
+                totalLocations += entityLocations.Values.Sum(m => m.Count);
+                totalLevels += entityLocations.Count;
+
+                // Register in GameContext for runtime switching
+                gameContext.RegisterGame(entry.version, config, itemMapper, locationMapper, entityLocations);
+
+                // First enabled game becomes the default
+                if (firstConfig == null)
+                {
+                    firstConfig = config;
+                    firstItemMapper = itemMapper;
+                    firstLocationMapper = locationMapper;
+                }
+            }
 
             ConsoleUI.Success("Level files patched (pickups replaced with sentinels).");
-
-            var entityLocations = patcher.GetAllMappingsByLevelIndex();
-            ConsoleUI.Info($"Tracking {entityLocations.Values.Sum(m => m.Count)} pickup locations across {entityLocations.Count} levels.");
+            ConsoleUI.Info($"Tracking {totalLocations} pickup locations across {totalLevels} levels ({string.Join("+", enabledGames.Select(g => g.ToUpper()))}).");
 
             var stateStore = new SaveStateStore(session.SlotName, session.Seed);
-            // Default to TR1; GameStateWatcher will detect and switch at runtime
-            var gameContext = new GameContext();
-            gameContext.SwitchGame(0, new TR1GameMemoryMap(), memory.Tomb1Base);
-            var watcher = new GameStateWatcher(session, memory, itemMapper, locationMapper, entityLocations, stateStore, gameContext);
+            // Initialize context with TR1 defaults; GameStateWatcher will detect and switch at runtime
+            // Don't call GetDllBase here — game process isn't running yet.
+            gameContext.SwitchGame(0, new TR1GameMemoryMap(), IntPtr.Zero);
+
+            var watcher = new GameStateWatcher(
+                session, memory,
+                firstItemMapper ?? new ItemMapper(tr1Config),
+                firstLocationMapper ?? new LocationMapper(tr1Config),
+                mergedEntityLocations,
+                stateStore, gameContext);
 
             ConsoleUI.Info("Waiting for game to launch...");
-            ConsoleUI.Info("Start tomb123.exe and begin playing TR1!\n");
+            ConsoleUI.Info($"Start tomb123.exe and begin playing!\n");
 
             await watcher.WaitForGameAsync(cts.Token);
             await watcher.RunAsync(cts.Token);
@@ -140,10 +204,14 @@ class Program
         {
             saveManager.SwapOut();
 
-            if (patcher?.BackupManager.HasBackups() == true &&
-                ConsoleUI.Confirm("Restore original level files?"))
+            bool anyBackups = allPatchers.Any(p => p.BackupManager.HasBackups());
+            if (anyBackups && ConsoleUI.Confirm("Restore original level files?"))
             {
-                patcher.BackupManager.RestoreAll();
+                foreach (var p in allPatchers)
+                {
+                    if (p.BackupManager.HasBackups())
+                        p.BackupManager.RestoreAll();
+                }
                 ConsoleUI.Success("Original files restored.");
             }
 
