@@ -48,6 +48,54 @@ class Program
             return;
         }
 
+        if (args.Contains("--identify"))
+        {
+            await RunIdentifyMode();
+            return;
+        }
+
+        if (args.Contains("--dump-ring"))
+        {
+            await RunRingDumpMode();
+            return;
+        }
+
+        if (args.Contains("--scan-rings"))
+        {
+            await RunScanRingsMode();
+            return;
+        }
+
+        if (args.Contains("--own-test"))
+        {
+            await RunOwnTestMode(args);
+            return;
+        }
+
+        if (args.Contains("--give"))
+        {
+            await RunGiveMode(args);
+            return;
+        }
+
+        if (args.Contains("--sound-probe"))
+        {
+            await RunSoundProbeMode(args);
+            return;
+        }
+
+        if (args.Contains("--dump-sfx-table"))
+        {
+            await RunDumpSfxTableMode(args);
+            return;
+        }
+
+        if (args.Contains("--watch-sfx"))
+        {
+            await RunWatchSfxMode(args);
+            return;
+        }
+
         // --- Normal AP mode ---
         string server = GetArg(args, 0, null) ?? ConsoleUI.Prompt("Archipelago server (host:port)");
         string? slotName = GetArg(args, 1, null) ?? ConsoleUI.Prompt("Slot name");
@@ -62,6 +110,18 @@ class Program
         {
             ConsoleUI.Error($"Game directory not found: {gameDir}");
             return;
+        }
+
+        // Self-heal: a previous run that was killed (instead of exiting through
+        // the finally block) leaves the level files patched — every pickup then
+        // grants a small medipack in normal play. Restore any leftover backups
+        // BEFORE patching so every session starts from pristine files.
+        var startupBackups = new BackupManager(gameDir);
+        if (startupBackups.HasBackups())
+        {
+            ConsoleUI.Warning("Leftover level backups found — previous run did not shut down cleanly.");
+            startupBackups.RestoreAll();
+            ConsoleUI.Success("Original level files restored before patching.");
         }
 
         // Detect and swap save files before anything else
@@ -114,7 +174,8 @@ class Program
             ConsoleUI.Info($"Tracking {entityLocations.Values.Sum(m => m.Count)} pickup locations across {entityLocations.Count} levels.");
 
             var stateStore = new SaveStateStore(session.SlotName, session.Seed);
-            var watcher = new GameStateWatcher(session, memory, entityLocations, stateStore);
+            var watcher = new GameStateWatcher(
+                session, memory, entityLocations, stateStore, saveManager.SaveFilePath);
 
             ConsoleUI.Info("Waiting for game to launch...");
             ConsoleUI.Info("Start tomb123.exe and begin playing TR1!\n");
@@ -134,8 +195,11 @@ class Program
         {
             saveManager.SwapOut();
 
-            if (patcher?.BackupManager.HasBackups() == true &&
-                ConsoleUI.Confirm("Restore original level files?"))
+            // ALWAYS restore. Leaving the level files patched silently breaks
+            // normal play (sentinel pickups grant small medipacks instead of the
+            // real item), and the old y/n prompt defaulted to "no" whenever stdin
+            // was unavailable — which is every background/redirected run.
+            if (patcher?.BackupManager.HasBackups() == true)
             {
                 patcher.BackupManager.RestoreAll();
                 ConsoleUI.Success("Original files restored.");
@@ -1194,6 +1258,168 @@ class Program
     }
 
     /// <summary>
+    /// Attaches to tomb123.exe and plays a run of SFX_SECRET chimes, then a few
+    /// reference ids, so the Sound_Effect remote-call path can be validated live
+    /// inside a running level. Usage:
+    ///   TRArchipelagoClient.exe --sound-probe [sfxId ...]
+    /// Ids are the engine's own sound catalog ids; with no extra args it plays
+    /// SFX_SECRET (70) three times, then 9 (wolf) and 0x30 (menu compass) once
+    /// each as audible controls.
+    /// </summary>
+    private static async Task RunSoundProbeMode(string[] args)
+    {
+        var idArgs = args
+            .Where(a => !a.StartsWith("--") && int.TryParse(a, out _))
+            .Select(int.Parse)
+            .ToList();
+
+        var memory = new ProcessMemory();
+        ConsoleUI.Info("Waiting for tomb123.exe to attach...");
+        for (int i = 0; i < 60 && !memory.IsAttached; i++)
+        {
+            memory.TryAttach();
+            if (!memory.IsAttached)
+                await Task.Delay(1000);
+        }
+        if (!memory.IsAttached)
+        {
+            ConsoleUI.Error("tomb123.exe not found (start the game and try again).");
+            return;
+        }
+
+        if (memory.Tomb1Base == IntPtr.Zero)
+            memory.RefreshTomb1Base();
+        if (memory.Tomb1Base == IntPtr.Zero)
+        {
+            ConsoleUI.Error("tomb1.dll not loaded yet (get past the menu into a level).");
+            return;
+        }
+
+        var sound = new GameSound(memory);
+
+        var plan = idArgs.Count > 0
+            ? idArgs.Select(id => (Id: id, What: "probe")).ToList()
+            : new List<(int Id, string What)>
+            {
+                (TR1RMemoryMap.SfxSecret, "probe secret #1"),
+                (TR1RMemoryMap.SfxSecret, "probe secret #2"),
+                (TR1RMemoryMap.SfxSecret, "probe secret #3"),
+                (9, "probe wolf reference"),
+                (0x30, "probe menu-compass reference"),
+            };
+
+        foreach (var (id, what) in plan)
+        {
+            ConsoleUI.Info($"Probing sfx={id} ({what})...");
+            for (int burst = 0; burst < 3; burst++)
+            {
+                sound.Play(id, what);
+                await Task.Delay(300);
+            }
+            await Task.Delay(400);
+        }
+
+        ConsoleUI.Success("Sound probe complete.");
+        memory.Dispose();
+    }
+
+    /// <summary>
+    /// Dumps a run of 16-bit words from a live tomb1.dll RVA so the engine's
+    /// runtime-populated tables (notably the id → sound-map at 0x377920, which
+    /// is all zeros on disk) can be read out of a running game. Usage:
+    ///   TRArchipelagoClient.exe --dump-sfx-table [rva] [count]
+    /// Defaults to 0x377920, 0x200 words.
+    /// </summary>
+    private static async Task RunDumpSfxTableMode(string[] args)
+    {
+        int rva = 0x377920;
+        int count = 0x200;
+        var nums = args.Where(a => !a.StartsWith("--")).ToList();
+        if (nums.Count >= 1) rva = Convert.ToInt32(nums[0], 16);
+        if (nums.Count >= 2) count = Convert.ToInt32(nums[1], 16);
+
+        var memory = new ProcessMemory();
+        for (int i = 0; i < 60 && !memory.IsAttached; i++)
+        {
+            memory.TryAttach();
+            if (!memory.IsAttached)
+                await Task.Delay(1000);
+        }
+        if (!memory.IsAttached) { ConsoleUI.Error("tomb123.exe not found."); return; }
+        if (memory.Tomb1Base == IntPtr.Zero) memory.RefreshTomb1Base();
+        if (memory.Tomb1Base == IntPtr.Zero) { ConsoleUI.Error("tomb1.dll not loaded."); return; }
+
+        IntPtr t1 = memory.Tomb1Base;
+        ConsoleUI.Info($"Dumping {count} words from tomb1.dll+0x{rva:X} (base 0x{t1:X})...");
+        for (int i = 0; i < count; i++)
+        {
+            short v = memory.ReadInt16(t1 + rva + i * 2);
+            Console.WriteLine($"id {i,4} 0x{i:X4}: {v,6}");
+        }
+        memory.Dispose();
+    }
+
+    /// <summary>
+    /// Watches the engine's 32 active sample voices (stride 0x10 at tomb1.dll+0x12CB30,
+    /// count at [voice] = sample index) and prints every change, so a sound the
+    /// player triggers in-game can be attributed to its sound-catalog id by
+    /// matching the fired sample index against the live id → sample map
+    /// (word[base + 0x377920 + id*2]). Usage:
+    ///   TRArchipelagoClient.exe --watch-sfx [seconds]
+    /// </summary>
+    private static async Task RunWatchSfxMode(string[] args)
+    {
+        int seconds = 60;
+        var nums = args.Where(a => !a.StartsWith("--")).ToList();
+        if (nums.Count >= 1) int.TryParse(nums[0], out seconds);
+
+        var memory = new ProcessMemory();
+        for (int i = 0; i < 60 && !memory.IsAttached; i++)
+        {
+            memory.TryAttach();
+            if (!memory.IsAttached) await Task.Delay(1000);
+        }
+        if (!memory.IsAttached) { ConsoleUI.Error("tomb123.exe not found."); return; }
+        if (memory.Tomb1Base == IntPtr.Zero) memory.RefreshTomb1Base();
+        if (memory.Tomb1Base == IntPtr.Zero) { ConsoleUI.Error("tomb1.dll not loaded."); return; }
+
+        IntPtr t1 = memory.Tomb1Base;
+        // Voice slots: base 0x12CB30, stride 0x10. Field +0x0 is the playback
+        // cursor/position (churns constantly, not the id); the sample id lives at
+        // field +0x8, proven by Sound_Effect's store at 0x180088A99:
+        //   mov dword [rbx + rax*8 + 0x12cb38], r13d   (rbx=0x12cb30, rax=slot*2)
+        const int VoiceTable = 0x12CB30;
+        const int VoiceStride = 0x10;
+        const int VoiceSampleOff = 0x8;
+        const int VoiceCount = 0x20;
+
+        short[] last = new short[VoiceCount];
+        for (int v = 0; v < VoiceCount; v++)
+            last[v] = (short)memory.ReadInt32(t1 + VoiceTable + v * VoiceStride + VoiceSampleOff);
+
+        ConsoleUI.Info($"Watching {VoiceCount} voices at tomb1.dll+0x{VoiceTable:X} (sample field +0x{VoiceSampleOff:X}) for {seconds}s...");
+        ConsoleUI.Info("Trigger the sound in-game now.");
+
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        while (sw.Elapsed.TotalSeconds < seconds)
+        {
+            for (int v = 0; v < VoiceCount; v++)
+            {
+                int cur = memory.ReadInt32(t1 + VoiceTable + v * VoiceStride + VoiceSampleOff);
+                short prev = last[v];
+                if ((short)cur == prev) continue;
+                last[v] = (short)cur;
+                if (cur <= 0) continue;
+                Console.WriteLine($"[{sw.Elapsed.TotalSeconds,6:F1}s] voice {v,2}: sampleId {prev} -> {cur}");
+            }
+            await Task.Delay(25);
+        }
+
+        ConsoleUI.Success("Watch complete.");
+        memory.Dispose();
+    }
+
+    /// <summary>
     /// Auto-detect the TR1-3 Remastered game directory by scanning Steam library folders.
     /// </summary>
     private static string? DetectGameDirectory()
@@ -1257,5 +1483,534 @@ class Program
         int count = 0;
         while (v != 0) { count += v & 1; v >>= 1; }
         return count;
+    }
+
+    /// <summary>
+    /// One-shot offset identification for the build this game is running:
+    /// attach, wait for a level, run identify -> derive -> validate, then print
+    /// a per-group report plus a paste-ready manifest block for OffsetModel.
+    /// </summary>
+    private static async Task RunIdentifyMode()
+    {
+        ConsoleUI.Info("[IDENTIFY] Attaching to tomb123.exe...");
+
+        var memory = new ProcessMemory();
+        while (memory.Tomb1Base == IntPtr.Zero)
+        {
+            if (memory.TryAttach())
+            {
+                memory.RefreshTomb1Base();
+                if (memory.Tomb1Base != IntPtr.Zero) break;
+            }
+            await Task.Delay(1000);
+        }
+
+        ConsoleUI.Success($"Attached at 0x{memory.Tomb1Base:X} | build {OffsetModel.BuildHash}");
+
+        ConsoleUI.Info("[IDENTIFY] Waiting for a level to load...");
+        while (memory.ReadInt32(memory.Tomb1Base, TR1RMemoryMap.IsInGameScene) <= 0
+            || memory.ReadInt32(memory.Tomb1Base, TR1RMemoryMap.LevelId) == TR1RMemoryMap.Level_Home
+            || memory.ReadInt32(memory.Tomb1Base, TR1RMemoryMap.LevelId) == TR1RMemoryMap.Level_MainMenu)
+        {
+            await Task.Delay(500);
+        }
+
+        string? saveDir = SaveFileManager.DetectSaveDirectory();
+        string? saveFile = saveDir == null ? null : new SaveFileManager(saveDir).SaveFilePath;
+
+        OffsetIdentifier.IdentifyOnAttach(memory, saveFile);
+        OffsetIdentifier.IdentifyRing(memory, forceResolve: true);
+
+        foreach (var group in OffsetModel.AllGroups)
+        {
+            var report = OffsetModel.Report(group);
+            string line = $"{group,-9} {report.State,-10} attempts={report.Attempts}";
+            if (!string.IsNullOrEmpty(report.LastError)) line += $"  err: {report.LastError}";
+
+            if (report.State is OffsetState.Pending or OffsetState.Quarantined)
+                ConsoleUI.Warning(line);
+            else
+                ConsoleUI.Success(line);
+
+            foreach (var (name, value) in OffsetModel.Snapshot(group))
+                ConsoleUI.Info($"    {name,-22} 0x{value:X}");
+        }
+
+        string quarantined = OffsetModel.QuarantinedGroups();
+        if (!string.IsNullOrEmpty(quarantined))
+            ConsoleUI.Warning($"Quarantined groups: {quarantined}");
+
+        ConsoleUI.Info("[IDENTIFY] Done.");
+    }
+
+    /// <summary>
+    /// Read-only live dump of the inventory ring: every slot's pointer, relIdx,
+    /// object id and qty, the walk-terminated count, and every Int16 in the
+    /// neighbourhood that equals the walk count (i.e. the ambiguous MainRingCount
+    /// candidates). No writes — used to pin the count/qtys offsets.
+    /// </summary>
+    private static async Task RunOwnTestMode(string[] args)
+    {
+        var memory = new ProcessMemory();
+        while (memory.Tomb1Base == IntPtr.Zero)
+        {
+            if (memory.TryAttach())
+            {
+                memory.RefreshTomb1Base();
+                if (memory.Tomb1Base != IntPtr.Zero) break;
+            }
+            await Task.Delay(1000);
+        }
+
+        ConsoleUI.Info("[OWN] waiting for a level to load...");
+        while (memory.ReadInt32(memory.Tomb1Base, TR1RMemoryMap.IsInGameScene) <= 0)
+            await Task.Delay(500);
+        await Task.Delay(2000);
+
+        int relIdx = int.Parse(GetArg(args, 1, "-2")!);
+        bool setAf = args.Contains("--af");
+        bool setDf = args.Contains("--df");
+
+        IntPtr t1 = memory.Tomb1Base;
+        IntPtr pistols = OffsetIdentifier.FindPistols(memory, t1);
+        if (pistols == IntPtr.Zero)
+        {
+            ConsoleUI.Error("[OWN] no Pistols anchor found; aborting");
+            return;
+        }
+
+        IntPtr item = pistols + relIdx * TR1RMemoryMap.InventoryItemStride;
+        ConsoleUI.Info($"[OWN] pistols=0x{pistols.ToInt64():X} rel={relIdx} item=0x{item.ToInt64():X} objId={memory.ReadInt16(item + TR1RMemoryMap.InvItem_ObjectId)}");
+        ConsoleUI.Info($"[OWN] before: 0x7F={memory.ReadByte(item + 0x7F):X2} 0xAF={memory.ReadByte(item + 0xAF):X2} 0xDF={memory.ReadByte(item + 0xDF):X2} 0x8F={memory.ReadByte(item + 0x8F):X2}");
+
+        memory.Write(item + 0x7F, (byte)1);
+        if (setAf) memory.Write(item + 0xAF, (byte)1);
+        if (setDf) memory.Write(item + 0xDF, (byte)1);
+
+        ConsoleUI.Info($"[OWN] after:  0x7F={memory.ReadByte(item + 0x7F):X2} 0xAF={memory.ReadByte(item + 0xAF):X2} 0xDF={memory.ReadByte(item + 0xDF):X2} 0x8F={memory.ReadByte(item + 0x8F):X2}");
+        ConsoleUI.Info("[OWN] done (wrote 0x01 at +0x7F). Open the inventory and check.");
+    }
+
+    private static async Task RunScanRingsMode()
+    {
+        var memory = new ProcessMemory();
+        while (memory.Tomb1Base == IntPtr.Zero)
+        {
+            if (memory.TryAttach())
+            {
+                memory.RefreshTomb1Base();
+                if (memory.Tomb1Base != IntPtr.Zero) break;
+            }
+            await Task.Delay(1000);
+        }
+
+        ConsoleUI.Info("[SCAN] waiting for a level to load...");
+        while (memory.ReadInt32(memory.Tomb1Base, TR1RMemoryMap.IsInGameScene) <= 0
+            || memory.ReadInt32(memory.Tomb1Base, TR1RMemoryMap.LevelId) == TR1RMemoryMap.Level_Home
+            || memory.ReadInt32(memory.Tomb1Base, TR1RMemoryMap.LevelId) == TR1RMemoryMap.Level_MainMenu)
+        {
+            await Task.Delay(500);
+        }
+        await Task.Delay(3000);
+
+        IntPtr t1 = memory.Tomb1Base;
+        IntPtr pistols = OffsetIdentifier.FindPistols(memory, t1);
+        if (pistols == IntPtr.Zero)
+        {
+            ConsoleUI.Error("[SCAN] no Pistols anchor found; aborting");
+            return;
+        }
+
+        long pistolsAbs = pistols.ToInt64();
+        int stride = TR1RMemoryMap.InventoryItemStride;
+        ConsoleUI.Info($"[SCAN] tomb1=0x{t1.ToInt64():X}  pistols=0x{pistolsAbs:X}  stride=0x{stride:X}");
+
+        const int regionStart = 0x100000;
+        const int regionEnd = 0x160000;
+        byte[] image = memory.ReadBytes(t1 + regionStart, regionEnd - regionStart);
+
+        int found = 0;
+        for (int off = 0; off + 8 <= image.Length; )
+        {
+            long v = BitConverter.ToInt64(image, off);
+            long d = v - pistolsAbs;
+            bool isItem = v != 0 && d % stride == 0 && (d / stride) is >= -40 and <= 60;
+            if (!isItem)
+            {
+                off += 8;
+                continue;
+            }
+
+            int runStart = off;
+            var rels = new List<long>();
+            while (off + 8 <= image.Length)
+            {
+                long v2 = BitConverter.ToInt64(image, off);
+                long d2 = v2 - pistolsAbs;
+                if (v2 == 0 || d2 % stride != 0 || (d2 / stride) is < -40 or > 60) break;
+                rels.Add(d2 / stride);
+                off += 8;
+            }
+
+            if (rels.Count >= 2)
+            {
+                var ids = new List<string>();
+                for (int i = 0; i < rels.Count; i++)
+                {
+                    IntPtr p = (IntPtr)(pistolsAbs + rels[i] * stride);
+                    ids.Add($"{rels[i]}:{memory.ReadInt16(p + TR1RMemoryMap.InvItem_ObjectId)}");
+                }
+                ConsoleUI.Info($"[SCAN] array @tomb1+0x{runStart:X} (abs 0x{t1.ToInt64() + runStart:X}) len={rels.Count}  rel:objId = [{string.Join("  ", ids)}]");
+                found++;
+            }
+        }
+
+        ConsoleUI.Info($"[SCAN] {found} candidate pointer arrays (len>=2) in tomb1+0x{regionStart:X}..0x{regionEnd:X}");
+        ConsoleUI.Info("[SCAN] done (no writes performed).");
+    }
+
+    private static async Task RunRingDumpMode()
+    {
+        var memory = new ProcessMemory();
+        while (memory.Tomb1Base == IntPtr.Zero)
+        {
+            if (memory.TryAttach())
+            {
+                memory.RefreshTomb1Base();
+                if (memory.Tomb1Base != IntPtr.Zero) break;
+            }
+            await Task.Delay(1000);
+        }
+
+        ConsoleUI.Info("[DUMP] waiting for a level to load...");
+        while (memory.ReadInt32(memory.Tomb1Base, TR1RMemoryMap.IsInGameScene) <= 0
+            || memory.ReadInt32(memory.Tomb1Base, TR1RMemoryMap.LevelId) == TR1RMemoryMap.Level_Home
+            || memory.ReadInt32(memory.Tomb1Base, TR1RMemoryMap.LevelId) == TR1RMemoryMap.Level_MainMenu)
+        {
+            await Task.Delay(500);
+        }
+
+        // Don't race level initialization: wait until entities exist and the
+        // camera has been positioned, otherwise the group validators fire
+        // false positives on a half-loaded level.
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        while ((memory.ReadInt32(memory.Tomb1Base, TR1RMemoryMap.EntitiesCount) <= 0
+                || memory.ReadInt32(memory.Tomb1Base + TR1RMemoryMap.CameraX) == 0)
+               && sw.ElapsedMilliseconds < 15000)
+        {
+            await Task.Delay(250);
+        }
+
+        string? saveDir = SaveFileManager.DetectSaveDirectory();
+        string? saveFile = saveDir == null ? null : new SaveFileManager(saveDir).SaveFilePath;
+
+        OffsetIdentifier.IdentifyOnAttach(memory, saveFile);
+        OffsetIdentifier.IdentifyRing(memory, forceResolve: true);
+
+        IntPtr t1 = memory.Tomb1Base;
+        int items = TR1RMemoryMap.MainRingItems;
+        int qtys = TR1RMemoryMap.MainRingQtys;
+        int countOff = TR1RMemoryMap.MainRingCount;
+
+        IntPtr pistols = OffsetIdentifier.FindPistols(memory, t1);
+        if (pistols == IntPtr.Zero)
+            pistols = (IntPtr)(t1.ToInt64() + items - TR1RMemoryMap.InvItemRelIndex.Compass * TR1RMemoryMap.InventoryItemStride);
+
+        int levelId = memory.ReadInt32(t1, TR1RMemoryMap.LevelId);
+        ConsoleUI.Info($"[DUMP] build {OffsetModel.BuildHash}");
+        ConsoleUI.Info($"[DUMP] level={levelId}  tomb1=0x{t1.ToInt64():X}  pistols=0x{pistols.ToInt64():X}");
+
+        // --- slots ---
+        int walk = 0;
+        var rows = new List<string>();
+        for (int i = 0; i < TR1RMemoryMap.MaxRingItems; i++)
+        {
+            long ptr = memory.ReadInt64(t1 + items + i * 8);
+            if (ptr == 0)
+            {
+                rows.Add($"  [{i,2}] NULL");
+                continue;
+            }
+
+            long delta = ptr - pistols.ToInt64();
+            bool aligned = delta % TR1RMemoryMap.InventoryItemStride == 0;
+            long rel = aligned ? delta / TR1RMemoryMap.InventoryItemStride : long.MinValue;
+            short objId = memory.ReadInt16((IntPtr)ptr + TR1RMemoryMap.InvItem_ObjectId);
+            short qty = memory.ReadInt16(t1 + qtys + i * 2);
+
+            rows.Add($"  [{i,2}] ptr=0x{ptr:X} rel={(aligned ? rel.ToString() : "?"),4} objId={objId,4} qty={qty,4}");
+
+            if (aligned && rel is >= -40 and <= 60 && i == walk) walk++;
+        }
+
+        short countValue = memory.ReadInt16(t1 + countOff);
+        ConsoleUI.Info($"[DUMP] items=0x{items:X} qtys=0x{qtys:X} countField=0x{countOff:X} (value={countValue})  walk={walk}");
+
+        // --- per-item struct bytes: owned vs unowned differ somewhere ---
+        ConsoleUI.Info("[DUMP] ring entry struct bytes 0x00-0x5F:");
+        for (int i = 0; i < TR1RMemoryMap.MaxRingItems; i++)
+        {
+            long ptr = memory.ReadInt64(t1 + items + i * 8);
+            if (ptr == 0) continue;
+            byte[] bb = memory.ReadBytes((IntPtr)ptr, 0x60);
+            var sb = new System.Text.StringBuilder();
+            for (int b = 0; b < bb.Length; b++)
+            {
+                if (b > 0) sb.Append(' ');
+                if (b % 0x10 == 0 && b > 0) sb.Append('|').Append(' ');
+                sb.Append(bb[b].ToString("X2"));
+            }
+            ConsoleUI.Info($"  [{i,2}] rel={((ptr - pistols.ToInt64()) % TR1RMemoryMap.InventoryItemStride == 0 ? ((ptr - pistols.ToInt64()) / TR1RMemoryMap.InventoryItemStride).ToString() : "?"),3} {sb}");
+        }
+
+        // --- diagnostic: ownership-flag hunt ---
+        // Ground truth from the player: slots 0,1,2 (compass, pistols, small med)
+        // are visible/owned; slots 3,4,5 (magnums, uzis, large med) exist in the
+        // array but are NOT shown. Print every byte offset where the owned set is
+        // internally uniform and differs from the unowned set.
+        {
+            const int probe = 0x100;
+            byte[][] structs = new byte[6][];
+            bool ok = true;
+            for (int i = 0; i < 6; i++)
+            {
+                long ptr = memory.ReadInt64(t1 + items + i * 8);
+                if (ptr == 0) { ok = false; break; }
+                structs[i] = memory.ReadBytes((IntPtr)ptr, probe);
+            }
+            if (ok)
+            {
+                ConsoleUI.Info("[DUMP] ownership flag candidates (owned={0,1,2} unowned={3,4,5}, 0x00-0xFF):");
+                int hitsn = 0;
+                for (int b = 0; b < 0x100; b++)
+                {
+                    byte o = structs[0][b];
+                    bool ownedSame = structs[1][b] == o && structs[2][b] == o;
+                    bool unownedDiffer = structs[3][b] != o && structs[4][b] != o && structs[5][b] != o;
+                    if (ownedSame && unownedDiffer)
+                    {
+                        ConsoleUI.Info($"   0x{b:X2}: owned={o:X2}  unowned={structs[3][b]:X2},{structs[4][b]:X2},{structs[5][b]:X2}");
+                        hitsn++;
+                    }
+                }
+                if (hitsn == 0) ConsoleUI.Info("   (none found with owned==owned && unowned!=owned)");
+            }
+        }
+        foreach (var row in rows) ConsoleUI.Info(row);
+
+        // --- header int16s right before the items array (plausible count slots) ---
+        var header = new List<string>();
+        for (int o = items - 0x20; o < items; o += 2)
+            header.Add($"0x{o:X}={memory.ReadInt16(t1 + o)}");
+        ConsoleUI.Info($"[DUMP] header: {string.Join("  ", header)}");
+
+        // --- every Int16 nearby equal to the walk count (the ambiguous candidates) ---
+        var hits = new List<string>();
+        for (int o = Math.Max(0, items - 0x4000); o <= items + 0x4000 && hits.Count < 40; o += 2)
+        {
+            if (o >= items && o < items + TR1RMemoryMap.MaxRingItems * 8) continue;
+            if (memory.ReadInt16(t1 + o) == walk) hits.Add($"0x{o:X}(+{o - items:X})");
+        }
+        ConsoleUI.Info($"[DUMP] Int16 == walk({walk}) near items: {string.Join("  ", hits)}");
+
+        // --- fixed candidate list: every offset that read walk in a prior dump ---
+        // Kept across states so a New Game (walk=2) vs NG+ (walk=7) comparison
+        // uniquely identifies the real count field among coincidences.
+        int[] tracked =
+        {
+            0x11C788, 0x11C7DC, 0x11CC1C, 0x11D60C, 0x11D71C, 0x11D72C, 0x11D73C,
+            0x11D76C, 0x11EE80, 0x11EFA0, 0x11F080, 0x11F0B8, 0x11F2D8,
+            items - 2, items - 4, items - 6, items - 8, items + TR1RMemoryMap.MaxRingItems * 8,
+        };
+        var trackedVals = new List<string>();
+        foreach (int c in tracked.Distinct())
+            trackedVals.Add($"0x{c:X}={memory.ReadInt16(t1 + c)}");
+        ConsoleUI.Info($"[DUMP] tracked candidates: {string.Join("  ", trackedVals)}");
+
+        // --- Int32 (not Int16) count candidates in case the field is 32-bit ---
+        var i32hits = new List<string>();
+        for (int o = Math.Max(0, items - 0x4000); o <= items + 0x4000 && i32hits.Count < 30; o += 4)
+        {
+            if (o >= items && o < items + TR1RMemoryMap.MaxRingItems * 8) continue;
+            if (memory.ReadInt32(t1 + o) == walk) i32hits.Add($"0x{o:X}(+{o - items:X})");
+        }
+        ConsoleUI.Info($"[DUMP] Int32 == walk({walk}): {string.Join("  ", i32hits)}");
+
+        // --- entity field scan: find which offset actually holds object_id ---
+        IntPtr ent = memory.ReadPointer(t1, TR1RMemoryMap.EntitiesPointer);
+        int entCount = memory.ReadInt32(t1 + TR1RMemoryMap.EntitiesCount);
+        ConsoleUI.Info($"[DUMP] entities=0x{ent.ToInt64():X} count={entCount} stride=0x{TR1RMemoryMap.EntitySize:X}");
+        for (int i = 0; i < 6 && i < entCount; i++)
+        {
+            var parts = new List<string>();
+            for (int f = 0; f <= 0x1E; f += 2)
+                parts.Add($"{f:X2}={memory.ReadInt16(ent + i * TR1RMemoryMap.EntitySize + f)}");
+            ConsoleUI.Info($"  ent[{i}]: {string.Join(" ", parts)}");
+        }
+
+        // --- keys ring walked independently of the (bad) count guess ---
+        int kItems = TR1RMemoryMap.KeysRingItems;
+        ConsoleUI.Info($"[DUMP] keys items walk @0x{kItems:X} (unconditional, 24 slots):");
+        int kWalk = 0;
+        for (int i = 0; i < TR1RMemoryMap.MaxRingItems; i++)
+        {
+            long ptr = memory.ReadInt64(t1 + kItems + i * 8);
+            if (ptr == 0)
+            {
+                ConsoleUI.Info($"  keys[{i}] NULL");
+                continue;
+            }
+            long delta = ptr - pistols.ToInt64();
+            bool aligned = delta % TR1RMemoryMap.InventoryItemStride == 0;
+            short objId = aligned ? memory.ReadInt16((IntPtr)ptr + TR1RMemoryMap.InvItem_ObjectId) : (short)-999;
+            if (aligned && objId is >= 0 and <= 900 && i == kWalk) kWalk++;
+            ConsoleUI.Info(
+                $"  keys[{i}] ptr=0x{ptr:X} rel={(aligned ? (delta / TR1RMemoryMap.InventoryItemStride).ToString() : "?"),4}" +
+                $" objId={objId,4}");
+        }
+        ConsoleUI.Info(
+            $"  keys walk={kWalk} (count field 0x{TR1RMemoryMap.KeysRingCount:X} says " +
+            $"{memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingCount)})");
+
+        // --- competing qtys arrays (derived vs the old patch4.1 guess) ---
+        foreach (int candidate in new[] { qtys, 0x11BDD8, 0x11BFF0 })
+        {
+            var vals = new List<string>();
+            for (int i = 0; i < 12; i++) vals.Add(memory.ReadInt16(t1 + candidate + i * 2).ToString());
+            ConsoleUI.Info($"[DUMP] qtys@0x{candidate:X}: {string.Join(",", vals)}");
+        }
+
+        // --- keys ring as currently guessed ---
+        int kCount = TR1RMemoryMap.KeysRingCount, kQtys = TR1RMemoryMap.KeysRingQtys;
+        short kCountValue = memory.ReadInt16(t1 + kCount);
+        ConsoleUI.Info($"[DUMP] keys: countField=0x{kCount:X} (value={kCountValue}) items=0x{kItems:X} qtys=0x{kQtys:X}");
+        if (kCountValue is > 0 and <= 24)
+        {
+            for (int i = 0; i < kCountValue; i++)
+            {
+                long ptr = memory.ReadInt64(t1 + kItems + i * 8);
+                long delta = ptr - pistols.ToInt64();
+                bool aligned = delta % TR1RMemoryMap.InventoryItemStride == 0;
+                short objId = ptr == 0 ? (short)-1 : memory.ReadInt16((IntPtr)ptr + TR1RMemoryMap.InvItem_ObjectId);
+                short qty = memory.ReadInt16(t1 + kQtys + i * 2);
+                ConsoleUI.Info(
+                    $"  keys[{i}] ptr=0x{ptr:X} rel={(aligned ? (delta / TR1RMemoryMap.InventoryItemStride).ToString() : "?"),4}" +
+                    $" objId={objId,4} qty={qty,4}");
+            }
+        }
+
+        // --- save-file slot sanity (the SaveSlot group) ---
+        if (saveFile != null && File.Exists(saveFile))
+        {
+            var fi = new FileInfo(saveFile);
+            ConsoleUI.Info(
+                $"[DUMP] save file {fi.Length} bytes; map assumes base=0x{TR1RMemoryMap.SaveFileBaseOffset:X} " +
+                $"slot=0x{TR1RMemoryMap.SaveSlotSize:X} max={TR1RMemoryMap.MaxSaveSlots}");
+        }
+
+        ConsoleUI.Info("[DUMP] done (no writes performed).");
+    }
+
+    /// <summary>
+    /// Live test harness for the native give path:
+    ///   TRArchipelagoClient.exe --give &lt;objId&gt; [keys]
+    /// Attaches, waits for a level, dumps both rings, prints the loaded-object
+    /// flags for the id and its alias, calls Inv_AddItem(objId) in-process,
+    /// then dumps the rings again. Success is judged by ring read-back only
+    /// (the function's return value is ambiguous).
+    /// </summary>
+    private static async Task RunGiveMode(string[] args)
+    {
+        int idx = Array.IndexOf(args, "--give");
+        string? objStr = idx >= 0 && idx + 1 < args.Length ? args[idx + 1] : null;
+        if (objStr == null || !int.TryParse(objStr, out int objId))
+        {
+            ConsoleUI.Error("usage: --give <objId> [keys]");
+            return;
+        }
+        bool keysRing = idx >= 0 && idx + 2 < args.Length && args[idx + 2] == "keys";
+
+        var memory = new ProcessMemory();
+        while (memory.Tomb1Base == IntPtr.Zero)
+        {
+            if (memory.TryAttach())
+            {
+                memory.RefreshTomb1Base();
+                if (memory.Tomb1Base != IntPtr.Zero) break;
+            }
+            await Task.Delay(1000);
+        }
+
+        ConsoleUI.Info("[GIVE] waiting for a level to load...");
+        while (memory.ReadInt32(memory.Tomb1Base, TR1RMemoryMap.IsInGameScene) <= 0
+            || memory.ReadInt32(memory.Tomb1Base, TR1RMemoryMap.LevelId) == TR1RMemoryMap.Level_Home
+            || memory.ReadInt32(memory.Tomb1Base, TR1RMemoryMap.LevelId) == TR1RMemoryMap.Level_MainMenu)
+        {
+            await Task.Delay(500);
+        }
+
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        while ((memory.ReadInt32(memory.Tomb1Base, TR1RMemoryMap.EntitiesCount) <= 0
+                || memory.ReadInt32(memory.Tomb1Base + TR1RMemoryMap.CameraX) == 0)
+               && sw.ElapsedMilliseconds < 15000)
+        {
+            await Task.Delay(250);
+        }
+
+        string? saveDir = SaveFileManager.DetectSaveDirectory();
+        string? saveFile = saveDir == null ? null : new SaveFileManager(saveDir).SaveFilePath;
+
+        OffsetIdentifier.IdentifyOnAttach(memory, saveFile);
+        OffsetIdentifier.IdentifyRing(memory, forceResolve: true);
+
+        IntPtr t1 = memory.Tomb1Base;
+        int levelId = memory.ReadInt32(t1, TR1RMemoryMap.LevelId);
+        ConsoleUI.Info($"[GIVE] level={levelId}  tomb1=0x{t1.ToInt64():X}  objId={objId}  ring={(keysRing ? "keys" : "main")}");
+
+        byte[] live = memory.ReadBytes(t1 + TR1RMemoryMap.InvAddItem, TR1RMemoryMap.InvAddItemSignature.Length);
+        bool sigOk = live.SequenceEqual(TR1RMemoryMap.InvAddItemSignature);
+        ConsoleUI.Info($"[GIVE] Inv_AddItem live: {BitConverter.ToString(live)} {(sigOk ? "(MATCH)" : "(MISMATCH)")}");
+
+        byte flag = memory.ReadByte(t1 + objId * TR1RMemoryMap.InvLoadedFlagStride + TR1RMemoryMap.InvLoadedFlagTable);
+        ConsoleUI.Info($"[GIVE] loadedObjectFlag[{objId}] = {flag}");
+        if (InventoryManager.AliasOfObjId(objId) is int alias)
+        {
+            byte aliasFlag = memory.ReadByte(t1 + alias * TR1RMemoryMap.InvLoadedFlagStride + TR1RMemoryMap.InvLoadedFlagTable);
+            ConsoleUI.Info($"[GIVE] alias {alias}: loadedObjectFlag[{alias}] = {aliasFlag}");
+        }
+
+        void DumpRing(string name, int itemsOff, int countOff, int qtysOff)
+        {
+            short count = memory.ReadInt16(t1 + countOff);
+            ConsoleUI.Info($"[GIVE] {name} (count field = {count}):");
+            for (int i = 0; i < TR1RMemoryMap.MaxRingItems; i++)
+            {
+                long ptr = memory.ReadInt64(t1 + itemsOff + i * 8);
+                if (ptr == 0)
+                {
+                    if (i < count) ConsoleUI.Info($"  [{i,2}] NULL (within count)");
+                    continue;
+                }
+                short oid = memory.ReadInt16((IntPtr)ptr + TR1RMemoryMap.InvItem_ObjectId);
+                short qty = memory.ReadInt16(t1 + qtysOff + i * 2);
+                ConsoleUI.Info($"  [{i,2}] objId={oid,4} qty={qty,4} ptr=0x{ptr:X}");
+            }
+        }
+
+        ConsoleUI.Info("[GIVE] --- BEFORE ---");
+        DumpRing("main ring", TR1RMemoryMap.MainRingItems, TR1RMemoryMap.MainRingCount, TR1RMemoryMap.MainRingQtys);
+        DumpRing("keys ring", TR1RMemoryMap.KeysRingItems, TR1RMemoryMap.KeysRingCount, TR1RMemoryMap.KeysRingQtys);
+
+        uint? exit = memory.CallRemote(t1 + TR1RMemoryMap.InvAddItem, objId);
+        ConsoleUI.Info(exit.HasValue
+            ? $"[GIVE] CallRemote returned 0x{exit:X} (ambiguous — trust the read-back)"
+            : "[GIVE] CallRemote FAILED (null: not attached / create failed / timeout)");
+        await Task.Delay(300);
+
+        ConsoleUI.Info("[GIVE] --- AFTER ---");
+        DumpRing("main ring", TR1RMemoryMap.MainRingItems, TR1RMemoryMap.MainRingCount, TR1RMemoryMap.MainRingQtys);
+        DumpRing("keys ring", TR1RMemoryMap.KeysRingItems, TR1RMemoryMap.KeysRingCount, TR1RMemoryMap.KeysRingQtys);
+
+        ConsoleUI.Info("[GIVE] done.");
     }
 }

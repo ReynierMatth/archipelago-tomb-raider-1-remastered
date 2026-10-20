@@ -268,6 +268,7 @@ public class SaveFileGameWatcher : IDisposable
             }
 
             ConsoleUI.ItemReceived(itemName, playerName);
+            // Sound played by GameStateWatcher in realtime mode; savefile mode logs only
             _itemsReceivedIndex++;
         }
 

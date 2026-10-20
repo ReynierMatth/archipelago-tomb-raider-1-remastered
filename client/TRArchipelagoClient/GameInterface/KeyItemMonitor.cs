@@ -28,7 +28,7 @@ public class KeyItemMonitor
         _lastKeysRing.Clear();
 
         IntPtr t1 = _memory.Tomb1Base;
-        short count = _memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingCount);
+        short count = OffsetIdentifier.RingWalk(_memory, TR1RMemoryMap.KeysRingItems);
 
         for (int i = 0; i < count; i++)
         {
@@ -52,7 +52,7 @@ public class KeyItemMonitor
         var result = new List<(long, short)>();
 
         IntPtr t1 = _memory.Tomb1Base;
-        short count = _memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingCount);
+        short count = OffsetIdentifier.RingWalk(_memory, TR1RMemoryMap.KeysRingItems);
 
         // Build current state
         var currentRing = new Dictionary<long, short>();

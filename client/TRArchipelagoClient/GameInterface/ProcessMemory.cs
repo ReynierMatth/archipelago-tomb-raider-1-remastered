@@ -22,11 +22,69 @@ public class ProcessMemory : IDisposable
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool CloseHandle(IntPtr hObject);
 
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern IntPtr CreateRemoteThread(
+        IntPtr hProcess, IntPtr lpThreadAttributes, UIntPtr dwStackSize,
+        IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, out IntPtr lpThreadId);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern uint WaitForSingleObject(IntPtr hHandle, uint dwMilliseconds);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool GetExitCodeThread(IntPtr hThread, out uint lpExitCode);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern IntPtr OpenThread(uint dwDesiredAccess, bool bInheritHandle, uint dwThreadId);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern uint SuspendThread(IntPtr hThread);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern uint ResumeThread(IntPtr hThread);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, UIntPtr dwSize,
+        uint flAllocationType, uint flProtect);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool VirtualFreeEx(IntPtr hProcess, IntPtr lpAddress, UIntPtr dwSize,
+        uint dwFreeType);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern IntPtr CreateToolhelp32Snapshot(uint dwFlags, uint th32ProcessID);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool Thread32First(IntPtr hSnapshot, ref THREADENTRY32 lpte);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool Thread32Next(IntPtr hSnapshot, ref THREADENTRY32 lpte);
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct THREADENTRY32
+    {
+        public uint dwSize;
+        public uint cntUsage;
+        public uint th32ThreadID;
+        public uint th32OwnerProcessID;
+        public int tpBasePri;
+        public int tpDeltaPri;
+        public uint dwFlags;
+    }
+
     private const int PROCESS_VM_READ = 0x0010;
     private const int PROCESS_VM_WRITE = 0x0020;
     private const int PROCESS_VM_OPERATION = 0x0008;
     private const int PROCESS_QUERY_INFORMATION = 0x0400;
+    private const int PROCESS_CREATE_THREAD = 0x0002;
 
+    private const uint TH32CS_SNAPTHREAD = 0x00000004;
+    private const uint THREAD_SUSPEND_RESUME = 0x0002;
+    private const uint WAIT_OBJECT_0 = 0x00000000;
+
+    private const uint MEM_COMMIT = 0x00001000;
+    private const uint MEM_RESERVE = 0x00002000;
+    private const uint MEM_RELEASE = 0x00008000;
+    private const uint PAGE_EXECUTE_READWRITE = 0x40;
     private IntPtr _processHandle;
     private Process? _gameProcess;
     private IntPtr _exeBaseAddress;
@@ -53,7 +111,7 @@ public class ProcessMemory : IDisposable
         _gameProcess = processes[0];
 
         _processHandle = OpenProcess(
-            PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION | PROCESS_QUERY_INFORMATION,
+            PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION | PROCESS_QUERY_INFORMATION | PROCESS_CREATE_THREAD,
             false,
             _gameProcess.Id);
 
@@ -62,6 +120,9 @@ public class ProcessMemory : IDisposable
 
         _exeBaseAddress = _gameProcess.MainModule?.BaseAddress ?? IntPtr.Zero;
         _tomb1DllBase = FindModuleBase(TR1RMemoryMap.TR1ModuleName);
+
+        // Offset layer keys its manifest on the on-disk build of the host exe.
+        OffsetModel.CurrentExePath ??= _gameProcess.MainModule?.FileName;
 
         return true;
     }
@@ -229,6 +290,191 @@ public class ProcessMemory : IDisposable
         => Write(address, value);
 
     // =================================================================
+    // REMOTE CALL (CreateRemoteThread)
+    // =================================================================
+
+    /// <summary>
+    /// Calls a function inside the attached process via CreateRemoteThread.
+    /// The target must have the signature DWORD fn(int arg) — arg arrives in RCX
+    /// (x64 first parameter / thread parameter). All other threads of the target
+    /// process are suspended while the call runs so it does not race the game's
+    /// main loop; they are always resumed in finally.
+    /// Returns the remote function's return value (EAX) or null on failure/timeout.
+    /// On timeout the remote thread is left to finish once threads resume; the
+    /// caller should treat null as "retry later". Exit codes are informational
+    /// only — callers must verify effects (e.g. ring read-back), because
+    /// Inv_AddItem returns 0 both for success and refusal in some paths.
+    /// </summary>
+    public uint? CallRemote(IntPtr func, int arg, int timeoutMs = 2000)
+    {
+        if (!IsAttached || _processHandle == IntPtr.Zero || func == IntPtr.Zero || _gameProcess == null)
+            return null;
+
+        var suspended = SuspendOtherThreads();
+        IntPtr hRemote = IntPtr.Zero;
+        try
+        {
+            hRemote = CreateRemoteThread(_processHandle, IntPtr.Zero, UIntPtr.Zero,
+                func, new IntPtr(arg), 0, out _);
+            if (hRemote == IntPtr.Zero)
+                return null;
+
+            if (WaitForSingleObject(hRemote, (uint)timeoutMs) != WAIT_OBJECT_0)
+                return null;
+
+            if (!GetExitCodeThread(hRemote, out uint exitCode))
+                return null;
+
+            return exitCode;
+        }
+        finally
+        {
+            if (hRemote != IntPtr.Zero)
+                CloseHandle(hRemote);
+            ResumeThreads(suspended);
+        }
+    }
+
+    /// <summary>
+    /// Calls a function inside the attached process with all three x64 register
+    /// parameters set explicitly — <c>DWORD fn(long rcx, long rdx, long r8d)</c>.
+    ///
+    /// <see cref="CallRemote"/> can only hand its single argument to RCX (the
+    /// thread parameter), which is enough for Inv_AddItem but not for
+    /// three-argument entry points such as Sound_Effect(sfx, pos, flags).
+    /// This variant allocates a 42-byte trampoline inside the target that loads
+    /// RCX/RDX/R8 and jumps to <paramref name="func"/>; the target's own RET then
+    /// returns straight to the thread start routine, so EAX becomes the thread
+    /// exit code.
+    ///
+    /// Same suspension contract as CallRemote: every other thread of the target
+    /// is suspended while the call runs, so it cannot race the game's main loop.
+    /// Returns the target's return value or null on failure/timeout.
+    ///
+    /// The trampoline page is freed only after the remote thread has finished.
+    /// On timeout it is deliberately leaked — the thread may still be executing
+    /// it, and freeing it under a live thread would crash the game.
+    /// </summary>
+    public uint? CallRemote3(IntPtr func, long rcx, long rdx, long r8d, int timeoutMs = 2000)
+    {
+        if (!IsAttached || _processHandle == IntPtr.Zero || func == IntPtr.Zero || _gameProcess == null)
+            return null;
+
+        byte[] stub = BuildTrampoline(func, rcx, rdx, r8d);
+        IntPtr remote = VirtualAllocEx(_processHandle, IntPtr.Zero, (UIntPtr)stub.Length,
+            MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+        if (remote == IntPtr.Zero)
+            return null;
+
+        if (!WriteProcessMemory(_processHandle, remote, stub, stub.Length, out int written) ||
+            written != stub.Length)
+        {
+            VirtualFreeEx(_processHandle, remote, UIntPtr.Zero, MEM_RELEASE);
+            return null;
+        }
+
+        var suspended = SuspendOtherThreads();
+        IntPtr hRemote = IntPtr.Zero;
+        bool finished = false;
+        try
+        {
+            hRemote = CreateRemoteThread(_processHandle, IntPtr.Zero, UIntPtr.Zero,
+                remote, IntPtr.Zero, 0, out _);
+            if (hRemote == IntPtr.Zero)
+                return null;
+
+            if (WaitForSingleObject(hRemote, (uint)timeoutMs) != WAIT_OBJECT_0)
+                return null;
+
+            if (!GetExitCodeThread(hRemote, out uint exitCode))
+                return null;
+
+            finished = true;
+            return exitCode;
+        }
+        finally
+        {
+            if (hRemote != IntPtr.Zero)
+                CloseHandle(hRemote);
+            ResumeThreads(suspended);
+            if (finished)
+                VirtualFreeEx(_processHandle, remote, UIntPtr.Zero, MEM_RELEASE);
+        }
+    }
+
+    /// <summary>
+    /// Builds the in-process trampoline:
+    ///   mov rcx,imm64 / mov rdx,imm64 / mov r8,imm64 / mov rax,func / jmp rax
+    /// 42 bytes. The jmp is a tail call, so no return address is pushed here.
+    /// </summary>
+    private static byte[] BuildTrampoline(IntPtr func, long rcx, long rdx, long r8d)
+    {
+        var stub = new byte[42];
+        int i = 0;
+
+        void Op(params byte[] bytes)
+        {
+            foreach (byte b in bytes) stub[i++] = b;
+        }
+
+        void Imm64(long value)
+        {
+            foreach (byte b in BitConverter.GetBytes(value)) stub[i++] = b;
+        }
+
+        Op(0x48, 0xB9); Imm64(rcx);                          // mov rcx, imm64
+        Op(0x48, 0xBA); Imm64(rdx);                          // mov rdx, imm64
+        Op(0x49, 0xB8); Imm64(r8d);                          // mov r8,  imm64
+        Op(0x48, 0xB8); Imm64(func.ToInt64());               // mov rax, func
+        Op(0xFF, 0xE0);                                      // jmp rax
+        return stub;
+    }
+
+    /// <summary>
+    /// Suspends every thread of the attached game except the caller's own, so a
+    /// remote call cannot race the game's main loop. Handles are returned for
+    /// <see cref="ResumeThreads"/>; they are always resumed by the caller's finally.
+    /// </summary>
+    private List<IntPtr> SuspendOtherThreads()
+    {
+        var suspended = new List<IntPtr>();
+        if (_gameProcess == null)
+            return suspended;
+
+        IntPtr snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+        if (snapshot != new IntPtr(-1))
+        {
+            var te = new THREADENTRY32 { dwSize = (uint)Marshal.SizeOf<THREADENTRY32>() };
+            if (Thread32First(snapshot, ref te))
+            {
+                do
+                {
+                    if (te.th32OwnerProcessID != (uint)_gameProcess.Id)
+                        continue;
+                    IntPtr hThread = OpenThread(THREAD_SUSPEND_RESUME, false, te.th32ThreadID);
+                    if (hThread == IntPtr.Zero)
+                        continue;
+                    if (SuspendThread(hThread) != 0xFFFFFFFF)
+                        suspended.Add(hThread);
+                    else
+                        CloseHandle(hThread);
+                } while (Thread32Next(snapshot, ref te));
+            }
+            CloseHandle(snapshot);
+        }
+        return suspended;
+    }
+
+    private void ResumeThreads(List<IntPtr> suspended)
+    {
+        foreach (IntPtr h in suspended)
+        {
+            ResumeThread(h);
+            CloseHandle(h);
+        }
+    }
+
+    // =================================================================
     // AOB SCANNING
     // =================================================================
 
@@ -257,9 +503,7 @@ public class ProcessMemory : IDisposable
         public uint Type;
     }
 
-    private const uint MEM_COMMIT = 0x1000;
     private const uint PAGE_READWRITE = 0x04;
-    private const uint PAGE_EXECUTE_READWRITE = 0x40;
     private const uint PAGE_WRITECOPY = 0x08;
 
     /// <summary>

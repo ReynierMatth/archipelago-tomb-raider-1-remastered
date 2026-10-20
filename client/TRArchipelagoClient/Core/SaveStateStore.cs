@@ -73,6 +73,24 @@ public class SaveStateStore
             ConsoleUI.Error($"[SAVE] Failed to persist state: {ex.Message}");
         }
     }
+
+    /// <summary>
+    /// Drops every per-save snapshot. Called when a brand-new game is started:
+    /// the previous save's cached check-sets and injection indices no longer
+    /// describe the live (wiped) inventory, so reconciling from them would be
+    /// wrong. The AP server stays the source of truth for what was checked, so
+    /// nothing is re-sent (the server dedups) while all received items are
+    /// re-injected by the caller.
+    /// </summary>
+    public void ResetForNewGame()
+    {
+        if (_data.Snapshots.Count == 0)
+            return;
+
+        ConsoleUI.Info($"[SAVE] New game — discarding {_data.Snapshots.Count} stale snapshot(s)");
+        _data.Snapshots.Clear();
+        Persist();
+    }
 }
 
 /// <summary>
@@ -112,4 +130,12 @@ public class SaveSnapshot
 
     /// <summary>Index into the AP item stream at the time of save.</summary>
     public int ItemsReceivedIndex { get; set; }
+
+    /// <summary>
+    /// How many ring items were actually INJECTED into the game at save time.
+    /// Absent (0) in snapshots written before this field existed — those are
+    /// treated as "nothing injected yet" so stale snapshots can never suppress
+    /// items that only reached the AP stream but never reached the inventory.
+    /// </summary>
+    public int ItemsInjectedIndex { get; set; }
 }

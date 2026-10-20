@@ -5,14 +5,14 @@ namespace TRArchipelagoClient.Core;
 ///
 /// ID Schema:
 ///   Pickup locations:    780000 + level_index * 1000 + entity_index
-///   Secret locations:    790000 + level_index * 10 + secret_index
-///   Level completion:    795000 + level_index
+///   Secret locations:    795000 + level_index * 10 + secret_index
+///   Level completion:    796000 + level_index
 /// </summary>
 public static class LocationMapper
 {
     private const int PickupBaseId = 780_000;
-    private const int SecretBaseId = 790_000;
-    private const int LevelCompleteBaseId = 795_000;
+    private const int SecretBaseId = 795_000;
+    private const int LevelCompleteBaseId = 796_000;
 
     private static readonly string[] LevelFiles =
     {

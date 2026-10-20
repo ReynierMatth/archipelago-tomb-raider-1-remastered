@@ -8,29 +8,38 @@ namespace TRArchipelagoClient.GameInterface;
 /// Injects received items into the game in real-time via process memory.
 ///
 /// Injection strategy by item type:
-///   - Weapons: Inject into Main Ring + set WSB weapon flag + give starting ammo
-///   - Ammo: Write directly to LARA_INFO ammo fields (instant, no ring needed)
-///   - Medipacks: Inject into Main Ring (qty increment if already present)
-///   - Key items: Inject into Keys Ring (same mechanic, different ring offsets)
-///   - Traps: Direct write to Lara's health / ammo fields
+///   - Weapons: call the game's own Inv_AddItem(objId) — the native path
+///     inserts the ring entry, grants starting ammo (shotgun +12, magnums
+///     +50, uzis +100) and converts any matching ammo ring items; we then
+///     set the WSB weapon flag for save persistence
+///   - Ammo: write directly to LARA_INFO when the weapon is owned (verified
+///     working); otherwise call Inv_AddItem so the game inserts the ammo
+///     ring item natively
+///   - Medipacks: call Inv_AddItem (stacks qty natively when present)
+///   - Key items: call Inv_AddItem — the game routes to the Keys Ring itself
+///     (insert switches rings on the item's sort key)
+///   - Traps: direct write to Lara's health / ammo fields
 ///
-/// Both Main Ring and Keys Ring use the same structure:
-///   count (Int16) + items[] (Int64 pointers) + qtys[] (Int16)
-///   Items are INVENTORY_ITEM struct pointers computed as:
-///     target_ptr = pistols_ptr + relIdx * 0xCD0
+/// Inv_AddItem (tomb1.dll+0x1F7D0) is invoked inside the game process via
+/// CreateRemoteThread (ProcessMemory.CallRemote) with objId as the thread
+/// parameter (RCX). The game performs all ring bookkeeping. Success is
+/// verified by ring read-back (count/qty matched on InvItem_ObjectId) —
+/// exit codes are ambiguous (refusal and several success paths both return
+/// 0). Remote calls are refused (and logged) when the Inv_AddItem prologue
+/// does not match this build or the Ring offset group is not usable.
 /// </summary>
 public class InventoryManager
 {
     private readonly ProcessMemory _memory;
 
-    // Received key items per level — kept permanently for idempotent re-injection
-    // after death/reload. InjectToRingRaw handles duplicates safely.
+    // Received key items per level — kept permanently for idempotent
+    // re-injection after death/reload. EnsureKeyItemsInRing tops the ring
+    // up to the expected qty (never past it), so duplicates are safe.
     private readonly Dictionary<int, List<long>> _receivedKeyItems = new();
 
     // Once all key items have been successfully injected after a load,
     // stop reconciling until the next load — prevents re-giving used keys.
     private bool _keyItemsEnsured;
-    private bool _loggedPistolsRetry;
 
     // After injection, keep re-checking for this many ticks to make sure the
     // game engine doesn't overwrite the ring. Only set _keyItemsEnsured once
@@ -47,9 +56,6 @@ public class InventoryManager
     // added the medipack to the ring yet when the entity flag changes.
     private int _pendingSentinelRemovals;
 
-    // Cached Pistols pointer (reference for all relIdx calculations)
-    private IntPtr _pistolsPtr;
-
     /// <summary>Set by GameStateWatcher once the scanner finds the live inventory address.</summary>
     public InventoryScanner? Scanner { get; set; }
 
@@ -63,49 +69,233 @@ public class InventoryManager
     /// </summary>
     private IntPtr WorldStateAddr => _memory.Tomb1Base + TR1RMemoryMap.WorldStateBackup;
 
+    // =================================================================
+    // NATIVE GIVE/REMOVE (Inv_AddItem / ring-remove via CreateRemoteThread)
+    // =================================================================
+
     /// <summary>
-    /// Call on level change to refresh the Pistols pointer cache.
+    /// Calls the game's own Inv_AddItem(objId) inside the game process
+    /// (thread-proc argument arrives in RCX). The game handles ring routing
+    /// (main vs keys), qty stacking, pickup/canonical id aliasing
+    /// (tomb1.dll+0x1F590) and the per-level loaded-object flag.
+    /// objId may be a canonical inventory id (InvObjId.*) — the game remaps
+    /// aliases itself, so either member of an id pair works when either is
+    /// loaded in the current level.
+    /// Returns true only when a ring read-back shows the effect (item
+    /// appeared or qty increased). Exit codes are informational only:
+    /// refusal and several success paths both return 0.
     /// </summary>
-    public void RefreshPistolsPointer()
+    public bool GiveByObjId(int objId, string what, bool keysRing = false)
     {
-        _pistolsPtr = FindPistolsPointer();
-        if (_pistolsPtr != IntPtr.Zero)
-            ConsoleUI.Info($"[INV] Pistols reference: 0x{_pistolsPtr:X}");
+        IntPtr t1 = _memory.Tomb1Base;
+        if (t1 == IntPtr.Zero)
+        {
+            ConsoleUI.Warning($"[INV] {what}: tomb1.dll not loaded");
+            return false;
+        }
+
+        if (!OffsetModel.Usable(OffsetGroup.Ring))
+        {
+            ConsoleUI.Warning($"[INV] {what}: Ring offsets not usable — cannot verify give(objId={objId})");
+            return false;
+        }
+
+        if (!EnsureSignature(TR1RMemoryMap.InvAddItem, TR1RMemoryMap.InvAddItemSignature, "Inv_AddItem"))
+            return false;
+
+        int itemsOff = keysRing ? TR1RMemoryMap.KeysRingItems : TR1RMemoryMap.MainRingItems;
+        int countOff = keysRing ? TR1RMemoryMap.KeysRingCount : TR1RMemoryMap.MainRingCount;
+        int qtysOff = keysRing ? TR1RMemoryMap.KeysRingQtys : TR1RMemoryMap.MainRingQtys;
+
+        var (_, beforeQty) = FindInRing(itemsOff, countOff, qtysOff, objId);
+
+        uint? exit = _memory.CallRemote(t1 + TR1RMemoryMap.InvAddItem, objId);
+
+        var (_, afterQty) = FindInRing(itemsOff, countOff, qtysOff, objId);
+
+        if (afterQty > beforeQty)
+        {
+            ConsoleUI.Info($"[INV] {what}: give(objId={objId}) OK — qty {beforeQty} -> {afterQty}" +
+                (exit.HasValue ? $" (exit 0x{exit:X})" : " (call timed out)"));
+            return true;
+        }
+
+        byte flag = _memory.ReadByte(t1 + objId * TR1RMemoryMap.InvLoadedFlagStride + TR1RMemoryMap.InvLoadedFlagTable);
+        string aliasInfo = "";
+        int? alias = AliasOfObjId(objId);
+        if (alias.HasValue)
+        {
+            byte aliasFlag = _memory.ReadByte(t1 + alias.Value * TR1RMemoryMap.InvLoadedFlagStride + TR1RMemoryMap.InvLoadedFlagTable);
+            aliasInfo = $", alias {alias.Value} flag={aliasFlag}";
+        }
+        ConsoleUI.Warning(
+            $"[INV] {what}: give(objId={objId}) had NO effect — flag[{objId}]={flag}{aliasInfo}, " +
+            $"qty {beforeQty} -> {afterQty}" +
+            (exit.HasValue ? $", exit 0x{exit:X}" : ", call timed out") +
+            " (object not loaded in this level?)");
+        return false;
     }
 
     /// <summary>
-    /// Gives a weapon to the player by injecting into the Main Ring
-    /// and setting the WSB weapon flag for save persistence.
+    /// Calls the game's own ring-remove (tomb1.dll+0x1FF80, arg = objId) —
+    /// qty-- natively, with full removal (shift + count--) at qty 0; it
+    /// searches the main ring first, then the keys ring. Returns true only
+    /// when the main-ring read-back shows the qty dropped. Used for the
+    /// sentinel medipack cancel (the game natively adds it on pickup).
     /// </summary>
-    public void GiveWeapon(long apItemId)
+    private bool RemoveByObjId(int objId, string what)
     {
-        var type = ItemMapper.GetTR1Type(apItemId);
-        if (type == null) return;
+        IntPtr t1 = _memory.Tomb1Base;
+        if (t1 == IntPtr.Zero || !OffsetModel.Usable(OffsetGroup.Ring))
+            return false;
 
-        int relIdx = type.Value switch
+        if (!EnsureSignature(TR1RMemoryMap.InvRemoveItem, TR1RMemoryMap.InvRemoveItemSignature, "Inv_RemoveItem"))
+            return false;
+
+        var (_, beforeQty) = FindInRing(
+            TR1RMemoryMap.MainRingItems, TR1RMemoryMap.MainRingCount,
+            TR1RMemoryMap.MainRingQtys, objId);
+        if (beforeQty <= 0)
+            return false; // not in the ring yet — caller retries next tick
+
+        uint? exit = _memory.CallRemote(t1 + TR1RMemoryMap.InvRemoveItem, objId);
+
+        var (_, afterQty) = FindInRing(
+            TR1RMemoryMap.MainRingItems, TR1RMemoryMap.MainRingCount,
+            TR1RMemoryMap.MainRingQtys, objId);
+
+        if (afterQty < beforeQty)
         {
-            TR1Type.Shotgun_S_P => TR1RMemoryMap.InvItemRelIndex.Shotgun,
-            TR1Type.Magnums_S_P => TR1RMemoryMap.InvItemRelIndex.Magnums,
-            TR1Type.Uzis_S_P => TR1RMemoryMap.InvItemRelIndex.Uzis,
-            _ => int.MinValue,
-        };
-
-        if (relIdx == int.MinValue) return;
-
-        // Inject into Main Ring for immediate visibility
-        if (EnsurePistolsPointer())
-        {
-            bool injected = InjectToRing(
-                TR1RMemoryMap.MainRingCount,
-                TR1RMemoryMap.MainRingItems,
-                TR1RMemoryMap.MainRingQtys,
-                relIdx, 1);
-
-            if (injected)
-                ConsoleUI.Info($"[INV] {type.Value} injected into Main Ring (relIdx={relIdx})");
+            ConsoleUI.Info($"[INV] {what}: remove(objId={objId}) OK — qty {beforeQty} -> {afterQty}");
+            return true;
         }
 
-        // Also set WSB weapon flag for save persistence
+        ConsoleUI.Warning(
+            $"[INV] {what}: remove(objId={objId}) had NO effect — qty {beforeQty} -> {afterQty}" +
+            (exit.HasValue ? $", exit 0x{exit:X}" : ", call timed out"));
+        return false;
+    }
+
+    /// <summary>
+    /// Validates the live prologue of a tomb1.dll function before the first
+    /// remote call (and on every call — 21 bytes, negligible). A mismatch
+    /// means the game patched under us; every give/remove is refused and
+    /// logged instead of executing unknown code.
+    /// </summary>
+    private bool EnsureSignature(int rva, byte[] expected, string name)
+    {
+        IntPtr t1 = _memory.Tomb1Base;
+        if (t1 == IntPtr.Zero) return false;
+
+        byte[] live = _memory.ReadBytes(t1 + rva, expected.Length);
+        if (live.SequenceEqual(expected))
+            return true;
+
+        ConsoleUI.Warning(
+            $"[INV] {name} signature MISMATCH at tomb1.dll+0x{rva:X} " +
+            $"(live: {BitConverter.ToString(live)}) — refusing remote calls; offsets need updating for this patch");
+        return false;
+    }
+
+    /// <summary>
+    /// Finds a ring entry by the inventory object id stored in the struct
+    /// itself (INVENTORY_ITEM+0x08). Returns (-1, 0) when absent.
+    /// Matching is ALWAYS on objId — never on pointer identity (the
+    /// stride/relIdx pointer model is wrong for Key2/Key3/Key4).
+    /// Uses the proven count field; falls back to the NULL-walk if the
+    /// count reads out of range.
+    /// </summary>
+    public (int Index, short Qty) FindInRing(int itemsOff, int countOff, int qtysOff, int objId)
+    {
+        IntPtr t1 = _memory.Tomb1Base;
+        short count = TR1RMemoryMap.MainRingCountConfirmed
+            ? _memory.ReadInt16(t1 + countOff)
+            : OffsetIdentifier.RingWalk(_memory, itemsOff);
+        if (count < 0 || count > TR1RMemoryMap.MaxRingItems)
+            count = OffsetIdentifier.RingWalk(_memory, itemsOff);
+
+        for (int i = 0; i < count; i++)
+        {
+            IntPtr ptr = _memory.ReadPointer(t1 + itemsOff + i * 8);
+            if (ptr == IntPtr.Zero) continue;
+            if (_memory.ReadInt16(ptr + TR1RMemoryMap.InvItem_ObjectId) != objId) continue;
+            return (i, _memory.ReadInt16(t1 + qtysOff + i * 2));
+        }
+        return (-1, 0);
+    }
+
+    /// <summary>
+    /// Pickup id &lt;-> canonical id pairs the game's internal remap
+    /// (tomb1.dll+0x1F590) understands. Diagnostic only: Inv_AddItem
+    /// performs the remap itself — used here to explain refusals
+    /// ("flag[canonical]=0 but alias is loaded").
+    /// </summary>
+    public static int? AliasOfObjId(int objId) => objId switch
+    {
+        84 => 99, 99 => 84,
+        85 => 100, 100 => 85,
+        86 => 101, 101 => 86,
+        87 => 102, 102 => 87,
+        89 => 104, 104 => 89,
+        90 => 105, 105 => 90,
+        91 => 106, 106 => 91,
+        93 => 108, 108 => 93,
+        94 => 109, 109 => 94,
+        110 => 114, 114 => 110,
+        111 => 115, 115 => 111,
+        112 => 116, 116 => 112,
+        113 => 117, 117 => 113,
+        126 => 127, 127 => 126,
+        129 => 133, 133 => 129,
+        130 => 134, 134 => 130,
+        131 => 135, 135 => 131,
+        132 => 136, 136 => 132,
+        141 => 148, 148 => 141,
+        142 => 149, 149 => 142,
+        72 => 82, 82 => 72,
+        _ => null,
+    };
+
+    /// <summary>
+    /// Gives a weapon via the game's native Inv_AddItem(objId): inserts the
+    /// ring entry and grants starting ammo natively (shotgun +12 rounds,
+    /// magnums +50, uzis +100; any matching ammo ring items are converted to
+    /// LARA_INFO by the same native path). Then sets the WSB weapon flag for
+    /// save persistence. Already owned → no-op success (a re-give would only
+    /// stack qty).
+    /// </summary>
+    public bool GiveWeapon(long apItemId)
+    {
+        var type = ItemMapper.GetTR1Type(apItemId);
+        if (type == null) return false;
+
+        int objId = type.Value switch
+        {
+            TR1Type.Shotgun_S_P => TR1RMemoryMap.InvObjId.Shotgun,
+            TR1Type.Magnums_S_P => TR1RMemoryMap.InvObjId.Magnums,
+            TR1Type.Uzis_S_P => TR1RMemoryMap.InvObjId.Uzis,
+            _ => -1,
+        };
+
+        if (objId < 0) return false;
+
+        bool ok;
+        bool owned = OffsetModel.Usable(OffsetGroup.Ring) &&
+            FindInRing(TR1RMemoryMap.MainRingItems, TR1RMemoryMap.MainRingCount,
+                TR1RMemoryMap.MainRingQtys, objId).Index >= 0;
+
+        if (owned)
+        {
+            ConsoleUI.Info($"[INV] {type.Value}: already owned");
+            ok = true;
+        }
+        else
+        {
+            ok = GiveByObjId(objId, type.Value.ToString());
+            if (!ok) return false;
+        }
+
+        // WSB weapon flag for save persistence (idempotent OR).
         byte weaponFlag = type.Value switch
         {
             TR1Type.Shotgun_S_P => TR1RMemoryMap.Weapon_Shotgun,
@@ -118,65 +308,41 @@ public class InventoryManager
         {
             IntPtr weaponAddr = WorldStateAddr + TR1RMemoryMap.Save_WeaponsConfig;
             byte weaponByte = _memory.ReadByte(weaponAddr);
-            _memory.Write(weaponAddr, (byte)(weaponByte | weaponFlag));
+            WriteGate.CheckedWrite(_memory, OffsetGroup.Wsb, weaponAddr, (byte)(weaponByte | weaponFlag), "WSB weapon flag");
         }
 
-        // Convert any existing ammo items in the ring to LARA_INFO, then give starting ammo
-        (int ammoRelIdx, int laraAmmoOffset, int ammoPerPickup) = type.Value switch
-        {
-            TR1Type.Shotgun_S_P => (TR1RMemoryMap.InvItemRelIndex.ShotgunAmmo,
-                TR1RMemoryMap.Lara_ShotgunAmmo, 2 * TR1RMemoryMap.ShotgunAmmoMultiplier),
-            TR1Type.Magnums_S_P => (TR1RMemoryMap.InvItemRelIndex.MagnumAmmo,
-                TR1RMemoryMap.Lara_MagnumAmmo, 50),
-            TR1Type.Uzis_S_P => (TR1RMemoryMap.InvItemRelIndex.UziAmmo,
-                TR1RMemoryMap.Lara_UziAmmo, 100),
-            _ => (int.MinValue, -1, 0),
-        };
-
-        if (laraAmmoOffset < 0) return;
-
-        // Remove ammo item from ring if it exists, and convert its qty to LARA_INFO
-        short ammoQty = RemoveFromRing(
-            TR1RMemoryMap.MainRingCount, TR1RMemoryMap.MainRingItems,
-            TR1RMemoryMap.MainRingQtys, ammoRelIdx);
-
-        // Write to LARA_INFO: converted ring qty + starting ammo
-        IntPtr ammoAddr = _memory.Tomb1Base + laraAmmoOffset;
-        int current = _memory.ReadInt32(ammoAddr);
-        int toAdd = (ammoQty * ammoPerPickup) + ammoPerPickup; // ring pickups + starting ammo
-        int newVal = Math.Min(current + toAdd, 999999);
-        _memory.Write(ammoAddr, newVal);
-        ConsoleUI.Info($"[INV] Ammo: {current} -> {newVal} (converted {ammoQty} ring pickups + starting ammo)");
+        return ok;
     }
 
     /// <summary>
     /// Gives ammo. If the player owns the weapon, writes directly to LARA_INFO
-    /// ammo fields (instant). If not, injects the ammo item into the Main Ring
-    /// so it appears as a visible pickup (e.g. "Magnum Clips").
+    /// ammo fields (instant, verified working). If not, calls Inv_AddItem so
+    /// the game inserts the ammo ring item natively — it converts to LARA_INFO
+    /// the moment the weapon arrives.
     /// Shotgun ammo is stored internally as displayed * 6.
     /// </summary>
-    public void GiveAmmo(long apItemId)
+    public bool GiveAmmo(long apItemId)
     {
         var type = ItemMapper.GetTR1Type(apItemId);
-        if (type == null) return;
+        if (type == null) return false;
 
-        // Map ammo type to its weapon relIdx and ammo relIdx
-        (int weaponRelIdx, int ammoRelIdx, int laraInfoOffset, int amount) = type.Value switch
+        (int weaponObjId, int ammoObjId, int laraInfoOffset, int amount) = type.Value switch
         {
-            TR1Type.ShotgunAmmo_S_P => (TR1RMemoryMap.InvItemRelIndex.Shotgun, TR1RMemoryMap.InvItemRelIndex.ShotgunAmmo,
+            TR1Type.ShotgunAmmo_S_P => (TR1RMemoryMap.InvObjId.Shotgun, TR1RMemoryMap.InvObjId.ShotgunAmmo,
                 TR1RMemoryMap.Lara_ShotgunAmmo, 2 * TR1RMemoryMap.ShotgunAmmoMultiplier),
-            TR1Type.MagnumAmmo_S_P => (TR1RMemoryMap.InvItemRelIndex.Magnums, TR1RMemoryMap.InvItemRelIndex.MagnumAmmo,
+            TR1Type.MagnumAmmo_S_P => (TR1RMemoryMap.InvObjId.Magnums, TR1RMemoryMap.InvObjId.MagnumAmmo,
                 TR1RMemoryMap.Lara_MagnumAmmo, 50),
-            TR1Type.UziAmmo_S_P => (TR1RMemoryMap.InvItemRelIndex.Uzis, TR1RMemoryMap.InvItemRelIndex.UziAmmo,
+            TR1Type.UziAmmo_S_P => (TR1RMemoryMap.InvObjId.Uzis, TR1RMemoryMap.InvObjId.UziAmmo,
                 TR1RMemoryMap.Lara_UziAmmo, 100),
-            _ => (int.MinValue, int.MinValue, -1, 0),
+            _ => (-1, -1, -1, 0),
         };
 
-        if (laraInfoOffset < 0) return;
+        if (ammoObjId < 0) return false;
 
-        // Check if the player has the weapon in the Main Ring
-        bool hasWeapon = EnsurePistolsPointer() && HasItemInRing(
-            TR1RMemoryMap.MainRingCount, TR1RMemoryMap.MainRingItems, weaponRelIdx);
+        // Check if the player has the weapon in the Main Ring (objId match)
+        bool hasWeapon = OffsetModel.Usable(OffsetGroup.Ring) &&
+            FindInRing(TR1RMemoryMap.MainRingItems, TR1RMemoryMap.MainRingCount,
+                TR1RMemoryMap.MainRingQtys, weaponObjId).Index >= 0;
 
         if (hasWeapon)
         {
@@ -184,55 +350,35 @@ public class InventoryManager
             IntPtr ammoAddr = _memory.Tomb1Base + laraInfoOffset;
             int current = _memory.ReadInt32(ammoAddr);
             int newVal = Math.Min(current + amount, 999999);
-            _memory.Write(ammoAddr, newVal);
-            ConsoleUI.Info($"[INV] Ammo: {current} -> {newVal} (LARA_INFO)");
+            bool ok = WriteGate.CheckedWrite(_memory, OffsetGroup.Core, ammoAddr, newVal, "LARA_INFO ammo");
+            if (ok)
+                ConsoleUI.Info($"[INV] Ammo: {current} -> {newVal} (LARA_INFO)");
+            return ok;
         }
-        else if (EnsurePistolsPointer())
-        {
-            // Player doesn't have the weapon — inject ammo item into Main Ring
-            bool injected = InjectToRing(
-                TR1RMemoryMap.MainRingCount,
-                TR1RMemoryMap.MainRingItems,
-                TR1RMemoryMap.MainRingQtys,
-                ammoRelIdx, 1);
 
-            if (injected)
-                ConsoleUI.Info($"[INV] Ammo item injected into Main Ring (relIdx={ammoRelIdx})");
-            else
-                ConsoleUI.Warning($"[INV] Failed to inject ammo item (relIdx={ammoRelIdx})");
-        }
+        // Weapon not owned — game inserts the ammo item into the ring natively.
+        return GiveByObjId(ammoObjId, $"{type.Value} item");
     }
 
     /// <summary>
-    /// Gives a medipack by injecting into the Main Ring.
-    /// If the item is already in the ring, increments its qty.
-    /// Caller (ProcessReceivedItems) ensures Pistols pointer is ready.
+    /// Gives a medipack via the game's Inv_AddItem(objId): inserts the ring
+    /// entry, or stacks the qty natively when already present.
     /// </summary>
-    public void GiveMedipack(long apItemId)
+    public bool GiveMedipack(long apItemId)
     {
         var type = ItemMapper.GetTR1Type(apItemId);
-        if (type == null) return;
+        if (type == null) return false;
 
-        int relIdx = type.Value switch
+        int objId = type.Value switch
         {
-            TR1Type.SmallMed_S_P => TR1RMemoryMap.InvItemRelIndex.SmallMedipack,
-            TR1Type.LargeMed_S_P => TR1RMemoryMap.InvItemRelIndex.LargeMedipack,
-            _ => int.MinValue,
+            TR1Type.SmallMed_S_P => TR1RMemoryMap.InvObjId.SmallMedipack,
+            TR1Type.LargeMed_S_P => TR1RMemoryMap.InvObjId.LargeMedipack,
+            _ => -1,
         };
 
-        if (relIdx == int.MinValue) return;
+        if (objId < 0) return false;
 
-        if (EnsurePistolsPointer())
-        {
-            bool injected = InjectToRing(
-                TR1RMemoryMap.MainRingCount,
-                TR1RMemoryMap.MainRingItems,
-                TR1RMemoryMap.MainRingQtys,
-                relIdx, 1);
-
-            if (injected)
-                ConsoleUI.Info($"[INV] {type.Value} injected into Main Ring (relIdx={relIdx})");
-        }
+        return GiveByObjId(objId, type.Value.ToString());
     }
 
     /// <summary>
@@ -262,31 +408,21 @@ public class InventoryManager
     }
 
     /// <summary>
-    /// Attempts to inject a key item into the Keys Ring.
+    /// Attempts to give a key item into the Keys Ring via Inv_AddItem.
     /// Called from GiveKeyItem (immediate) and from OnLevelChanged (deferred).
-    /// Safe to call multiple times — InjectToRingRaw handles duplicates.
+    /// Safe to call repeatedly — GiveByObjId verifies by read-back and the
+    /// ensure loop only tops up to the expected qty.
     /// </summary>
     private bool TryInjectKeyItem(long apItemId)
     {
-        if (!EnsurePistolsPointer())
-            return false;
-
-        IntPtr targetPtr = ResolveKeyItemPointer(apItemId);
-        if (targetPtr == IntPtr.Zero)
+        int objId = ResolveKeyItemObjId(apItemId);
+        if (objId < 0)
         {
             ConsoleUI.Warning($"[INV] Key item AP ID {apItemId}: unknown type, cannot inject.");
             return false;
         }
 
-        bool injected = InjectToRingRaw(
-            TR1RMemoryMap.KeysRingCount,
-            TR1RMemoryMap.KeysRingItems,
-            TR1RMemoryMap.KeysRingQtys,
-            targetPtr, 1);
-
-        if (injected)
-            ConsoleUI.Info($"[INV] Key item injected into Keys Ring (ptr=0x{targetPtr:X})");
-        return injected;
+        return GiveByObjId(objId, $"Key item AP#{apItemId}", keysRing: true);
     }
 
     /// <summary>
@@ -308,8 +444,8 @@ public class InventoryManager
                     short health = _memory.ReadInt16(healthAddr);
                     short damage = (short)(health / 4);
                     short newHealth = (short)Math.Max(health - damage, TR1RMemoryMap.MinHealth);
-                    _memory.Write(healthAddr, newHealth);
-                    ConsoleUI.Warning($"TRAP! Took {damage} damage ({newHealth} HP remaining)");
+                    if (WriteGate.CheckedWrite(_memory, OffsetGroup.Core, healthAddr, newHealth, "Lara health"))
+                        ConsoleUI.Warning($"TRAP! Took {damage} damage ({newHealth} HP remaining)");
                 }
                 break;
 
@@ -323,17 +459,17 @@ public class InventoryManager
             case 3: // Medipack Drain — lose 1 small medipack
                 IntPtr smallMedAddr = WorldStateAddr + TR1RMemoryMap.Save_SmallMedipacks;
                 byte meds = _memory.ReadByte(smallMedAddr);
-                if (meds > 0)
-                    _memory.Write(smallMedAddr, (byte)(meds - 1));
-                ConsoleUI.Warning("TRAP! Lost a small medipack!");
+                if (meds > 0 && WriteGate.CheckedWrite(_memory, OffsetGroup.Wsb, smallMedAddr, (byte)(meds - 1), "WSB small medipack"))
+                    ConsoleUI.Warning("TRAP! Lost a small medipack!");
                 break;
         }
     }
 
     /// <summary>
     /// Gets received key items for a specific level. Items are NOT removed —
-    /// they are kept for idempotent re-injection after death/reload.
-    /// InjectToRingRaw handles duplicates safely (increments qty if already present).
+    /// they are kept for idempotent re-injection after death/reload
+    /// (EnsureKeyItemsInRing tops the ring up to the expected qty, so
+    /// duplicates are safe).
     /// </summary>
     public List<long> GetReceivedKeyItems(int locationMapperIndex)
     {
@@ -363,11 +499,11 @@ public class InventoryManager
 
         var items = GetReceivedKeyItems(mapperIdx);
         if (items.Count == 0) return;
-        if (!EnsurePistolsPointer()) return;
+        if (!OffsetModel.Usable(OffsetGroup.Ring)) return; // cannot read/verify yet
 
-        // Count expected qty per pointer from received items (skip used copies only)
+        // Count expected qty per objId from received items (skip used copies only)
         var remainingUsed = new Dictionary<long, int>(_usedKeyItems);
-        var expectedQty = new Dictionary<IntPtr, short>();
+        var expectedQty = new Dictionary<int, short>();
         foreach (long apItemId in items)
         {
             if (remainingUsed.TryGetValue(apItemId, out int usedCount) && usedCount > 0)
@@ -376,38 +512,30 @@ public class InventoryManager
                 continue;
             }
 
-            IntPtr ptr = ResolveKeyItemPointer(apItemId);
-            if (ptr == IntPtr.Zero) continue;
-            expectedQty.TryGetValue(ptr, out short current);
-            expectedQty[ptr] = (short)(current + 1);
+            int objId = ResolveKeyItemObjId(apItemId);
+            if (objId < 0) continue;
+            expectedQty.TryGetValue(objId, out short current);
+            expectedQty[objId] = (short)(current + 1);
         }
 
-        // Inject missing items and fix qty on existing ones
-        IntPtr t1 = _memory.Tomb1Base;
-        short ringCount = _memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingCount);
+        // Top up each slot through the game's own Inv_AddItem: never below the
+        // ring's current qty (idempotent), never above the expected qty (used
+        // keys stay used; a higher-than-expected qty is game-granted — leave it).
         bool injectedAny = false;
 
-        foreach (var (targetPtr, targetQty) in expectedQty)
+        foreach (var (objId, targetQty) in expectedQty)
         {
-            int ringIdx = -1;
-            for (int i = 0; i < ringCount; i++)
-            {
-                if (_memory.ReadPointer(t1 + TR1RMemoryMap.KeysRingItems + i * 8) == targetPtr)
-                { ringIdx = i; break; }
-            }
+            var (ringIdx, currentQty) = FindInRing(
+                TR1RMemoryMap.KeysRingItems, TR1RMemoryMap.KeysRingCount,
+                TR1RMemoryMap.KeysRingQtys, objId);
 
-            if (ringIdx >= 0)
+            if (ringIdx >= 0 && currentQty >= targetQty)
+                continue;
+
+            for (short n = currentQty; n < targetQty; n++)
             {
-                short currentQty = _memory.ReadInt16(t1 + TR1RMemoryMap.KeysRingQtys + ringIdx * 2);
-                if (currentQty < targetQty)
-                    _memory.Write(t1 + TR1RMemoryMap.KeysRingQtys + ringIdx * 2, targetQty);
-            }
-            else if (ringCount < TR1RMemoryMap.MaxRingItems)
-            {
-                _memory.Write(t1 + TR1RMemoryMap.KeysRingItems + ringCount * 8, targetPtr.ToInt64());
-                _memory.Write(t1 + TR1RMemoryMap.KeysRingQtys + ringCount * 2, targetQty);
-                ringCount++;
-                _memory.Write(t1 + TR1RMemoryMap.KeysRingCount, ringCount);
+                if (!GiveByObjId(objId, $"Key item objId {objId} (ensure)", keysRing: true))
+                    break; // refused (object not loaded in this level?) — cooldown will retry
                 injectedAny = true;
             }
         }
@@ -474,37 +602,20 @@ public class InventoryManager
     }
 
     /// <summary>
-    /// After a save reload, re-injects key items that were received but not yet used.
-    /// Items in usedKeyItems are skipped (they were consumed before the save).
+    /// After a save reload, re-arm key-item ensurance for the level: the used
+    /// set from the save is applied here, then EnsureKeyItemsInRing tops the
+    /// Keys Ring back up to the expected qty (idempotent — it compares against
+    /// the live ring, so items restored by the save are not doubled and used
+    /// keys are skipped).
     /// </summary>
     public void ReconcileKeyItems(int mapperIdx, Dictionary<long, int> usedKeyItems)
     {
-        if (!_receivedKeyItems.TryGetValue(mapperIdx, out var items))
+        if (!_receivedKeyItems.ContainsKey(mapperIdx))
             return;
 
-        if (!EnsurePistolsPointer())
-            return;
-
-        var remainingUsed = new Dictionary<long, int>(usedKeyItems);
-        foreach (long apItemId in items)
-        {
-            if (remainingUsed.TryGetValue(apItemId, out int usedCount) && usedCount > 0)
-            {
-                remainingUsed[apItemId] = usedCount - 1;
-                ConsoleUI.Info($"[INV] Reconcile: skipping used key item AP#{apItemId}");
-                continue;
-            }
-
-            IntPtr targetPtr = ResolveKeyItemPointer(apItemId);
-            if (targetPtr == IntPtr.Zero) continue;
-
-            ConsoleUI.Info($"[INV] Reconcile: re-injecting key item AP#{apItemId} (ptr=0x{targetPtr:X})");
-            InjectToRingRaw(
-                TR1RMemoryMap.KeysRingCount,
-                TR1RMemoryMap.KeysRingItems,
-                TR1RMemoryMap.KeysRingQtys,
-                targetPtr, 1);
-        }
+        _usedKeyItems = usedKeyItems ?? new();
+        if (_usedKeyItems.Count > 0)
+            ConsoleUI.Info($"[INV] Reconcile: used set from save — {string.Join(", ", _usedKeyItems.Select(kv => $"AP#{kv.Key}×{kv.Value}"))}");
 
         _keyItemsEnsured = false;
         _keyItemEnsureCooldown = KeyItemEnsureCooldownTicks;
@@ -512,7 +623,9 @@ public class InventoryManager
 
     /// <summary>
     /// Resolves a Keys Ring pointer back to an AP item ID.
-    /// Used by KeyItemMonitor to identify which AP item was consumed.
+    /// Used by KeyItemMonitor to identify which AP item was consumed:
+    /// the pointed struct's own objId is matched against the objId each
+    /// received AP item maps to (K1-K4/P1-P4/Scion/LeadBar slots).
     /// Returns 0 if not found.
     /// </summary>
     public long ResolvePointerToApId(long pointer, int mapperIdx)
@@ -520,15 +633,13 @@ public class InventoryManager
         if (!_receivedKeyItems.TryGetValue(mapperIdx, out var items))
             return 0;
 
-        if (!EnsurePistolsPointer())
+        short objId = _memory.ReadInt16(new IntPtr(pointer) + TR1RMemoryMap.InvItem_ObjectId);
+        if (objId < 0)
             return 0;
-
-        IntPtr targetPtr = new IntPtr(pointer);
 
         foreach (long apItemId in items)
         {
-            IntPtr resolvedPtr = ResolveKeyItemPointer(apItemId);
-            if (resolvedPtr == targetPtr)
+            if (ResolveKeyItemObjId(apItemId) == objId)
                 return apItemId;
         }
 
@@ -536,132 +647,22 @@ public class InventoryManager
     }
 
     // =================================================================
-    // RING INJECTION
+    // READINESS
     // =================================================================
 
-    /// <summary>
-    /// Injects an item into an inventory ring using a relIdx from Pistols.
-    /// If the item already exists in the ring, increments its qty.
-    /// Otherwise appends it at the end with the given qty.
-    /// </summary>
-    private bool InjectToRing(int ringCountOffset, int ringItemsOffset, int ringQtysOffset, int relIdx, short qty)
-    {
-        if (_pistolsPtr == IntPtr.Zero) return false;
-        IntPtr targetPtr = _pistolsPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
-        return InjectToRingRaw(ringCountOffset, ringItemsOffset, ringQtysOffset, targetPtr, qty);
-    }
+    /// <summary>Retained for existing level-change call sites. The give path
+    /// no longer caches any pistols/relIdx pointer (matching is on objId), so
+    /// there is nothing to invalidate.</summary>
+    public void InvalidatePistolsPointer() { }
 
     /// <summary>
-    /// Injects an item into an inventory ring using a raw INVENTORY_ITEM pointer.
-    /// Used for items not in the stride-aligned table (e.g. Key4/Thor Key).
+    /// Returns true when a native give can be attempted: tomb1.dll is loaded
+    /// and the Inv_AddItem prologue matches this build. Ring-offset usability
+    /// is checked separately inside GiveByObjId (the Ring group is validated
+    /// per level transition by OffsetIdentifier.IdentifyRing).
     /// </summary>
-    private bool InjectToRingRaw(int ringCountOffset, int ringItemsOffset, int ringQtysOffset, IntPtr targetPtr, short qty)
-    {
-        IntPtr t1 = _memory.Tomb1Base;
-        short ringCount = _memory.ReadInt16(t1 + ringCountOffset);
-
-        // Check if item already exists in ring
-        for (int i = 0; i < ringCount; i++)
-        {
-            IntPtr existingPtr = _memory.ReadPointer(t1 + ringItemsOffset + i * 8);
-            if (existingPtr == targetPtr)
-            {
-                // Increment qty
-                IntPtr qtyAddr = t1 + ringQtysOffset + i * 2;
-                short currentQty = _memory.ReadInt16(qtyAddr);
-                short newQty = (short)Math.Min(currentQty + qty, 255);
-                _memory.Write(qtyAddr, newQty);
-                return true;
-            }
-        }
-
-        // Append new item
-        if (ringCount >= TR1RMemoryMap.MaxRingItems)
-            return false;
-
-        _memory.Write(t1 + ringItemsOffset + ringCount * 8, targetPtr.ToInt64());
-        _memory.Write(t1 + ringQtysOffset + ringCount * 2, qty);
-        _memory.Write(t1 + ringCountOffset, (short)(ringCount + 1));
-        return true;
-    }
-
-    /// <summary>
-    /// Checks whether an item (by relIdx from Pistols) exists in a ring.
-    /// </summary>
-    private bool HasItemInRing(int ringCountOffset, int ringItemsOffset, int weaponRelIdx)
-    {
-        if (_pistolsPtr == IntPtr.Zero) return false;
-        IntPtr t1 = _memory.Tomb1Base;
-        IntPtr weaponPtr = _pistolsPtr + weaponRelIdx * TR1RMemoryMap.InventoryItemStride;
-        short count = _memory.ReadInt16(t1 + ringCountOffset);
-        for (int i = 0; i < count; i++)
-        {
-            if (_memory.ReadPointer(t1 + ringItemsOffset + i * 8) == weaponPtr)
-                return true;
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Removes an item (by relIdx) from a ring. Shifts subsequent items down.
-    /// Returns the qty the item had, or 0 if not found.
-    /// </summary>
-    private short RemoveFromRing(int ringCountOffset, int ringItemsOffset, int ringQtysOffset, int relIdx)
-    {
-        if (_pistolsPtr == IntPtr.Zero) return 0;
-        IntPtr t1 = _memory.Tomb1Base;
-        IntPtr targetPtr = _pistolsPtr + relIdx * TR1RMemoryMap.InventoryItemStride;
-        short count = _memory.ReadInt16(t1 + ringCountOffset);
-
-        // Find the item
-        int foundIdx = -1;
-        short foundQty = 0;
-        for (int i = 0; i < count; i++)
-        {
-            if (_memory.ReadPointer(t1 + ringItemsOffset + i * 8) == targetPtr)
-            {
-                foundIdx = i;
-                foundQty = _memory.ReadInt16(t1 + ringQtysOffset + i * 2);
-                break;
-            }
-        }
-        if (foundIdx < 0) return 0;
-
-        // Shift subsequent items down
-        for (int i = foundIdx; i < count - 1; i++)
-        {
-            long nextPtr = _memory.ReadInt64(t1 + ringItemsOffset + (i + 1) * 8);
-            _memory.Write(t1 + ringItemsOffset + i * 8, nextPtr);
-            short nextQty = _memory.ReadInt16(t1 + ringQtysOffset + (i + 1) * 2);
-            _memory.Write(t1 + ringQtysOffset + i * 2, nextQty);
-        }
-
-        // Clear last slot and decrement count
-        _memory.Write(t1 + ringItemsOffset + (count - 1) * 8, 0L);
-        _memory.Write(t1 + ringQtysOffset + (count - 1) * 2, (short)0);
-        _memory.Write(t1 + ringCountOffset, (short)(count - 1));
-        return foundQty;
-    }
-
-    /// <summary>
-    /// Ensures the Pistols pointer is cached. Tries to find it if not set.
-    /// </summary>
-    private bool EnsurePistolsPointer()
-    {
-        if (_pistolsPtr != IntPtr.Zero) return true;
-        _pistolsPtr = FindPistolsPointer();
-        return _pistolsPtr != IntPtr.Zero;
-    }
-
-    /// <summary>Invalidate cached pointer (call on level change).</summary>
-    public void InvalidatePistolsPointer() => _pistolsPtr = IntPtr.Zero;
-
-    /// <summary>
-    /// Returns true if the inventory ring system is ready for injection
-    /// (Pistols pointer found). Items that need ring injection should be
-    /// deferred until this returns true.
-    /// </summary>
-    public bool IsInventoryReady() => EnsurePistolsPointer();
+    public bool IsInventoryReady() => EnsureSignature(
+        TR1RMemoryMap.InvAddItem, TR1RMemoryMap.InvAddItemSignature, "Inv_AddItem");
 
     /// <summary>True once key items are confirmed stable in the ring after injection.</summary>
     public bool KeyItemsEnsured => _keyItemsEnsured;
@@ -700,83 +701,32 @@ public class InventoryManager
     }
 
     /// <summary>
-    /// Removes one small medipack from the Main Ring (decrements qty by 1,
-    /// or removes the item entirely if qty reaches 0).
+    /// Removes one small medipack from the Main Ring by calling the game's
+    /// own ring-remove (qty-- natively; full removal at qty 0).
+    /// Returns false while the medipack is not yet in the ring — the caller
+    /// retries next tick (the game may add it on a later tick than the
+    /// entity flag change).
     /// </summary>
     private bool RemoveOneSentinelMedipack()
     {
-        if (!EnsurePistolsPointer()) return false;
+        var (idx, qty) = FindInRing(
+            TR1RMemoryMap.MainRingItems, TR1RMemoryMap.MainRingCount,
+            TR1RMemoryMap.MainRingQtys, TR1RMemoryMap.InvObjId.SmallMedipack);
+        if (idx < 0 || qty <= 0)
+            return false; // small medipack not found in ring yet — retry next tick
 
-        IntPtr t1 = _memory.Tomb1Base;
-        IntPtr targetPtr = _pistolsPtr + TR1RMemoryMap.InvItemRelIndex.SmallMedipack * TR1RMemoryMap.InventoryItemStride;
-        short ringCount = _memory.ReadInt16(t1 + TR1RMemoryMap.MainRingCount);
-
-        for (int i = 0; i < ringCount; i++)
-        {
-            if (_memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems + i * 8) != targetPtr)
-                continue;
-
-            IntPtr qtyAddr = t1 + TR1RMemoryMap.MainRingQtys + i * 2;
-            short qty = _memory.ReadInt16(qtyAddr);
-
-            if (qty > 1)
-            {
-                _memory.Write(qtyAddr, (short)(qty - 1));
-                ConsoleUI.Info($"[INV] Sentinel medipack removed (qty {qty} -> {qty - 1})");
-                return true;
-            }
-
-            // qty == 1 → remove item from ring entirely (shift subsequent items)
-            for (int j = i; j < ringCount - 1; j++)
-            {
-                long nextPtr = _memory.ReadInt64(t1 + TR1RMemoryMap.MainRingItems + (j + 1) * 8);
-                _memory.Write(t1 + TR1RMemoryMap.MainRingItems + j * 8, nextPtr);
-                short nextQty = _memory.ReadInt16(t1 + TR1RMemoryMap.MainRingQtys + (j + 1) * 2);
-                _memory.Write(t1 + TR1RMemoryMap.MainRingQtys + j * 2, nextQty);
-            }
-            _memory.Write(t1 + TR1RMemoryMap.MainRingItems + (ringCount - 1) * 8, 0L);
-            _memory.Write(t1 + TR1RMemoryMap.MainRingQtys + (ringCount - 1) * 2, (short)0);
-            _memory.Write(t1 + TR1RMemoryMap.MainRingCount, (short)(ringCount - 1));
-            ConsoleUI.Info("[INV] Sentinel medipack removed (item removed from ring)");
-            return true;
-        }
-
-        return false; // small medipack not found in ring yet — retry next tick
+        return RemoveByObjId(TR1RMemoryMap.InvObjId.SmallMedipack, "Sentinel medipack");
     }
 
     /// <summary>
-    /// Finds the Pistols INVENTORY_ITEM pointer by cross-referencing Main Ring items.
-    /// Compass (items[0]) should be at Pistols + 6 * stride.
+    /// Resolves the canonical inventory object id (INVENTORY_ITEM+0x08 value,
+    /// i.e. what the ring stores and what Inv_AddItem expects) for a key item
+    /// AP ID. AP IDs use level-specific TR1Type aliases (e.g. Folly_K4_ThorKey
+    /// = 14280), not generic types. We cast to TR1Type and parse the enum name
+    /// to determine the generic slot (K1-K4, P1-P4, Scion, LeadBar).
+    /// Returns -1 when the AP id maps to no known slot.
     /// </summary>
-    private IntPtr FindPistolsPointer()
-    {
-        IntPtr t1 = _memory.Tomb1Base;
-        short ringCount = _memory.ReadInt16(t1 + TR1RMemoryMap.MainRingCount);
-        if (ringCount < 2) return IntPtr.Zero;
-
-        IntPtr item0 = _memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems);
-
-        for (int i = 1; i < ringCount; i++)
-        {
-            IntPtr itemPtr = _memory.ReadPointer(t1 + TR1RMemoryMap.MainRingItems + i * 8);
-            if (itemPtr == IntPtr.Zero) continue;
-
-            long diff = item0.ToInt64() - itemPtr.ToInt64();
-            if (diff == TR1RMemoryMap.InvItemRelIndex.Compass * TR1RMemoryMap.InventoryItemStride)
-                return itemPtr;
-        }
-
-        // No fallback — only return a verified pointer
-        return IntPtr.Zero;
-    }
-
-    /// <summary>
-    /// Resolves the INVENTORY_ITEM pointer for a key item AP ID.
-    /// AP IDs use level-specific TR1Type aliases (e.g. Folly_K4_ThorKey = 14280),
-    /// not generic types. We cast to TR1Type and parse the enum name to determine
-    /// the generic slot (K1-K4, P1-P4, Scion, LeadBar).
-    /// </summary>
-    private IntPtr ResolveKeyItemPointer(long apItemId)
+    public int ResolveKeyItemObjId(long apItemId)
     {
         int enumValue = (int)(apItemId - 770_000);
         var tr1Type = (TR1Type)enumValue;
@@ -784,45 +734,37 @@ public class InventoryManager
 
         // If ToString() returns just a number, the enum value is undefined
         if (name == enumValue.ToString())
-            return IntPtr.Zero;
+            return -1;
 
-        // Determine generic slot from the alias name pattern
-        // K4 must be checked before K1 (to avoid "_K4_" matching "_K1" substring issue — not possible, but order is cleaner)
-        int? relIdx = null;
-        bool isKey4 = false;
-
+        // Determine generic slot from the alias name pattern.
+        // K4 must be checked before K1 (to avoid "_K4_" matching "_K1" substring
+        // issue — not possible, but order is cleaner).
         if (name.Contains("_K1_") || name.Contains("_K1"))
-            relIdx = TR1RMemoryMap.InvItemRelIndex.Key1;
-        else if (name.Contains("_K2_") || name.Contains("_K2"))
-            relIdx = TR1RMemoryMap.InvItemRelIndex.Key2;
-        else if (name.Contains("_K3_") || name.Contains("_K3"))
-            relIdx = TR1RMemoryMap.InvItemRelIndex.Key3;
-        else if (name.Contains("_K4_") || name.Contains("_K4"))
-            isKey4 = true;
-        else if (name.Contains("_P1_") || name.Contains("_P1") || name.Contains("_LeadBar"))
-            relIdx = TR1RMemoryMap.InvItemRelIndex.Puzzle1;
-        else if (name.Contains("_P2_") || name.Contains("_P2"))
-            relIdx = TR1RMemoryMap.InvItemRelIndex.Puzzle2;
-        else if (name.Contains("_P3_") || name.Contains("_P3"))
-            relIdx = TR1RMemoryMap.InvItemRelIndex.Puzzle3;
-        else if (name.Contains("_P4_") || name.Contains("_P4"))
-            relIdx = TR1RMemoryMap.InvItemRelIndex.Puzzle4;
-        else if (name.Contains("_Scion") || name.Contains("Scion"))
-            relIdx = TR1RMemoryMap.InvItemRelIndex.Scion;
+            return TR1RMemoryMap.InvObjId.Key1;
+        if (name.Contains("_K2_") || name.Contains("_K2"))
+            return TR1RMemoryMap.InvObjId.Key2;
+        if (name.Contains("_K3_") || name.Contains("_K3"))
+            return TR1RMemoryMap.InvObjId.Key3;
+        if (name.Contains("_K4_") || name.Contains("_K4"))
+            return TR1RMemoryMap.InvObjId.Key4;
+        if (name.Contains("_P1_") || name.Contains("_P1") || name.Contains("_LeadBar"))
+            return TR1RMemoryMap.InvObjId.Puzzle1;
+        if (name.Contains("_P2_") || name.Contains("_P2"))
+            return TR1RMemoryMap.InvObjId.Puzzle2;
+        if (name.Contains("_P3_") || name.Contains("_P3"))
+            return TR1RMemoryMap.InvObjId.Puzzle3;
+        if (name.Contains("_P4_") || name.Contains("_P4"))
+            return TR1RMemoryMap.InvObjId.Puzzle4;
+        if (name.Contains("_Scion") || name.Contains("Scion"))
+            return TR1RMemoryMap.InvObjId.Scion;
 
-        if (relIdx.HasValue)
-            return _pistolsPtr + relIdx.Value * TR1RMemoryMap.InventoryItemStride;
-
-        if (isKey4)
-            return _pistolsPtr + TR1RMemoryMap.Key4ByteOffset;
-
-        return IntPtr.Zero;
+        return -1;
     }
 
     private void HalveAmmoInt32(IntPtr addr)
     {
         int current = _memory.ReadInt32(addr);
         if (current > 0)
-            _memory.Write(addr, current / 2);
+            WriteGate.CheckedWrite(_memory, OffsetGroup.Core, addr, current / 2, "LARA_INFO ammo halve");
     }
 }

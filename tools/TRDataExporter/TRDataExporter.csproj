@@ -6,15 +6,9 @@
     <RootNamespace>TRDataExporter</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\TRLevelControl\TRLevelControl.csproj" />
+    <ProjectReference Include="..\..\client\TRLevelControl\TRLevelControl.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\..\TRRandomizerCore\Resources\TR1\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>Resources\TR1\%(RecursiveDir)%(Filename)%(Extension)</Link>
-    </Content>
   </ItemGroup>
 </Project>

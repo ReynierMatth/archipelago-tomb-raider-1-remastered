@@ -4,8 +4,8 @@ All data loaded from tr1r_data.json (exported by TRDataExporter).
 
 ID Schema (must match client LocationMapper.cs):
   - Pickup/Key item locations: 780000 + level_index * 1000 + entity_index
-  - Secret locations:          790000 + level_index * 10 + secret_index
-  - Level completion:          795000 + level_index
+  - Secret locations:          795000 + level_index * 10 + secret_index
+  - Level completion:          796000 + level_index
 """
 
 import json
@@ -22,8 +22,8 @@ class TR1RLocationData(NamedTuple):
 
 # Base IDs (must match client LocationMapper.cs)
 PICKUP_BASE_ID = 780_000
-SECRET_BASE_ID = 790_000
-LEVEL_COMPLETE_BASE_ID = 795_000
+SECRET_BASE_ID = 795_000
+LEVEL_COMPLETE_BASE_ID = 796_000
 
 # Friendly names for pickup types
 _PICKUP_TYPE_NAMES = {

@@ -6,7 +6,7 @@ Traps and events are AP-only (not in game data).
 ID Schema:
   - Key items/weapons/ammo/meds: from itemDefinitions in tr1r_data.json
   - Traps: 769000 + trap_index
-  - Events: 795000 + level_index (matches level completion location IDs)
+  - Events: 796000 + level_index (matches level completion location IDs)
 """
 
 import json
@@ -86,7 +86,7 @@ TRAPS: Dict[str, TR1RItemData] = {
 }
 
 # -- Level Completion Events (locked items, real AP IDs matching location IDs) --
-LEVEL_COMPLETE_BASE_ID = 795_000
+LEVEL_COMPLETE_BASE_ID = 796_000
 _game_data = _load_data()
 EVENTS: Dict[str, TR1RItemData] = {
     f"Level Complete - {level['name']}": TR1RItemData(

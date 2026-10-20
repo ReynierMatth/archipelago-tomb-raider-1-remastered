@@ -31,6 +31,7 @@ Thumbs.db
 # Build outputs
 *.apworld
 tr1r_data.json
+publish/
 
 # Dev artifacts
 apworld/output/
@@ -41,3 +42,4 @@ MEMORY.md
 # Backup files
 *.bak
 *.orig
+*.patch41bak
